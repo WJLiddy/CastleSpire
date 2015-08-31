@@ -12,13 +12,11 @@ public class CastleSpire : Game
     public CastleSpire()
     {
         graphics = new GraphicsDeviceManager(this);
-        Content.RootDirectory = "Content";
     }
 
         
     protected override void Initialize()
     {
-        // TODO: Add your initialization logic here
         base.Initialize();
     }
 
@@ -36,8 +34,7 @@ public class CastleSpire : Game
 
         //TODO: Link on non-release builds. 
         Directory.SetCurrentDirectory(@"C:\Users\JACK\Desktop\Projects\ad2-engine\Castle Spire\assets\");
-        System.IO.Stream stream = File.Open(@"misc\logo.png", FileMode.Open);
-        logo = Texture2D.FromStream(graphics.GraphicsDevice, stream);
+       logo = Utils.TextureLoader("test", graphics.GraphicsDevice);
     }
 
         /// <summary>
@@ -73,6 +70,7 @@ public class CastleSpire : Game
 
         spriteBatch.Begin();
 
+        //dest, source
         spriteBatch.Draw(logo, new Rectangle(0, 0, 800, 480), Color.White);
 
         spriteBatch.End();
