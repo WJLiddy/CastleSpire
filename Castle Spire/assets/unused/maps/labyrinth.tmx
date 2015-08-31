@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="25" height="25" tilewidth="24" tileheight="24">
+ <tileset firstgid="1" name="Untitled" tilewidth="24" tileheight="24">
+  <image source="Untitled.png" width="480" height="240"/>
+  <tile id="41">
+   <properties>
+    <property name="Collide" value="1"/>
+    <property name="Save" value="1"/>
+   </properties>
+  </tile>
+  <tile id="61">
+   <properties>
+    <property name="Collide" value="1"/>
+    <property name="Save" value="1"/>
+   </properties>
+  </tile>
+  <tile id="104">
+   <properties>
+    <property name="Barrier" value="1"/>
+    <property name="Collide" value="1"/>
+   </properties>
+  </tile>
+  <tile id="105">
+   <properties>
+    <property name="Barrier" value="1"/>
+    <property name="Collide" value="1"/>
+   </properties>
+  </tile>
+  <tile id="108">
+   <properties>
+    <property name="Collide" value="1"/>
+   </properties>
+  </tile>
+  <tile id="122">
+   <properties>
+    <property name="Collide" value="1"/>
+   </properties>
+  </tile>
+  <tile id="125">
+   <properties>
+    <property name="Collide" value="1"/>
+   </properties>
+  </tile>
+  <tile id="148">
+   <properties>
+    <property name="Collide" value="1"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="201" name="WorldTileset2" tilewidth="24" tileheight="24">
+  <image source="WorldTileset2.png" width="480" height="240"/>
+  <tile id="16">
+   <properties>
+    <property name="Barrier" value="1"/>
+    <property name="Collide" value="1"/>
+    <property name="Heal" value="15"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="base" width="25" height="25">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC72VwQ3DIAxFmSd7kQMSC3DrEF2na7Tdpq2EpS/X3ziQ9vBFZMAP2+CUlFL5g3ZQ7aO2F2L/KJO5rBiVMBhL+5e5DDbGwPVWvCyODAzLj8Vg8nIt3xeQl6uoxAfm5Qryah7R9lZTNdjIGaojK/+i1iU10f51PbxcsDpE9x9hPOHsrZ87ysB87ek7V62PD8W4wfxqHMK4K0Y7mdHUt+Xf8nWkZtqvxZuNw+Kwe7HCiNw7VCUM1n+8fhjpEdZ+q8eNRhZHNRircZxRD2Rhn7XeMr7hUdx6jf7vjeKaYXi+I4xRb/XO4d2bmXqM7Oze/FIvsY9suMQJAAA=
+  </data>
+ </layer>
+ <layer name="baseDetail" width="25" height="25" visible="0">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3BAQ0AAADCoPdPbQ43oAAAeDP5i1XpxAkAAA==
+  </data>
+ </layer>
+</map>
