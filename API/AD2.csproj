@@ -40,7 +40,7 @@
   <ItemGroup>
     <Compile Include="AnimSheet.cs" />
     <Compile Include="Class1.cs" />
-    <Compile Include="GameState.cs" />
+    <Compile Include="GS.cs" />
     <Compile Include="NPC.cs" />
     <Compile Include="PC.cs" />
     <Compile Include="StatSet.cs" />

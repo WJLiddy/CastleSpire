@@ -8,10 +8,12 @@ public class CastleSpire : Game
     GraphicsDeviceManager graphics;
     SpriteBatch spriteBatch;
     Texture2D logo;
+    AnimSheet dragon;
 
     public CastleSpire()
     {
         graphics = new GraphicsDeviceManager(this);
+        GS.game = this;
     }
 
         
@@ -34,7 +36,9 @@ public class CastleSpire : Game
 
         //TODO: Link on non-release builds. 
         Directory.SetCurrentDirectory(@"C:\Users\JACK\Desktop\Projects\ad2-engine\Castle Spire\assets\");
-       logo = Utils.TextureLoader("test", graphics.GraphicsDevice);
+        logo = Utils.TextureLoader(@"misc\logo.png", graphics.GraphicsDevice);
+        dragon = new AnimSheet(@"creatures\pc\halfdragon\walk.xml");
+
     }
 
         /// <summary>
@@ -68,11 +72,13 @@ public class CastleSpire : Game
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        spriteBatch.Begin();
+        graphics.PreferMultiSampling = false;
+        spriteBatch.Begin(SpriteSortMode.Immediate,BlendState.AlphaBlend,SamplerState.PointClamp,DepthStencilState.Default,RasterizerState.CullNone);
 
         //dest, source
         spriteBatch.Draw(logo, new Rectangle(0, 0, 800, 480), Color.White);
-
+        dragon.draw(spriteBatch);
+      
         spriteBatch.End();
 
 
