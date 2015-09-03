@@ -55,8 +55,13 @@ public class CastleSpire : Game
     /// checking for collisions, gathering input, and playing audio.
     /// </summary>
     /// <param name="gameTime">Provides a snapshot of timing values.</param>
+    /// 
     protected override void Update(GameTime gameTime)
     {
+
+        //Fetch player inputs/ clear AI inputs
+        //Let AI decide inputs
+        //do all update logic.
           
 
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -77,6 +82,7 @@ public class CastleSpire : Game
 
         //dest, source
         spriteBatch.Draw(logo, new Rectangle(0, 0, 800, 480), Color.White);
+
         dragon.draw(spriteBatch);
       
         spriteBatch.End();

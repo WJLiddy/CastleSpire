@@ -41,6 +41,9 @@
     <Compile Include="AnimSheet.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="GS.cs" />
+    <Compile Include="AIInput.cs" />
+    <Compile Include="PInput.cs" />
+    <Compile Include="Input.cs" />
     <Compile Include="NPC.cs" />
     <Compile Include="PC.cs" />
     <Compile Include="StatSet.cs" />
