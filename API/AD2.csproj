@@ -39,15 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AnimSheet.cs" />
-    <Compile Include="Class1.cs" />
-    <Compile Include="GS.cs" />
-    <Compile Include="AIInput.cs" />
-    <Compile Include="PInput.cs" />
-    <Compile Include="Input.cs" />
-    <Compile Include="NPC.cs" />
-    <Compile Include="PC.cs" />
-    <Compile Include="StatSet.cs" />
-    <Compile Include="Creature.cs" />
+    <Compile Include="Dummy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>

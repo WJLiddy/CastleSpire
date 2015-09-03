@@ -4,8 +4,7 @@ using System;
 using System.IO;
 using System.Xml;
 
-
-//So, an anim sheet is simply a Texture2d that represents a rectangular object
+//An anim sheet is basically a Texture2d with frames. 
 public class AnimSheet
 {
     public Texture2D sheet { get; private set; }
@@ -14,8 +13,8 @@ public class AnimSheet
     public int frameCount { get; private set; }
     public int offsetX { get; private set; }
     public int offsetY { get; private set; }
-    public int size { get; private set; }
-
+    public int speed { get; private set; }
+    
     public AnimSheet(String pathToSheetXML)
     {
         XmlReader reader = XmlReader.Create(pathToSheetXML);
@@ -35,19 +34,22 @@ public class AnimSheet
         reader.ReadToFollowing("offsetY");
         offsetY = reader.ReadElementContentAsInt();
 
-        reader.ReadToFollowing("size");
-        size = reader.ReadElementContentAsInt();
+        reader.ReadToFollowing("defaultSpeed");
+
+        if (!reader.EOF)
+            speed = reader.ReadElementContentAsInt();
 
         reader.Close();
 
-        sheet = Utils.TextureLoader(Path.ChangeExtension(pathToSheetXML, ".png"), GS.game.GraphicsDevice);
+        sheet = Utils.TextureLoader(Path.ChangeExtension(pathToSheetXML, ".png"), Utils.game.GraphicsDevice);
 
     }
-
-    public void draw(SpriteBatch spriteBatch)
+    
+    //draw a given frame at a given place at a given size
+    public void draw(SpriteBatch spriteBatch,int dir, int frame, int x, int y, int w, int h)
     {
         //destination, source
-        spriteBatch.Draw(sheet, new Rectangle(0, 0, 800, 480), new Rectangle(0, 0, frameWidth, frameHeight), Color.White);
+        spriteBatch.Draw(sheet, new Rectangle(x, y, w, h), new Rectangle(frame*frameWidth, dir*frameHeight, frameWidth, frameHeight), Color.White);
     }
 
 

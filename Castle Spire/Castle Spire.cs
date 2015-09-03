@@ -10,10 +10,81 @@ public class CastleSpire : Game
     Texture2D logo;
     AnimSheet dragon;
 
+    //our minimum game dimensions.
+    private readonly int baseWidth = 360;
+    private readonly int baseHeight = 270;
+
+    //Turn this on for fullscreen
+    bool fullScreen = false;
+
+    //If windowed, antialiasing will never happen. 
+    //Else, it might. We can ignore it and deal with blurry edges, or turn this on and I'll try to correct it.
+    bool fullScreenWithAlias = true;
+
+    //important: needed to stop anti-aliasing by making the game window small in fullscreen.
+    private int drawScaleX = 1;
+    private int drawScaleY = 1;
+    private int drawXOff = 0;
+    private int drawYOff = 0;
+
+
     public CastleSpire()
     {
         graphics = new GraphicsDeviceManager(this);
-        GS.game = this;
+        Utils.game = this;
+
+        graphics.IsFullScreen = fullScreen;
+
+        int resWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+        int resHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+
+
+        if(!fullScreen)
+        {
+            //Simply make the window as big as possible while remaining a multiple. Easy.
+            drawScaleX = System.Math.Min(resHeight / baseHeight, resWidth / baseWidth);
+            drawScaleY = drawScaleX;
+             
+            graphics.PreferredBackBufferHeight = baseHeight * drawScaleY;
+            graphics.PreferredBackBufferWidth = baseWidth * drawScaleX;
+        }
+
+        else if(fullScreenWithAlias)
+        {
+            //Simply make the window as big as possible while remaining a multiple.
+            drawScaleX = System.Math.Min(resHeight / baseHeight, resWidth / baseWidth);
+            drawScaleY = drawScaleX;
+
+            //now, we actually do want to set the dimentions correctly.
+            graphics.PreferredBackBufferHeight = resHeight;
+            graphics.PreferredBackBufferWidth = resWidth;
+
+            //now, find offsets.
+            drawXOff = (resWidth - (baseWidth * drawScaleY)) / 2;
+            drawYOff = (resHeight - (baseHeight * drawScaleX)) / 2;
+
+        } else
+        {
+
+            //full screen, no alias
+            //boy this is gonna be ugly but you asked for it.
+            drawScaleY = 1;
+            drawScaleX = 1;
+        }
+
+
+        //if aliasing is false... your fate is in the hands of C# now. May Bill help you now.
+        //  if (!alias)
+        // {
+        //     scale = 1;
+        //    graphics.PreferredBackBufferHeight = 270;
+        //   graphics.PreferredBackBufferWidth = 480;
+        //}
+
+
+
+
+        graphics.ApplyChanges();
     }
 
         
@@ -37,7 +108,7 @@ public class CastleSpire : Game
         //TODO: Link on non-release builds. 
         Directory.SetCurrentDirectory(@"C:\Users\JACK\Desktop\Projects\ad2-engine\Castle Spire\assets\");
         logo = Utils.TextureLoader(@"misc\logo.png", graphics.GraphicsDevice);
-        dragon = new AnimSheet(@"creatures\pc\halfdragon\walk.xml");
+        dragon = new AnimSheet(@"creatures\pc\pirate\walk.xml");
 
     }
 
@@ -75,15 +146,18 @@ public class CastleSpire : Game
     /// <param name="gameTime">Provides a snapshot of timing values.</param>
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.CornflowerBlue);
+        GraphicsDevice.Clear(Color.Black);
 
-        graphics.PreferMultiSampling = false;
-        spriteBatch.Begin(SpriteSortMode.Immediate,BlendState.AlphaBlend,SamplerState.PointClamp,DepthStencilState.Default,RasterizerState.CullNone);
+        Matrix matrixScale = Matrix.Identity;
+        matrixScale.M11 = drawScaleX; matrixScale.M22 = drawScaleY;
+        matrixScale.Translation = new Vector3(drawXOff, drawYOff, 0);
+        spriteBatch.Begin(SpriteSortMode.Immediate,BlendState.AlphaBlend,SamplerState.PointClamp,DepthStencilState.Default,RasterizerState.CullNone,null,matrixScale);
 
         //dest, source
-        spriteBatch.Draw(logo, new Rectangle(0, 0, 800, 480), Color.White);
+        //1024×768
+        spriteBatch.Draw(logo, new Rectangle(0, 0, baseWidth, baseHeight), Color.White);
 
-        dragon.draw(spriteBatch);
+        dragon.draw(spriteBatch,2,1,70,150,24,32);
       
         spriteBatch.End();
 

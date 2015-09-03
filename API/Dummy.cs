@@ -2,11 +2,9 @@
 /// <summary>
 /// The main class.
 /// </summary>
-public static class Program
+public static class Dummy
 {
-    /// <summary>
-    /// The main entry point for the application.
-    /// </summary>
+    //Dummy class until i figure out to Api my api knowwhatimsayin
     static void Main()
     {
 

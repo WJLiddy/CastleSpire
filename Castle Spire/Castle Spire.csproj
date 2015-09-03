@@ -38,9 +38,16 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="src\Input\AIInput.cs" />
     <Compile Include="Castle Spire.cs" />
+    <Compile Include="src\Creature\Creature.cs" />
+    <Compile Include="src\Input\Input.cs" />
+    <Compile Include="src\Creature\NPC.cs" />
+    <Compile Include="src\Creature\PC.cs" />
+    <Compile Include="src\Input\PInput.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\StatSet.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
