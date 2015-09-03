@@ -9,6 +9,7 @@ public class CastleSpire : Game
     SpriteBatch spriteBatch;
     Texture2D logo;
     AnimSheet dragon;
+    ADFont spireFont;
 
     //our minimum game dimensions.
     private readonly int baseWidth = 360;
@@ -32,59 +33,9 @@ public class CastleSpire : Game
     {
         graphics = new GraphicsDeviceManager(this);
         Utils.game = this;
+        configureResolution();
 
-        graphics.IsFullScreen = fullScreen;
-
-        int resWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-        int resHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-
-
-        if(!fullScreen)
-        {
-            //Simply make the window as big as possible while remaining a multiple. Easy.
-            drawScaleX = System.Math.Min(resHeight / baseHeight, resWidth / baseWidth);
-            drawScaleY = drawScaleX;
-             
-            graphics.PreferredBackBufferHeight = baseHeight * drawScaleY;
-            graphics.PreferredBackBufferWidth = baseWidth * drawScaleX;
-        }
-
-        else if(fullScreenWithAlias)
-        {
-            //Simply make the window as big as possible while remaining a multiple.
-            drawScaleX = System.Math.Min(resHeight / baseHeight, resWidth / baseWidth);
-            drawScaleY = drawScaleX;
-
-            //now, we actually do want to set the dimentions correctly.
-            graphics.PreferredBackBufferHeight = resHeight;
-            graphics.PreferredBackBufferWidth = resWidth;
-
-            //now, find offsets.
-            drawXOff = (resWidth - (baseWidth * drawScaleY)) / 2;
-            drawYOff = (resHeight - (baseHeight * drawScaleX)) / 2;
-
-        } else
-        {
-
-            //full screen, no alias
-            //boy this is gonna be ugly but you asked for it.
-            drawScaleY = 1;
-            drawScaleX = 1;
-        }
-
-
-        //if aliasing is false... your fate is in the hands of C# now. May Bill help you now.
-        //  if (!alias)
-        // {
-        //     scale = 1;
-        //    graphics.PreferredBackBufferHeight = 270;
-        //   graphics.PreferredBackBufferWidth = 480;
-        //}
-
-
-
-
-        graphics.ApplyChanges();
+     
     }
 
         
@@ -107,8 +58,9 @@ public class CastleSpire : Game
 
         //TODO: Link on non-release builds. 
         Directory.SetCurrentDirectory(@"C:\Users\JACK\Desktop\Projects\ad2-engine\Castle Spire\assets\");
-        logo = Utils.TextureLoader(@"misc\logo.png", graphics.GraphicsDevice);
+        logo = Utils.TextureLoader(@"misc\logo.png");
         dragon = new AnimSheet(@"creatures\pc\pirate\walk.xml");
+        spireFont = new ADFont(@"misc\spireFont.png");
 
     }
 
@@ -158,11 +110,74 @@ public class CastleSpire : Game
         spriteBatch.Draw(logo, new Rectangle(0, 0, baseWidth, baseHeight), Color.White);
 
         dragon.draw(spriteBatch,2,1,70,150,24,32);
-      
+
+        spireFont.draw(spriteBatch, "AD Engine", 200, 5, Color.White,3,true);
+
+
+
         spriteBatch.End();
 
 
         base.Draw(gameTime);
+    }
+
+    private void configureResolution()
+    {
+        graphics.IsFullScreen = fullScreen;
+
+        int resWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+        int resHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+
+
+        if (!fullScreen)
+        {
+            //Simply make the window as big as possible while remaining a multiple. Easy.
+            drawScaleX = System.Math.Min(resHeight / baseHeight, resWidth / baseWidth);
+            drawScaleY = drawScaleX;
+
+            graphics.PreferredBackBufferHeight = baseHeight * drawScaleY;
+            graphics.PreferredBackBufferWidth = baseWidth * drawScaleX;
+        }
+
+        else if (fullScreenWithAlias)
+        {
+            //Simply make the window as big as possible while remaining a multiple.
+            drawScaleX = System.Math.Min(resHeight / baseHeight, resWidth / baseWidth);
+            drawScaleY = drawScaleX;
+
+            //now, we actually do want to set the dimentions correctly.
+            graphics.PreferredBackBufferHeight = resHeight;
+            graphics.PreferredBackBufferWidth = resWidth;
+
+            //now, find offsets.
+            drawXOff = (resWidth - (baseWidth * drawScaleY)) / 2;
+            drawYOff = (resHeight - (baseHeight * drawScaleX)) / 2;
+
+        }
+        else
+        {
+
+            //full screen, no alias
+            //boy this is gonna be ugly but you asked for it.
+            drawScaleY = 1;
+            drawScaleX = 1;
+        }
+
+
+        //if aliasing is false... your fate is in the hands of C# now. May Bill help you now.
+        //  if (!alias)
+        // {
+        //     scale = 1;
+        //    graphics.PreferredBackBufferHeight = 270;
+        //   graphics.PreferredBackBufferWidth = 480;
+        //}
+
+
+
+
+        graphics.ApplyChanges();
+
+
     }
 
 }

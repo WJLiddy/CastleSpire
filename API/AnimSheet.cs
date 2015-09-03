@@ -41,7 +41,7 @@ public class AnimSheet
 
         reader.Close();
 
-        sheet = Utils.TextureLoader(Path.ChangeExtension(pathToSheetXML, ".png"), Utils.game.GraphicsDevice);
+        sheet = Utils.TextureLoader(Path.ChangeExtension(pathToSheetXML, ".png"));
 
     }
     
