@@ -46,10 +46,17 @@ public class AnimSheet
     }
     
     //draw a given frame at a given place at a given size
-    public void draw(SpriteBatch spriteBatch,int dir, int frame, int x, int y, int w, int h)
+    public void draw(SpriteBatch spriteBatch,int frame, int dir, int x, int y, int w, int h)
     {
         //destination, source
         spriteBatch.Draw(sheet, new Rectangle(x, y, w, h), new Rectangle(frame*frameWidth, dir*frameHeight, frameWidth, frameHeight), Color.White);
+    }
+
+    //draw a given frame at a given place at a given size
+    public void draw(SpriteBatch spriteBatch, int frame, int dir, int x, int y)
+    {
+        //destination, source
+        spriteBatch.Draw(sheet, new Rectangle(x, y, frameWidth, frameHeight), new Rectangle(frame * frameWidth, dir * frameHeight, frameWidth, frameHeight), Color.White);
     }
 
 

@@ -1,10 +1,4 @@
-﻿using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-abstract class Input
+﻿abstract class Input
 {
     public bool A { get; protected set; }
     public bool B { get; protected set; }

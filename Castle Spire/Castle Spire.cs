@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.IO;
 
 public class CastleSpire : Game
@@ -8,8 +9,9 @@ public class CastleSpire : Game
     GraphicsDeviceManager graphics;
     SpriteBatch spriteBatch;
     Texture2D logo;
-    AnimSheet dragon;
     ADFont spireFont;
+    AnimSet pirateAnimSet;
+    PInput input;
 
     //our minimum game dimensions.
     private readonly int baseWidth = 360;
@@ -33,9 +35,15 @@ public class CastleSpire : Game
     {
         graphics = new GraphicsDeviceManager(this);
         Utils.game = this;
-        configureResolution();
+        Directory.SetCurrentDirectory(@"..\..\..\assets\");
+        Utils.pathToAssets = Directory.GetCurrentDirectory();
+        input = new PInput();
+        input.cUP = Keys.Up;
+        input.cDOWN = Keys.Down;
+        input.cLEFT = Keys.Left;
+        input.cRIGHT = Keys.Right;
 
-     
+        configureResolution();
     }
 
         
@@ -57,10 +65,10 @@ public class CastleSpire : Game
         // mySound = SoundEffect.FromStream(stream);
 
         //TODO: Link on non-release builds. 
-        Directory.SetCurrentDirectory(@"C:\Users\JACK\Desktop\Projects\ad2-engine\Castle Spire\assets\");
         logo = Utils.TextureLoader(@"misc\logo.png");
-        dragon = new AnimSheet(@"creatures\pc\pirate\walk.xml");
         spireFont = new ADFont(@"misc\spireFont.png");
+        pirateAnimSet = new AnimSet(@"creatures\pc\pirate\anim.xml");
+        pirateAnimSet.hold("idle", 0, 0);
 
     }
 
@@ -91,7 +99,8 @@ public class CastleSpire : Game
             Exit();
 
         // TODO: Add your update logic here
-
+        input.update(Keyboard.GetState());
+    
         base.Update(gameTime);
     }
 
@@ -109,9 +118,28 @@ public class CastleSpire : Game
         //1024×768
         spriteBatch.Draw(logo, new Rectangle(0, 0, baseWidth, baseHeight), Color.White);
 
-        dragon.draw(spriteBatch,2,1,70,150,24,32);
+        //specify a default draw, problably idle, if not idle, whatever is first in the list.
+
+
+        if (input.UP)
+            pirateAnimSet.hold("idle", 0, 0);
+        else if (input.RIGHT)
+            pirateAnimSet.hold("idle", 0, 1);
+        else if (input.DOWN)
+            pirateAnimSet.hold("idle", 0, 2);
+        else if (input.LEFT)
+            pirateAnimSet.hold("idle", 0, 3);
+
+
+        pirateAnimSet.draw(spriteBatch, 30, 30);
+
+        pirateAnimSet.draw(spriteBatch, 130, 130, 50,30);
 
         spireFont.draw(spriteBatch, "AD Engine", 200, 5, Color.White,3,true);
+
+        Random r = new Random();
+
+        spireFont.draw(spriteBatch, "BIP WUZ HERE", 0, 100, new Color ( ( (float)(r.NextDouble()) ), (float)((r.NextDouble()) ), (float)((r.NextDouble()) )), 5, true);
 
 
 
