@@ -6,12 +6,13 @@ using System.IO;
 
 public class Utils
 {
-    public static Game game;
+    public static GraphicsDevice gfx;
+    public static SpriteBatch sb;
     public static String pathToAssets;
     public static Texture2D TextureLoader(String pathToTexture)
     {
-        System.IO.Stream stream = File.Open(pathToTexture, FileMode.Open);
-        return Texture2D.FromStream(game.GraphicsDevice, stream);
+        System.IO.Stream stream = File.Open(Utils.pathToAssets  + pathToTexture, FileMode.Open);
+        return Texture2D.FromStream(gfx, stream);
     }
 
 }

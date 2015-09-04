@@ -38,6 +38,10 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="src\GameState\CharSelect.cs" />
+    <Compile Include="src\GameState\GS.cs" />
+    <Compile Include="src\GameState\InGame.cs" />
+    <Compile Include="src\GameState\Title.cs" />
     <Compile Include="src\Input\AIInput.cs" />
     <Compile Include="Castle Spire.cs" />
     <Compile Include="src\Creature\Creature.cs" />

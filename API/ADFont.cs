@@ -23,7 +23,7 @@ public class ADFont
             numSpace = new int[10]{4,2,4,4,4,4,4,4,4,4};
     }
 
-    public void draw(SpriteBatch sb, string s, int x, int y, Color col, int scale = 1, bool outline = false){
+    public void draw(string s, int x, int y, Color col, int scale = 1, bool outline = false){
         s = s.ToUpper();
         int xCursor = 0; 
 
@@ -40,13 +40,13 @@ public class ADFont
 
                 if (outline)
                 {
-                    sb.Draw(font, new Rectangle(x + scale + xCursor, y, scale * alphaSpace[letterIndex], scale * size), new Rectangle(0, letterIndex * size, alphaSpace[letterIndex], size), Color.Black);
-                    sb.Draw(font, new Rectangle(x + -scale + xCursor, y, scale * alphaSpace[letterIndex], scale * size), new Rectangle(0, letterIndex * size, alphaSpace[letterIndex], size), Color.Black);
-                    sb.Draw(font, new Rectangle(x + xCursor, y + scale, scale * alphaSpace[letterIndex], scale * size), new Rectangle(0, letterIndex * size, alphaSpace[letterIndex], size), Color.Black);
-                    sb.Draw(font, new Rectangle(x + xCursor, y - scale , scale * alphaSpace[letterIndex], scale * size), new Rectangle(0, letterIndex * size, alphaSpace[letterIndex], size), Color.Black);
+                    Utils.sb.Draw(font, new Rectangle(x + scale + xCursor, y, scale * alphaSpace[letterIndex], scale * size), new Rectangle(0, letterIndex * size, alphaSpace[letterIndex], size), Color.Black);
+                    Utils.sb.Draw(font, new Rectangle(x + -scale + xCursor, y, scale * alphaSpace[letterIndex], scale * size), new Rectangle(0, letterIndex * size, alphaSpace[letterIndex], size), Color.Black);
+                    Utils.sb.Draw(font, new Rectangle(x + xCursor, y + scale, scale * alphaSpace[letterIndex], scale * size), new Rectangle(0, letterIndex * size, alphaSpace[letterIndex], size), Color.Black);
+                    Utils.sb.Draw(font, new Rectangle(x + xCursor, y - scale , scale * alphaSpace[letterIndex], scale * size), new Rectangle(0, letterIndex * size, alphaSpace[letterIndex], size), Color.Black);
                 }
 
-                sb.Draw(font, new Rectangle(x+xCursor, y, scale * alphaSpace[letterIndex], scale * size), new Rectangle(0, letterIndex * size, alphaSpace[letterIndex], size), col);
+                Utils.sb.Draw(font, new Rectangle(x+xCursor, y, scale * alphaSpace[letterIndex], scale * size), new Rectangle(0, letterIndex * size, alphaSpace[letterIndex], size), col);
  
                 x += scale * (1 + alphaSpace[letterIndex] + (outline? 2 : 0));
             }

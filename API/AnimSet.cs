@@ -1,10 +1,6 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Xml;
 
 public class AnimSet
@@ -32,7 +28,11 @@ public class AnimSet
         }
    
         reader.Close();
-       
+
+        //by default, "idle" will always be loaded
+        //TODO: Better implementation.
+        hold("idle", 0, 0);
+
     }
 
     public void hold(string anim, int frame, int dir)
@@ -49,14 +49,14 @@ public class AnimSet
     }
 
     //camera operation here.
-    public void draw(SpriteBatch sb, int x, int y, int w, int h)
+    public void draw(int x, int y, int w, int h)
     {
-        currentAnim.draw(sb,frame,dir,x,y,w,h);
+        currentAnim.draw(frame,dir,x,y,w,h);
     }
 
-    public void draw(SpriteBatch sb, int x, int y)
+    public void draw(int x, int y)
     {
-        currentAnim.draw(sb, frame, dir, x, y);
+        currentAnim.draw(frame, dir, x, y);
     }
 }
 

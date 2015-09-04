@@ -6,47 +6,54 @@ using System.IO;
 
 public class CastleSpire : Game
 {
-    GraphicsDeviceManager graphics;
-    SpriteBatch spriteBatch;
-    Texture2D logo;
-    ADFont spireFont;
-    AnimSet pirateAnimSet;
-    PInput input;
 
-    //our minimum game dimensions.
+    //required to load in any graphics
+    GraphicsDeviceManager graphics;
+    //Everything to draw
+    SpriteBatch spriteBatch;
+
+    //our minimum game dimensions. Needed for setting resolution.
     private readonly int baseWidth = 360;
     private readonly int baseHeight = 270;
 
-    //Turn this on for fullscreen
+    //Turn this on for fullscreen.
     bool fullScreen = false;
 
-    //If windowed, antialiasing will never happen. 
-    //Else, it might. We can ignore it and deal with blurry edges, or turn this on and I'll try to correct it.
-    bool fullScreenWithAlias = true;
+    //If windowed, antialiasing will never happen, so that's good.
+    //Else, it might. If we do not want antialiasing, that's good, I'll just draw boxes. Else, fill the whole screen.
+    bool fullScreenWithAntiAlias = false;
 
-    //important: needed to stop anti-aliasing by making the game window small in fullscreen.
+    //How to scale the resolution.
     private int drawScaleX = 1;
     private int drawScaleY = 1;
     private int drawXOff = 0;
     private int drawYOff = 0;
-
+    Matrix matrixScale;
 
     public CastleSpire()
     {
-        graphics = new GraphicsDeviceManager(this);
-        Utils.game = this;
-        Directory.SetCurrentDirectory(@"..\..\..\assets\");
-        Utils.pathToAssets = Directory.GetCurrentDirectory();
-        input = new PInput();
-        input.cUP = Keys.Up;
-        input.cDOWN = Keys.Down;
-        input.cLEFT = Keys.Left;
-        input.cRIGHT = Keys.Right;
+        //Here we want to init as much as we can that isn't graphics.
 
+        //Set the current directory that points to where to look for the assets folder.
+        Directory.SetCurrentDirectory(@"..\..\..\assets\");
+
+        //Save the path for fast access.
+        Utils.pathToAssets = Directory.GetCurrentDirectory() + @"\";
+
+        //init the graphics manager.
+        graphics = new GraphicsDeviceManager(this);
+
+        //figure out what resolution to run the game at.
         configureResolution();
+
+        //now that we know the resolution, make the matrix for it for scaling later.
+        matrixScale = Matrix.Identity;
+        matrixScale.M11 = drawScaleX; matrixScale.M22 = drawScaleY;
+        matrixScale.Translation = new Vector3(drawXOff, drawYOff, 0);
+
     }
 
-        
+
     protected override void Initialize()
     {
         base.Initialize();
@@ -55,21 +62,13 @@ public class CastleSpire : Game
       
     protected override void LoadContent()
     {
-        // Create a new SpriteBatch, which can be used to draw textures.
+        //Init graphics stuff and save to UTIL library
         spriteBatch = new SpriteBatch(GraphicsDevice);
+        Utils.gfx = graphics.GraphicsDevice;
+        Utils.sb = spriteBatch;
 
-
-        // Load a SoundEffect from a file 
-        // (NOTE: This is NOT in the current version of MonoGame)
-        //  stream = TitleContainer.OpenStream("Content/My Sound.wav");
-        // mySound = SoundEffect.FromStream(stream);
-
-        //TODO: Link on non-release builds. 
-        logo = Utils.TextureLoader(@"misc\logo.png");
-        spireFont = new ADFont(@"misc\spireFont.png");
-        pirateAnimSet = new AnimSet(@"creatures\pc\pirate\anim.xml");
-        pirateAnimSet.hold("idle", 0, 0);
-
+        //Init our gamestate with basically will handle everything.
+        new GS();
     }
 
         /// <summary>
@@ -94,57 +93,26 @@ public class CastleSpire : Game
         //Let AI decide inputs
         //do all update logic.
           
-
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
-        // TODO: Add your update logic here
-        input.update(Keyboard.GetState());
-    
+        GS.update(gameTime, Keyboard.GetState());
+
         base.Update(gameTime);
     }
 
     /// <param name="gameTime">Provides a snapshot of timing values.</param>
     protected override void Draw(GameTime gameTime)
     {
+        //nuke old graphics.
         GraphicsDevice.Clear(Color.Black);
-
-        Matrix matrixScale = Matrix.Identity;
-        matrixScale.M11 = drawScaleX; matrixScale.M22 = drawScaleY;
-        matrixScale.Translation = new Vector3(drawXOff, drawYOff, 0);
+         
+        //set the spritebatch to start.
         spriteBatch.Begin(SpriteSortMode.Immediate,BlendState.AlphaBlend,SamplerState.PointClamp,DepthStencilState.Default,RasterizerState.CullNone,null,matrixScale);
 
-        //dest, source
-        //1024×768
-        spriteBatch.Draw(logo, new Rectangle(0, 0, baseWidth, baseHeight), Color.White);
-
-        //specify a default draw, problably idle, if not idle, whatever is first in the list.
-
-
-        if (input.UP)
-            pirateAnimSet.hold("idle", 0, 0);
-        else if (input.RIGHT)
-            pirateAnimSet.hold("idle", 0, 1);
-        else if (input.DOWN)
-            pirateAnimSet.hold("idle", 0, 2);
-        else if (input.LEFT)
-            pirateAnimSet.hold("idle", 0, 3);
-
-
-        pirateAnimSet.draw(spriteBatch, 30, 30);
-
-        pirateAnimSet.draw(spriteBatch, 130, 130, 50,30);
-
-        spireFont.draw(spriteBatch, "AD Engine", 200, 5, Color.White,3,true);
-
-        Random r = new Random();
-
-        spireFont.draw(spriteBatch, "BIP WUZ HERE", 0, 100, new Color ( ( (float)(r.NextDouble()) ), (float)((r.NextDouble()) ), (float)((r.NextDouble()) )), 5, true);
-
-
+        GS.draw();
 
         spriteBatch.End();
-
 
         base.Draw(gameTime);
     }
@@ -167,7 +135,7 @@ public class CastleSpire : Game
             graphics.PreferredBackBufferWidth = baseWidth * drawScaleX;
         }
 
-        else if (fullScreenWithAlias)
+        else if (!fullScreenWithAntiAlias)
         {
             //Simply make the window as big as possible while remaining a multiple.
             drawScaleX = System.Math.Min(resHeight / baseHeight, resWidth / baseWidth);
@@ -191,21 +159,7 @@ public class CastleSpire : Game
             drawScaleX = 1;
         }
 
-
-        //if aliasing is false... your fate is in the hands of C# now. May Bill help you now.
-        //  if (!alias)
-        // {
-        //     scale = 1;
-        //    graphics.PreferredBackBufferHeight = 270;
-        //   graphics.PreferredBackBufferWidth = 480;
-        //}
-
-
-
-
         graphics.ApplyChanges();
-
-
     }
 
 }
