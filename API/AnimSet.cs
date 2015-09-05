@@ -43,9 +43,28 @@ public class AnimSet
         this.dir = dir;
     }
 
-    public void update(int frames)
+    public void startAnim(string anim, int dir)
     {
-        //lol
+        currentAnim = (AnimSheet)anims[anim];
+        frame = 0;
+        this.dir = dir;
+        animate = true;
+        framesLeftToNext = currentAnim.speed;
+    }
+
+    public void update()
+    {
+        if (animate)
+        {
+            framesLeftToNext--;
+
+            if (framesLeftToNext == 0)
+            {
+                frame = (frame + 1) % currentAnim.frameCount;
+                framesLeftToNext = currentAnim.speed;
+            }
+        }
+
     }
 
     //camera operation here.

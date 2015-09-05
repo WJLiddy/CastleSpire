@@ -2,7 +2,7 @@
 using System;
 
 
-class PInput : Input
+public class PInput : Input
 {
 
     //Objects here are "Keys" enums from a keyboard.
@@ -24,6 +24,21 @@ class PInput : Input
 
     public void update(KeyboardState k)
     {
+        //Applies no matter what?
+        pA = (cA == null) ? false : (!A && k.IsKeyDown((Keys)cA));
+        pB = (cB == null) ? false : (!B && k.IsKeyDown((Keys)cB));
+        pX = (cX == null) ? false : (!X && k.IsKeyDown((Keys)cX));
+        pY = (cY == null) ? false : (!Y && k.IsKeyDown((Keys)cY));
+
+        pUP = (cUP == null) ? false : (!UP && k.IsKeyDown((Keys)cUP));
+        pRIGHT = (cRIGHT == null) ? false : (!RIGHT && k.IsKeyDown((Keys)cRIGHT));
+        pDOWN = (cDOWN == null) ? false : (!DOWN && k.IsKeyDown((Keys)cDOWN));
+        pLEFT = (cLEFT == null) ? false :  (!LEFT && k.IsKeyDown((Keys)cLEFT));
+
+        pL = (cL == null) ? false : (!L && k.IsKeyDown((Keys)cL));
+        pR = (cR == null) ? false : (!R && k.IsKeyDown((Keys)cR));
+        pS = (cS == null) ? false : (!S && k.IsKeyDown((Keys)cS));
+
         //TODO: Only have keyboard support
         A = (cA == null) ? false : k.IsKeyDown((Keys)cA);
         B = (cB == null) ? false : k.IsKeyDown((Keys)cB);
@@ -39,6 +54,9 @@ class PInput : Input
         R = (cR == null) ? false : k.IsKeyDown((Keys)cR);
 
         S = (cS == null) ? false : k.IsKeyDown((Keys)cS);
+
+
+
     }
 
 }

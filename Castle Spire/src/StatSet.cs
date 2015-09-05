@@ -1,18 +1,36 @@
-﻿public class StatSet
+﻿using System.Xml;
+
+public class StatSet
 {
     public int strXP { get; private set; }
     public int dexXP { get; private set; }
     public int affXP { get; private set; }
     public int vitXP { get; private set; }
+    public int spdXP { get; private set; }
 
-    public readonly int XPperSkill;
+    public readonly int XPperSkill = 50;
 
-    public StatSet(int strlvl, int dexlvl, int afflvl, int vitlvl)
+    public static readonly double baseSpeed = 45;
+    public static readonly double skillSpeed = .07;
+
+    public StatSet(string pathToURL)
     {
-        this.strXP = 0;
-        this.dexXP = 0;
-        this.affXP = 0;
-        this.vitXP = 0;
+        XmlReader reader = XmlReader.Create(pathToURL);
+
+        reader.ReadToFollowing("str");
+        strXP = XPperSkill * reader.ReadElementContentAsInt();
+
+        reader.ReadToFollowing("dex");
+        dexXP = XPperSkill * reader.ReadElementContentAsInt();
+
+        reader.ReadToFollowing("aff");
+        affXP = XPperSkill * reader.ReadElementContentAsInt();
+
+        reader.ReadToFollowing("vit");
+        vitXP = XPperSkill * reader.ReadElementContentAsInt();
+
+        reader.ReadToFollowing("spd");
+        spdXP = XPperSkill * reader.ReadElementContentAsInt();
     }
 
     public void awardStrXP(int xp)
@@ -35,25 +53,34 @@
         vitXP += xp;
     }
 
-    public int getStrSkill()
+    public void awardSpdXP(int xp)
+    {
+        spdXP += xp;
+    }
+
+    public int str()
     {
         return strXP / XPperSkill;
     }
 
-    public int getDexSkill()
+    public int dex()
     {
         return dexXP / XPperSkill;
     }
 
-    public int getAffSkill()
+    public int aff()
     {
         return affXP / XPperSkill;
     }
 
-    public int getVitSkill()
+    public int vit()
     {
         return vitXP / XPperSkill;
     }
 
+    public int spd()
+    {
+        return spdXP / XPperSkill;
+    }
 }
 

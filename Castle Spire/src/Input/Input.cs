@@ -1,4 +1,4 @@
-﻿abstract class Input
+﻿public abstract class Input
 {
     public bool A { get; protected set; }
     public bool B { get; protected set; }
@@ -14,4 +14,19 @@
     public bool R { get; protected set; }
 
     public bool S { get; protected set; }
+
+    public bool pA { get; protected set; }
+    public bool pB { get; protected set; }
+    public bool pX { get; protected set; }
+    public bool pY { get; protected set; }
+
+    public bool pUP { get; protected set; }
+    public bool pDOWN { get; protected set; }
+    public bool pLEFT { get; protected set; }
+    public bool pRIGHT { get; protected set; }
+
+    public bool pL { get; protected set; }
+    public bool pR { get; protected set; }
+
+    public bool pS { get; protected set; }
 }

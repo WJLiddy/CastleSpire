@@ -34,10 +34,12 @@ public class AnimSheet
         reader.ReadToFollowing("offsetY");
         offsetY = reader.ReadElementContentAsInt();
 
-        reader.ReadToFollowing("defaultSpeed");
+        reader.ReadToFollowing("speed");
 
         if (!reader.EOF)
             speed = reader.ReadElementContentAsInt();
+        else
+            speed = 1;
 
         reader.Close();
 

@@ -8,20 +8,16 @@ public abstract class Creature
     //Collisions are done based on this as well.
     //Howeever, for movement purposes, there exists a delta-X which is based on a 1/1000 (delta-scale) scale. Think millipixels. That way characters can move at different 'speeds'
     //This accumulator is really only used for movement.
-    public uint x { get; private set; }
-    public uint y { get; private set; }
+    public int x { get; protected set; }
+    public int y { get; protected set; }
 
     //for movement/speed purposes
-    private static readonly uint DELTA_SCALE = 1000;
-    private uint dx;
-    private uint dy;
+    public static readonly int DELTA_SCALE = 1000;
+    protected int dx { get; set; }
+    protected int dy { get; set; }
     
     //size of boundingbox of character
-    public uint size { get; private set; }
-
-
+    public int size { get; protected set; }
    
-
-    
 }
 
