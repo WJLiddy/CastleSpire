@@ -3,6 +3,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 public abstract class Creature
 {
+
+
+    public static readonly double rad2over2 = .7071067812;
+    
+    protected int[] prioritySet = new int[4]{ 0, 1, 2, 3 };
+
     StatSet set;
     //In this game engine, creatures are graphically locked to a discrete grid which is the set of all whole numbers.
     //Collisions are done based on this as well.

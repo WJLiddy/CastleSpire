@@ -22,9 +22,9 @@ public class GS
 
     //Small font heavily used in game
     static ADFont spireFont;
+    
+    public static Texture2D logo;
 
-    //Set of pirate animations, for testing only
-    static AnimSet pirateAnimSet;
 
     //A single input set.
     public static PInput input { get; private set; }
@@ -33,7 +33,6 @@ public class GS
     public GS()
     {
         state = State.Title;
-        animDefs();
         input = new PInput();
         input.cUP = Keys.W;
         input.cRIGHT = Keys.D;
@@ -43,12 +42,9 @@ public class GS
         spireFont = new ADFont(@"misc\spireFont.png");
 
         title = new Title();
+        logo = Utils.TextureLoader(@"misc\logo.png");
     }
 
-    public static void animDefs()
-    {
-        pirateAnimSet = new AnimSet(@"creatures\pc\pirate\anim.xml");
-    }
 
     public static void update(GameTime delta, KeyboardState ks)
     {

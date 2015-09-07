@@ -37,6 +37,11 @@ public class Utils
     {
         sb.Draw(t, new Rectangle(x, y, w, h), c);
     }
+
+    public static void drawTexture(object logo, int x, int y, int size1, int size2)
+    {
+        throw new NotImplementedException();
+    }
 }
 
 

@@ -6,12 +6,12 @@ using System.Xml;
 public class AnimSet
 {
 
-    Hashtable anims;
-    AnimSheet currentAnim = null;
-    int frame = 0;
-    int dir = 0;
-    int framesLeftToNext = 0;
-    bool animate = false;
+    private Hashtable anims;
+    public AnimSheet currentAnim { get; private set; } = null;
+    private int frame = 0;
+    private int dir = 0;
+    private int framesLeftToNext = 0;
+    private bool animate = false;
 
     public AnimSet(String pathToAnimUrl)
     {
@@ -46,10 +46,14 @@ public class AnimSet
     public void startAnim(string anim, int dir)
     {
         currentAnim = (AnimSheet)anims[anim];
-        frame = 0;
         this.dir = dir;
-        animate = true;
-        framesLeftToNext = currentAnim.speed;
+
+        if (!animate)
+        {
+            framesLeftToNext = currentAnim.speed;
+            animate = true;
+            frame = 0;
+        }
     }
 
     public void update()

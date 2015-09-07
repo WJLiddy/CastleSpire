@@ -1,21 +1,18 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 class InGame
 {
     
     ADFont f;
     PC player;
-    
+    public static Map map;
+
 
     public InGame(int race)
     {
         player = new PC(race);
         f = new ADFont(@"misc\spireFont.png");
-
+        map = new Map(@"maps\testmap.xml");
     }
 
     //Load each of the characters.
@@ -27,8 +24,17 @@ class InGame
 
     public void draw()
     {
-        Utils.gfx.Clear(Color.NavajoWhite);
-        player.draw();
+        
+        Utils.gfx.Clear(Color.White);
+
+        //figure out camera stuff
+        int cameraX = player.x - (CastleSpire.baseWidth / 2);
+        int cameraY = player.y - (CastleSpire.baseHeight / 2);
+
+        //Map drawing outside it's limits.
+        map.draw(cameraX , cameraY, CastleSpire.baseWidth, CastleSpire.baseHeight);
+
+        player.draw(cameraX, cameraY);
     }
 
 

@@ -13,15 +13,15 @@ public class CastleSpire : Game
     SpriteBatch spriteBatch;
 
     //our minimum game dimensions. Needed for setting resolution.
-    private readonly int baseWidth = 360;
-    private readonly int baseHeight = 270;
+    public static readonly int baseWidth = 360;
+    public static readonly int baseHeight = 270;
 
     //Turn this on for fullscreen.
     bool fullScreen = false;
 
     //If windowed, antialiasing will never happen, so that's good.
     //Else, it might. If we do not want antialiasing, that's good, I'll just draw boxes. Else, fill the whole screen.
-    bool fullScreenWithAntiAlias = false;
+    bool fullScreenWithAntiAlias = true;
 
     //How to scale the resolution.
     private int drawScaleX = 1;
@@ -65,6 +65,7 @@ public class CastleSpire : Game
         //Init graphics stuff and save to UTIL library
         spriteBatch = new SpriteBatch(GraphicsDevice);
         Utils.gfx = graphics.GraphicsDevice;
+        graphics.SynchronizeWithVerticalRetrace = true;
         Utils.sb = spriteBatch;
 
         //Init our gamestate with basically will handle everything.
@@ -92,6 +93,7 @@ public class CastleSpire : Game
         //Fetch player inputs/ clear AI inputs
         //Let AI decide inputs
         //do all update logic.
+        
           
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
