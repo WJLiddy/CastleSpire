@@ -67,6 +67,7 @@ public class CastleSpire : Game
         Utils.gfx = graphics.GraphicsDevice;
         graphics.SynchronizeWithVerticalRetrace = true;
         Utils.sb = spriteBatch;
+        Utils.load();
 
         //Init our gamestate with basically will handle everything.
         new GS();
@@ -108,9 +109,10 @@ public class CastleSpire : Game
     {
         //nuke old graphics.
         GraphicsDevice.Clear(Color.Black);
+        
          
         //set the spritebatch to start.
-        spriteBatch.Begin(SpriteSortMode.Immediate,BlendState.AlphaBlend,SamplerState.PointClamp,DepthStencilState.Default,RasterizerState.CullNone,null,matrixScale);
+        spriteBatch.Begin(SpriteSortMode.Deferred,BlendState.AlphaBlend,SamplerState.PointClamp,DepthStencilState.Default,RasterizerState.CullNone,null,matrixScale);
 
         GS.draw();
 

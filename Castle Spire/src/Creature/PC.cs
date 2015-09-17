@@ -6,8 +6,10 @@ class PC : Creature
 
     Races race;
     AnimSet anim;
-    StatSet stats;
-    int dir = 0;
+    enum Dir { UP,RIGHT,DOWN,LEFT};
+    Dir dir = Dir.DOWN;
+    public string name { get; private set; }
+    HUD hud;
 
     public PC(int racei)
     {
@@ -18,23 +20,33 @@ class PC : Creature
                 anim = new AnimSet(@"creatures\pc\pirate\anim.xml");
                 stats = new StatSet(@"creatures\pc\pirate\stat.xml");
                 size = 18;
+                name = "NANCY";
                 break;
             case Races.Dragon:
                 anim = new AnimSet(@"creatures\pc\dragon\anim.xml");
                 stats = new StatSet(@"creatures\pc\dragon\stat.xml");
                 size = 16;
+                name = "ALESSIA";
                 break;
             case Races.Meximage:
                 anim = new AnimSet(@"creatures\pc\meximage\anim.xml");
                 stats = new StatSet(@"creatures\pc\meximage\stat.xml");
                 size = 18;
+                name = "JESUS";
                 break;
             case Races.Ninja:
                 anim = new AnimSet(@"creatures\pc\ninja\anim.xml");
                 stats = new StatSet(@"creatures\pc\ninja\stat.xml");
                 size = 16;
+                name = "BIP";
                 break;
         }
+
+        HP = stats.vit();
+        MP = stats.aff();
+        FA = MAX_FATIGUE;
+
+        //hud = new HUD(this);
     }
 
     public void update(Input i, GameTime delta)
@@ -89,46 +101,46 @@ class PC : Creature
         {
             dx = dx - (int)(milliPixelsToMove * rad2over2);
             dy = dy - (int)(milliPixelsToMove * rad2over2);
-            dir = 3;
+            dir = Dir.LEFT;
         }
         else if (xy[0] == 3 && xy[1] == 2)
         {
             dx = dx - (int)(milliPixelsToMove * rad2over2);
             dy = dy + (int)(milliPixelsToMove * rad2over2);
-            dir = 3;
+            dir = Dir.LEFT;
         }
         else if (xy[0] == 1 && xy[1] == 0)
         {
             dx = dx + (int)(milliPixelsToMove * rad2over2);
             dy = dy - (int)(milliPixelsToMove * rad2over2);
-            dir = 1;
+            dir = Dir.RIGHT;
         }
         else if (xy[0] == 1 && xy[1] == 2)
         {
             dx = dx + (int)(milliPixelsToMove * rad2over2);
             dy = dy + (int)(milliPixelsToMove * rad2over2);
-            dir = 1;
+            dir = Dir.RIGHT;
         }
 
         else if (xy[0] == 1)
         {
             dx = dx + milliPixelsToMove;
-            dir = 1;
+            dir = Dir.RIGHT;
         }
         else if (xy[0] == 3)
         {
             dx = dx - milliPixelsToMove;
-            dir = 3;
+            dir = Dir.LEFT;
         }
         else if (xy[1] == 0)
         {
             dy = dy - milliPixelsToMove;
-            dir = 0;
+            dir = Dir.UP;
         }
         else if (xy[1] == 2)
         {
             dy = dy + milliPixelsToMove;
-            dir = 2;
+            dir = Dir.DOWN;
         }
 
 
@@ -142,9 +154,9 @@ class PC : Creature
 
         if (i.LEFT || i.RIGHT || i.UP || i.DOWN)
         {
-            anim.startAnim("walk", dir);
+            anim.startAnim("walk", (int)dir);
         } else { 
-            anim.hold("idle", 0, dir);
+            anim.hold("idle", 0, (int)dir);
         }
 
         //check to see if my dx would cause a collision.

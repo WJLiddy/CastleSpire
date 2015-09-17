@@ -14,8 +14,6 @@ class CharSelect
     private AnimSet dragon;
     private Texture2D arrow;
 
-    ADFont f;
-
     public int charSelect { get; private set; } = 0;
 
     public CharSelect()
@@ -32,9 +30,6 @@ class CharSelect
 
         arrow = Utils.TextureLoader(@"misc\bigDownArrow.png");
 
-
-
-        f = new ADFont(@"misc\spireFont.png");
     }
 
     //Load each of the characters.
@@ -74,9 +69,7 @@ class CharSelect
     public void draw()
     {
         Utils.gfx.Clear(new Color (20,0,28));
-
-        f.draw("Choose your character",10,10,Color.White,3,false);
-
+        Utils.drawString("CHOOSE yOUR CHARACTER", 50, 50, Color.White, 3);
         pirate.draw(50, 100,24*2,32*2);
         dragon.draw(100, 100, 24 * 2, 32 * 2);
         meximage.draw(150, 100, 24 * 2, 32 * 2);

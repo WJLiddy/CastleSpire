@@ -25,6 +25,7 @@ public class GS
     
     public static Texture2D logo;
 
+    public static GameTime lastDelta;
 
     //A single input set.
     public static PInput input { get; private set; }
@@ -48,6 +49,9 @@ public class GS
 
     public static void update(GameTime delta, KeyboardState ks)
     {
+
+        lastDelta = delta;
+
         input.update(ks);
 
         State newState;
@@ -85,7 +89,8 @@ public class GS
 
     public static void draw()
     {
-        switch (state)
+
+      switch (state)
         {
             case State.Title:
                 title.draw();
@@ -97,6 +102,11 @@ public class GS
                 inGame.draw();
                 break;
         }
+
+        Utils.drawString(lastDelta.IsRunningSlowly ? "SLOW!" : "", 100, 1, Color.BlanchedAlmond, 1, true);
+
+
+
     }
 }
 

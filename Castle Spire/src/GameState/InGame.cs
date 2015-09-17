@@ -3,15 +3,22 @@
 class InGame
 {
     
-    ADFont f;
     PC player;
+    
+
+
     public static Map map;
+    HUD h,h1,h2,h3;
 
 
     public InGame(int race)
     {
         player = new PC(race);
-        f = new ADFont(@"misc\spireFont.png");
+
+        h = new HUD(player, HUD.Corner.TOPLEFT);
+        h1 = new HUD(player, HUD.Corner.TOPRIGHT);
+        h2 = new HUD(player, HUD.Corner.BOTTOMLEFT);
+        h3 = new HUD(player, HUD.Corner.BOTTOMRIGHT);
         map = new Map(@"maps\testmap.xml");
     }
 
@@ -24,7 +31,7 @@ class InGame
 
     public void draw()
     {
-        
+
         Utils.gfx.Clear(Color.White);
 
         //figure out camera stuff
@@ -32,22 +39,44 @@ class InGame
         int cameraY = player.y - (CastleSpire.baseHeight / 2);
 
         //Map drawing outside it's limits.
-        map.draw(cameraX , cameraY, CastleSpire.baseWidth, CastleSpire.baseHeight);
+        map.drawBase(cameraX, cameraY, CastleSpire.baseWidth, CastleSpire.baseHeight);
 
-        player.draw(cameraX, cameraY);
+       for (int y = 0; y != CastleSpire.baseHeight; y++)
+        {
+            map.drawObjectLine(cameraX, cameraY, CastleSpire.baseWidth, CastleSpire.baseHeight,y);
+
+            if ((cameraY + y) == (player.y))
+              player.draw(cameraX, cameraY);
+        }
+
+        /**
+
+         System.Random r = new System.Random();
+
+        for (int i = 0; i != 1000; i++)
+        {
+                    player.draw(cameraX, cameraY);
+
+        }
+
+        Utils.drawString("TOO MANY NANCIIIEEES", 20, 50, new Color((float)(r.NextDouble() ), (float)(r.NextDouble()), (float)(r.NextDouble() )), 3, true);
+        
+    */
+
+
+        //one y for each physical line of pixels
+        //one y to represent what line of pixels that is on the map.
+
+
+
+
+
+        h.draw();
+        h1.draw();
+        h2.draw();
+        h3.draw();
+        
+
     }
 
-
-    /**
-           input.update(ks);
-
-        if (input.UP)
-            pirateAnimSet.hold("idle", 0, 0);
-        else if (input.RIGHT)
-            pirateAnimSet.hold("idle", 0, 1);
-        else if (input.DOWN)
-            pirateAnimSet.hold("idle", 0, 2);
-        else if (input.LEFT)
-            pirateAnimSet.hold("idle", 0, 3);
-    */
 }
