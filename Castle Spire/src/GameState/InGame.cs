@@ -45,33 +45,25 @@ class InGame
         {
             map.drawObjectLine(cameraX, cameraY, CastleSpire.baseWidth, CastleSpire.baseHeight,y);
 
+            //THIS WILL WORK when drawObjectLine correctly does
+            //Keep in mind draw object line should look for a low wall then rise up.
+            //What this is doing is over-drawing all of the walls. 
             if ((cameraY + y) == (player.y))
               player.draw(cameraX, cameraY);
         }
 
-        /**
 
-         System.Random r = new System.Random();
+        //Nancies();
 
-        for (int i = 0; i != 1000; i++)
-        {
-                    player.draw(cameraX, cameraY);
+    
 
-        }
-
-        Utils.drawString("TOO MANY NANCIIIEEES", 20, 50, new Color((float)(r.NextDouble() ), (float)(r.NextDouble()), (float)(r.NextDouble() )), 3, true);
         
-    */
-
-
-        //one y for each physical line of pixels
-        //one y to represent what line of pixels that is on the map.
 
 
 
 
 
-        h.draw();
+      //  h.draw();
         h1.draw();
         h2.draw();
         h3.draw();
@@ -79,4 +71,19 @@ class InGame
 
     }
 
+
+    public void Nancies(int cameraX, int cameraY)
+    {
+        
+    System.Random r = new System.Random();
+
+    for (int i = 0; i != 1000; i++)
+    {
+        player.draw(cameraX + (int)(r.NextDouble()*400.0) - 200, cameraY + (int)( r.NextDouble() * 400) - 200 );
+
+    }
+
+    Utils.drawString("TOO MANY NANCIIIEEES", 20, 50, new Color((float)(r.NextDouble() ), (float)(r.NextDouble()), (float)(r.NextDouble() )), 3, true);
+
+    }
 }
