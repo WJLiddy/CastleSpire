@@ -41,6 +41,7 @@
     <Compile Include="ADFont.cs" />
     <Compile Include="AnimSet.cs" />
     <Compile Include="AnimSheet.cs" />
+    <Compile Include="Clock.cs" />
     <Compile Include="Dummy.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -109,7 +109,7 @@ public class Map
 
     public void drawObjectLine(int x, int y, int w, int h, int step)
     {
-        if (step + y >= 0)
+        if (step + y >= 0 && step + y < baseMap.Height)
         {
             foreach (MapObject o in allObjects[step + y])
             {

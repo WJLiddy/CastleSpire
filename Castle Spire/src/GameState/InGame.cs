@@ -4,7 +4,7 @@ class InGame
 {
     
     PC player;
-    
+    Clock clock;
 
 
     public static Map map;
@@ -20,13 +20,26 @@ class InGame
         h2 = new HUD(player, HUD.Corner.BOTTOMLEFT);
         h3 = new HUD(player, HUD.Corner.BOTTOMRIGHT);
         map = new Map(@"maps\testmap.xml");
+        clock = new Clock();
     }
 
     //Load each of the characters.
     public GS.State update(GameTime delta)
     {
         player.update(GS.input,delta);
+
+        // day -> 1 hour
+        // 24 hours -> 60 minutes
+        // hour 75 seconds
+
+        // minute 75 / 60 seconds
+
+        //75.0 / (60.0 * 60.0)
+
+        //How many sec per minue
+        clock.tick((60.0 / 75.0));
         return GS.State.InGame;
+
     }
 
     public void draw()
@@ -52,6 +65,7 @@ class InGame
               player.draw(cameraX, cameraY);
         }
 
+        Utils.drawRect(clock.color(), 0, 0, CastleSpire.baseWidth, CastleSpire.baseHeight);
 
         //Nancies();
 
@@ -62,11 +76,13 @@ class InGame
 
 
 
-
+        
       //  h.draw();
         h1.draw();
         h2.draw();
         h3.draw();
+        ClockHUD.draw(clock);
+
         
 
     }

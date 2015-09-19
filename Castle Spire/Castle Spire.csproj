@@ -39,6 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="HUD.cs" />
+    <Compile Include="src\ClockGUI.cs" />
     <Compile Include="src\GameState\CharSelect.cs" />
     <Compile Include="src\GameState\GS.cs" />
     <Compile Include="src\GameState\InGame.cs" />
