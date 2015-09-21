@@ -26,7 +26,7 @@ public class Clock
 
         day = new Color(0f, 0f, 0f, 0f);
 
-        twilight = new Color(162f / 255f, 88f / 255f, 0f, 0.5f);
+        twilight = new Color(40f / 255f, 25f / 255f, 0f, 0.5f);
         night = new Color(0f, 0f, 0f, 1f);
 
         hourDawn = 7;
@@ -111,28 +111,15 @@ public class Clock
         }
         else if (hours() < hourSunrise)
         {
-            return mix(60f * (hourSunrise - hourDawn), ((60f * (hours() - hourDawn)) + minutes()) + (seconds() / 60f) , night, twilight);
+            return Utils.mix(60f * (hourSunrise - hourDawn), ((60f * (hours() - hourDawn)) + minutes()) + (seconds() / 60f), night, twilight);
         }
         else if (hours() < hourDayStart)
         {
-            return mix(60f * (hourDayStart - hourSunrise), ((60f * (hours() - hourSunrise)) + minutes()) + (seconds() / 60f), twilight, day);
+            return Utils.mix(60f * (hourDayStart - hourSunrise), ((60f * (hours() - hourSunrise)) + minutes()) + (seconds() / 60f), twilight, day);
         }
         else
             return day;
     }
-
-
-    public Color mix (float minDuration, float position, Color last, Color next)
-    {
-
-
-        float delta = position / minDuration;
-
-        float R = ((last.R / 255f) * (1f - delta)) + (delta * (next.R / 255f));
-        float G = ((last.G / 255f) * (1f - delta)) + (delta * (next.G / 255f));
-        float B = ((last.B / 255f) * (1f - delta)) + (delta * (next.B / 255f));
-        float A = ((last.A / 255f) * (1f - delta)) + (delta * (next.A / 255f));
-
-         return new Color(R, G, B, A);
-    }
 }
+
+

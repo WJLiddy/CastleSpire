@@ -1,10 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 
 class InGame
 {
     
     PC player;
+    Color soulcol = new Color(0, 0, 0.1f, 0.5f);
     Clock clock;
+    double TICK_TIME = (60.0 / 75.0);
 
 
     public static Map map;
@@ -37,7 +40,7 @@ class InGame
         //75.0 / (60.0 * 60.0)
 
         //How many sec per minue
-        clock.tick((60.0 / 75.0));
+        clock.tick(TICK_TIME * 10);
         return GS.State.InGame;
 
     }
@@ -65,7 +68,24 @@ class InGame
               player.draw(cameraX, cameraY);
         }
 
-        Utils.drawRect(clock.color(), 0, 0, CastleSpire.baseWidth, CastleSpire.baseHeight);
+        Light soul = null;
+        LinkedList<Light> lights = new LinkedList<Light>();
+
+        //Before dawn, draw a lightsource at the player spot. That way he/she can see a little bit.
+        if (clock.hours() < clock.hourDawn)
+        {
+            soul = new Light(soulcol, player.x + (player.size / 2), player.y + (player.size / 2), 20, 40);
+            lights.AddFirst(soul);
+        }
+
+        if (clock.hours() == clock.hourDawn && (clock.minutes() < 20))
+        {
+            soul = new Light(Utils.mix(20 * 60,(60 * clock.minutes()) + clock.seconds(),soulcol,clock.color()), player.x + (player.size / 2), player.y + (player.size / 2), 20,40);
+            lights.AddFirst(soul);
+        }
+        
+
+        Utils.drawTexture(Light.createLightMap(clock.color(),lights,cameraX,cameraY,CastleSpire.baseWidth,CastleSpire.baseHeight), 0, 0);
 
         //Nancies();
 

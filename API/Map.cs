@@ -202,7 +202,9 @@ public class Map
 
                     for (int dh = 0; dh != h; dh++)
                     {
-                        colorData[dh] = objectLayer[x + (( (y - h) + dh) * mapW)];  
+                        //we know the object is 'h' pixels high from the base.
+                        //we also know that the top is at y = 0.
+                        colorData[dh] = objectLayer[x + ( (y +- ((h - 1) - dh)) * mapW)];  
                     }
 
                     newObject.SetData<Color>(colorData);
