@@ -40,7 +40,7 @@ class InGame
         //75.0 / (60.0 * 60.0)
 
         //How many sec per minue
-        clock.tick(TICK_TIME);
+        clock.tick(50 * TICK_TIME);
         return GS.State.InGame;
 
     }
@@ -68,24 +68,34 @@ class InGame
               player.draw(cameraX, cameraY);
         }
 
+
         Light soul = null;
+
         LinkedList<Light> lights = new LinkedList<Light>();
-
-        //Before dawn, draw a lightsource at the player spot. That way he/she can see a little bit.
-        if (clock.hours() < clock.hourDawn)
-        {
-            soul = new Light(soulcol, player.x + (player.size / 2), player.y + (player.size / 2), 20, 40);
-            lights.AddFirst(soul);
-        }
-
-        if (clock.hours() == clock.hourDawn && (clock.minutes() < 20))
-        {
-            soul = new Light(Utils.mix(20 * 60,(60 * clock.minutes()) + clock.seconds(),soulcol,clock.color()), player.x + (player.size / 2), player.y + (player.size / 2), 20,40);
-            lights.AddFirst(soul);
-        }
         
 
-        Utils.drawTexture(Light.createLightMap(clock.color(),lights,cameraX,cameraY,CastleSpire.baseWidth,CastleSpire.baseHeight), 0, 0);
+         //Before dawn, draw a lightsource at the player spot. That way he/she can see a little bit.
+         if (clock.hours() < AmbientLight.hourDawn || clock.hours() >= AmbientLight.hourDusk)
+         {
+             soul = new Light(soulcol, player.x + (player.size / 2), player.y + (player.size / 2), 20, 40);
+             lights.AddFirst(soul);
+         }
+
+         if (clock.hours() == AmbientLight.hourDawn && (clock.minutes() < 20))
+         {
+             soul = new Light(Utils.mix(20 * 60,(60 * clock.minutes()) + clock.seconds(),soulcol, AmbientLight.ambientColor(clock)), player.x + (player.size / 2), player.y + (player.size / 2), 20,40);
+             lights.AddFirst(soul);
+         }
+
+
+        if (clock.hours() == AmbientLight.hourSunset && (clock.minutes() > 40))
+        {
+            soul = new Light(Utils.mix(20 * 60, (60 * (clock.minutes() - 40 ) ) + clock.seconds(), AmbientLight.ambientColor(clock), soulcol) , player.x + (player.size / 2), player.y + (player.size / 2), 20, 40);
+            lights.AddFirst(soul);
+        }
+
+
+        Utils.drawTexture(Light.createLightMap(AmbientLight.ambientColor(clock),lights,cameraX,cameraY,CastleSpire.baseWidth,CastleSpire.baseHeight), 0, 0);
 
         //Nancies();
 

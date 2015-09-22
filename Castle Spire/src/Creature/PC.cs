@@ -154,7 +154,7 @@ class PC : Creature
 
         if (i.LEFT || i.RIGHT || i.UP || i.DOWN)
         {
-            anim.startAnim("walk", (int)dir);
+            anim.autoAnimate("walk", (int)dir);
         } else { 
             anim.hold("idle", 0, (int)dir);
         }

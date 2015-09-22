@@ -38,6 +38,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AmbientLight.cs" />
     <Compile Include="HUD.cs" />
     <Compile Include="src\ClockGUI.cs" />
     <Compile Include="src\GameState\CharSelect.cs" />

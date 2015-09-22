@@ -65,11 +65,6 @@ public class Light
         lightMapTexture.SetData<Color>(lightMap);
         return lightMapTexture;
 
-
-
-
-
-
     }
 
 }

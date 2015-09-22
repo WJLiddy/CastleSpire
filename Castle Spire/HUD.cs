@@ -64,7 +64,7 @@ class HUD
 
             case Corner.TOPRIGHT:
                 //fake
-                x_NAME = CastleSpire.baseWidth - ADFont.scaleWidth(player.name, true);
+                x_NAME = CastleSpire.baseWidth - ADFont.getScaleWidth(player.name, true);
                 y_NAME = NAMEY;
                 x_HUD = CastleSpire.baseWidth - PANELWIDTH;
                 y_HUD = NAMESPACEY;
@@ -82,7 +82,7 @@ class HUD
                 break;
 
             case Corner.BOTTOMRIGHT:
-                x_NAME = CastleSpire.baseWidth - ADFont.scaleWidth(player.name,true);
+                x_NAME = CastleSpire.baseWidth - ADFont.getScaleWidth(player.name,true);
                 y_NAME = CastleSpire.baseHeight + -NAMESPACEY + 1;
                 x_HUD = CastleSpire.baseWidth - PANELWIDTH;
                 y_HUD = CastleSpire.baseHeight + -NAMESPACEY + -PANELHEIGHT;

@@ -6,35 +6,32 @@ using System.Xml;
 public class AnimSet
 {
 
+    //All of the animations in this set.
     private Hashtable anims;
+    //The current animation we're on.
     public AnimSheet currentAnim { get; private set; } = null;
+
+    //Current frame we are on.
     private int frame = 0;
+    //Current direction we are on.
     private int dir = 0;
-    private int framesLeftToNext = 0;
+    //Ticks until next frame.
+    private int ticksLeftToNext = 0;
+    //If true, automatically animate on tick.
     private bool animate = false;
 
     public AnimSet(String pathToAnimUrl)
     {
         anims = new Hashtable();
+        //Loads in all the animsheets, picking the last one to be the default.
+        loadAnimSets(pathToAnimUrl);
 
-        XmlReader reader = XmlReader.Create(pathToAnimUrl);
-
-        reader.ReadToFollowing("AnimSheet");
-        while (!reader.EOF)
-        {
-            String animSheetName = reader.ReadElementContentAsString();
-            anims.Add(animSheetName, new AnimSheet(Path.GetDirectoryName(pathToAnimUrl) + @"\" + animSheetName + ".xml"));
-            reader.ReadToFollowing("AnimSheet");
-        }
-   
-        reader.Close();
-
-        //by default, "idle" will always be loaded
-        //TODO: Better implementation.
-        hold("idle", 0, 0);
-
+        //Overrides default if "idle" is in the set.
+        if (anims["idle"] != null)
+            hold("idle", 0, 0);
     }
 
+    //freezes to this animation at this frame and direction.
     public void hold(string anim, int frame, int dir)
     {
         currentAnim = (AnimSheet)anims[anim];
@@ -43,14 +40,15 @@ public class AnimSet
         this.dir = dir;
     }
 
-    public void startAnim(string anim, int dir)
+    //starts animation. If animation is already in progress, does nothing
+    public void autoAnimate(string anim, int dir)
     {
         currentAnim = (AnimSheet)anims[anim];
         this.dir = dir;
 
         if (!animate)
         {
-            framesLeftToNext = currentAnim.speed;
+            ticksLeftToNext = currentAnim.speed;
             animate = true;
             frame = 0;
         }
@@ -60,18 +58,16 @@ public class AnimSet
     {
         if (animate)
         {
-            framesLeftToNext--;
+            ticksLeftToNext--;
 
-            if (framesLeftToNext == 0)
+            if (ticksLeftToNext == 0)
             {
                 frame = (frame + 1) % currentAnim.frameCount;
-                framesLeftToNext = currentAnim.speed;
+                ticksLeftToNext = currentAnim.speed;
             }
         }
-
     }
 
-    //camera operation here.
     public void draw(int x, int y, int w, int h)
     {
         currentAnim.draw(frame,dir,x,y,w,h);
@@ -80,6 +76,20 @@ public class AnimSet
     public void draw(int x, int y)
     {
         currentAnim.draw(frame, dir, x, y);
+    }
+
+    public void loadAnimSets(String pathToAnimUrl)
+    {
+        XmlReader reader = XmlReader.Create(pathToAnimUrl);
+        reader.ReadToFollowing("AnimSheet");
+        while (!reader.EOF)
+        {
+            String animSheetName = reader.ReadElementContentAsString();
+            anims.Add(animSheetName, new AnimSheet(Path.GetDirectoryName(pathToAnimUrl) + @"\" + animSheetName + ".xml"));
+            hold(animSheetName, 0, 0);
+            reader.ReadToFollowing("AnimSheet");
+        }
+        reader.Close();
     }
 }
 

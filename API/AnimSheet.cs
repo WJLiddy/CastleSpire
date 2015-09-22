@@ -17,6 +17,24 @@ public class AnimSheet
     
     public AnimSheet(String pathToSheetXML)
     {
+        readParameters(pathToSheetXML);
+        sheet = Utils.TextureLoader(Path.ChangeExtension(pathToSheetXML, ".png"));
+    }
+    
+    //draw a given frame at a given place at a given size
+    public void draw(int frame, int dir, int x, int y, int w, int h)
+    {
+        Utils.sb.Draw(sheet, new Rectangle(x, y, w, h), new Rectangle(frame*frameWidth, dir*frameHeight, frameWidth, frameHeight), Color.White);
+    }
+
+    //draw a given frame at a given place at a given size
+    public void draw(int frame, int dir, int x, int y)
+    {
+        Utils.sb.Draw(sheet, new Rectangle(x, y, frameWidth, frameHeight), new Rectangle(frame * frameWidth, dir * frameHeight, frameWidth, frameHeight), Color.White);
+    }
+
+    public void readParameters(String pathToSheetXML)
+    {
         XmlReader reader = XmlReader.Create(pathToSheetXML);
 
         reader.ReadToFollowing("frameWidth");
@@ -42,27 +60,7 @@ public class AnimSheet
             speed = 1;
 
         reader.Close();
-
-        sheet = Utils.TextureLoader(Path.ChangeExtension(pathToSheetXML, ".png"));
-
     }
-    
-    //draw a given frame at a given place at a given size
-    public void draw(int frame, int dir, int x, int y, int w, int h)
-    {
-        //destination, source
-        Utils.sb.Draw(sheet, new Rectangle(x, y, w, h), new Rectangle(frame*frameWidth, dir*frameHeight, frameWidth, frameHeight), Color.White);
-    }
-
-    //draw a given frame at a given place at a given size
-    public void draw(int frame, int dir, int x, int y)
-    {
-        //destination, source
-        Utils.sb.Draw(sheet, new Rectangle(x, y, frameWidth, frameHeight), new Rectangle(frame * frameWidth, dir * frameHeight, frameWidth, frameHeight), Color.White);
-    }
-
-
-
 
 }
 
