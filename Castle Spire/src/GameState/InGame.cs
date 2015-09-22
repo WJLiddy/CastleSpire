@@ -40,7 +40,7 @@ class InGame
         //75.0 / (60.0 * 60.0)
 
         //How many sec per minue
-        clock.tick(TICK_TIME * 10);
+        clock.tick(TICK_TIME);
         return GS.State.InGame;
 
     }
@@ -91,11 +91,7 @@ class InGame
 
     
 
-        
-
-
-
-
+      
         
       //  h.draw();
         h1.draw();

@@ -114,7 +114,7 @@ public class Map
             foreach (MapObject o in allObjects[step + y])
             {
                 //      Utils.sb.Draw(o.t, new Rectangle(0, 0, 1, o.h), new Rectangle(x + o.x, y + -o.h + o.base_y, 1, o.h) , Color.White);
-                Utils.sb.Draw(o.t, new Rectangle(-x + o.x, -y + o.base_y - o.h, 1, o.h), new Rectangle(0, 0, 1, o.h), Color.White);
+                Utils.sb.Draw(o.t, new Rectangle(-x + o.x, -y + o.base_y +- (o.h - 1), 1, o.h), new Rectangle(0, 0, 1, o.h), Color.White);
             }
         }
       //  { }
