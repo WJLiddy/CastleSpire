@@ -1,8 +1,8 @@
 <Map>
 	<base>basemap.png</base>
-	<collision>collision.png</collision>
-	<objectmask>objectMask.png</objectmask>
-	<objectlayer>object.png</objectlayer>
+	<collision>basemap_c.png</collision>
+	<objectmask>basemap_o_m.png</objectmask>
+	<objectlayer>basemap_o.png</objectlayer>
 	
 	<collisionKeyR>255</collisionKeyR>	
 	<collisionKeyG>0</collisionKeyG>

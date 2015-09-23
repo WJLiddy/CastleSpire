@@ -19,25 +19,25 @@ class PC : Creature
             case Races.Pirate:
                 anim = new AnimSet(@"creatures\pc\pirate\anim.xml");
                 stats = new StatSet(@"creatures\pc\pirate\stat.xml");
-                size = 18;
+                size = 12;
                 name = "NANCY";
                 break;
             case Races.Dragon:
                 anim = new AnimSet(@"creatures\pc\dragon\anim.xml");
                 stats = new StatSet(@"creatures\pc\dragon\stat.xml");
-                size = 16;
+                size = 15;
                 name = "ALESSIA";
                 break;
             case Races.Meximage:
                 anim = new AnimSet(@"creatures\pc\meximage\anim.xml");
                 stats = new StatSet(@"creatures\pc\meximage\stat.xml");
-                size = 18;
+                size = 14;
                 name = "JESUS";
                 break;
             case Races.Ninja:
                 anim = new AnimSet(@"creatures\pc\ninja\anim.xml");
                 stats = new StatSet(@"creatures\pc\ninja\stat.xml");
-                size = 16;
+                size = 12;
                 name = "BIP";
                 break;
         }

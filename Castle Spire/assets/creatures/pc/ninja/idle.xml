@@ -1,7 +1,7 @@
 <AnimSheet>
    <frameWidth>24</frameWidth>
    <frameHeight>32</frameHeight>
-   <frameCount>4</frameCount>
-   <offsetX>10</offsetX>
-   <offsetY>10</offsetY>
+   <frameCount>1</frameCount>
+   <offsetX>6</offsetX>
+   <offsetY>22</offsetY>
 </AnimSheet>

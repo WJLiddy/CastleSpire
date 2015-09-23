@@ -2,7 +2,7 @@
    <frameWidth>24</frameWidth>
    <frameHeight>32</frameHeight>
    <frameCount>4</frameCount>
-   <offsetX>10</offsetX>
-   <offsetY>10</offsetY>
+   <offsetX>5</offsetX>
+   <offsetY>18</offsetY>
    <speed>11</speed>
 </AnimSheet>
