@@ -25,7 +25,7 @@ class PC : Creature
             case Races.Dragon:
                 anim = new AnimSet(@"creatures\pc\dragon\anim.xml");
                 stats = new StatSet(@"creatures\pc\dragon\stat.xml");
-                size = 15;
+                size = 16;
                 name = "ALESSIA";
                 break;
             case Races.Meximage:
