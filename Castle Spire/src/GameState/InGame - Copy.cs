@@ -57,24 +57,21 @@ class InGame
         //Map drawing outside it's limits.
         map.drawBase(cameraX, cameraY, CastleSpire.baseWidth, CastleSpire.baseHeight);
 
-       for (int y = 0; y != 2 * CastleSpire.baseHeight; y++)
+       for (int y = 0; y != CastleSpire.baseHeight; y++)
         {
             map.drawObjectLine(cameraX, cameraY, CastleSpire.baseWidth, CastleSpire.baseHeight,y);
 
             //THIS WILL WORK when drawObjectLine correctly does
             //Keep in mind draw object line should look for a low wall then rise up.
             //What this is doing is over-drawing all of the walls. 
-            if ((cameraY + y) == (player.y + (player.size - 1)))
+            if ((cameraY + y) == (player.y))
               player.draw(cameraX, cameraY);
         }
 
 
         Light soul = null;
-       
-        Light candle = new Light(new Color((100f/255f),  (50f / 255f), 0f, 0.4f + (float)(Utils.random.NextDouble() * 0.1)), 207, 434, 5, 90);
 
         LinkedList<Light> lights = new LinkedList<Light>();
-        lights.AddFirst(candle);
         
 
          //Before dawn, draw a lightsource at the player spot. That way he/she can see a little bit.

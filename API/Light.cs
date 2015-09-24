@@ -22,7 +22,9 @@ public class Light
 
     //TODO: Add "strength" to light parameter? So some lights are brighter than others.
 
+
     //A lightmap is a texure that is drawn on top of everything to simulate lighting effects.
+    //TODO PROFILE Hard.
     public static Texture2D createLightMap(Color ambient, LinkedList<Light> Lights, int camX, int camY, int w, int h)
     {
         //first make a light map that is the size of the whole screen.
@@ -42,20 +44,18 @@ public class Light
         //crappy O(n^3) algo but we're just testing.
 
         //Make it all ambient.
-        for (int x = 0; x != w; x++)
+
+        foreach (Light l in Lights)
         {
-            for (int y = 0; y != h; y++)
-            {
-                foreach(Light l in Lights)
-                {
-                    if (Utils.intdist(x, l.x, y, l.y) < l.fallOff100)
+            for (int lit_x = l.x - (l.fallOff100); lit_x != l.x + (l.fallOff100); lit_x++)
+            { 
+                for (int lit_y = l.y - (l.fallOff100); lit_y != l.y + (l.fallOff100);lit_y++)
+                { 
+                    if ((Utils.intdist(lit_x, l.x, lit_y, l.y) < l.fallOff100) && 0 <= (lit_x - camX) && (lit_x - camX) < w && 0 <= (lit_y - camY) && (lit_y - camY) < h)
                     {
-                        //draw with respect to camera.
-                        //Cool Glitch Utils.mix(Utils.intdist(x, l.x, y, l.y),l.fallOff100,l.c,ambient);
-
-                         lightMap[(x - camX) + (w * (y - camY))] = Utils.mix(l.fallOff100,Utils.intdist(x, l.x, y, l.y),l.c,ambient);
+                       // System.Console.WriteLine("x " + " " + "y " +  )
+                        lightMap[(lit_x - camX) + (w * (lit_y - camY))] = Utils.mix(l.fallOff100, Utils.intdist(lit_x, l.x, lit_y, l.y), l.c, lightMap[(lit_x - camX) + (w * (lit_y - camY))]);
                     }
-
                 }
             }
         }

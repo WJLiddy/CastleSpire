@@ -11,6 +11,7 @@ public class Utils
     public static string pathToAssets;
     public static Texture2D rect;
     public static ADFont f;
+    public static Random random;
 
     public static Texture2D TextureLoader(String pathToTexture)
     {
@@ -24,6 +25,7 @@ public class Utils
     {
         rect = Utils.TextureLoader(@"misc/rect.png");
         f = new ADFont(@"misc/spireFont.png");
+        random = new Random();
     }
 
     public static void drawTexture(Texture2D t, int x, int y)

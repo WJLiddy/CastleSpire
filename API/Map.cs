@@ -109,7 +109,8 @@ public class Map
 
     public void drawObjectLine(int x, int y, int w, int h, int step)
     {
-        if (step + y >= 0 && step + y < baseMap.Height)
+        //TODO Measure highest element of list to see if it needs rendered
+        if (step + y >= 0 && step + y < (2 * baseMap.Height))
         {
             foreach (MapObject o in allObjects[step + y])
             {
