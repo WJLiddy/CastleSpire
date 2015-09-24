@@ -75,11 +75,9 @@ public class Utils
         return new Color(R, G, B, A);
     }
 
-    public static int intdist(int x1, int x2, int y1, int y2)
+    public static double dist(int x1, int x2, int y1, int y2)
     {
-        double xs = Math.Pow(x2 - x1, 2);
-        double ys = Math.Pow(y2 - y1, 2);
-        return (int)(Math.Sqrt(xs + ys));
+        return (Math.Sqrt(((x1 - x2) * (x1 - x2)) + ((y1 - y2) * (y1 - y2))));
     }
 
 }

@@ -51,10 +51,10 @@ public class Light
             { 
                 for (int lit_y = l.y - (l.fallOff100); lit_y != l.y + (l.fallOff100);lit_y++)
                 { 
-                    if ((Utils.intdist(lit_x, l.x, lit_y, l.y) < l.fallOff100) && 0 <= (lit_x - camX) && (lit_x - camX) < w && 0 <= (lit_y - camY) && (lit_y - camY) < h)
+                    if (0 <= (lit_x - camX) && (lit_x - camX) < w && 0 <= (lit_y - camY) && (lit_y - camY) < h && (Utils.dist(lit_x, l.x, lit_y, l.y) < l.fallOff100))
                     {
                        // System.Console.WriteLine("x " + " " + "y " +  )
-                        lightMap[(lit_x - camX) + (w * (lit_y - camY))] = Utils.mix(l.fallOff100, Utils.intdist(lit_x, l.x, lit_y, l.y), l.c, lightMap[(lit_x - camX) + (w * (lit_y - camY))]);
+                        lightMap[(lit_x - camX) + (w * (lit_y - camY))] = Utils.mix(l.fallOff100, (float)Utils.dist(lit_x, l.x, lit_y, l.y), l.c, lightMap[(lit_x - camX) + (w * (lit_y - camY))]);
                     }
                 }
             }
