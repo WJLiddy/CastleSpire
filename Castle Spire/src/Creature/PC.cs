@@ -13,6 +13,8 @@ class PC : Creature
 
     public PC(int racei)
     {
+        x = 1;
+        y = 1;
         race = (Races)racei;
         switch (race)
         {

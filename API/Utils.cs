@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 
 
@@ -13,8 +15,38 @@ public class Utils
     public static ADFont f;
     public static Random random;
 
+    public struct Mix
+    {
+        public float delta;
+        public Color last;
+        public Color next;
+
+        public Mix(float d, Color l, Color n)
+        {
+            delta = d;
+            last = l;
+            next = n;
+        }
+
+        public override bool Equals(Object m)
+        {
+            return ((Mix)m).delta == delta &&
+            ((Mix)m).last.Equals(last) &&
+            ((Mix)m).next.Equals(next);
+        }
+
+        public override int GetHashCode()
+        {
+            return ((int)(Int32.MaxValue * delta)/2) + (int)((last.PackedValue / 4)) + (int)((next.PackedValue / 4));
+        }
+    }
+
+
+    public static Dictionary<Mix,Color> colorHash;
+
     public static Texture2D TextureLoader(String pathToTexture)
     {
+ 
         System.IO.Stream stream = File.Open(Utils.pathToAssets + pathToTexture, FileMode.Open);
         Texture2D t =  Texture2D.FromStream(gfx, stream);
         stream.Close();
@@ -26,6 +58,7 @@ public class Utils
         rect = Utils.TextureLoader(@"misc/rect.png");
         f = new ADFont(@"misc/spireFont.png");
         random = new Random();
+        colorHash = new Dictionary<Mix, Color>(1024*1024*32);
     }
 
     public static void drawTexture(Texture2D t, int x, int y)
@@ -63,6 +96,31 @@ public class Utils
         f.draw(s, x,y, c, scale, outline);
     }
 
+    /** Hash Edition 
+    public static Color mix(float minDuration, float position, Color last, Color next)
+    {
+        //implement a hash in case we've seen this argument before
+        float delta = position / minDuration;
+
+        Mix m = new Mix(delta, last, next);
+        if (colorHash.ContainsKey(m))
+            return colorHash[m];
+        else
+        {
+
+
+            float R = ((last.R / 255f) * (1f - delta)) + (delta * (next.R / 255f));
+            float G = ((last.G / 255f) * (1f - delta)) + (delta * (next.G / 255f));
+            float B = ((last.B / 255f) * (1f - delta)) + (delta * (next.B / 255f));
+            float A = ((last.A / 255f) * (1f - delta)) + (delta * (next.A / 255f));
+
+            colorHash[m] = new Color(R, G, B, A);
+            return colorHash[m];
+        }
+    }
+       */
+
+ 
     public static Color mix(float minDuration, float position, Color last, Color next)
     {
         float delta = position / minDuration;
@@ -71,9 +129,10 @@ public class Utils
         float G = ((last.G / 255f) * (1f - delta)) + (delta * (next.G / 255f));
         float B = ((last.B / 255f) * (1f - delta)) + (delta * (next.B / 255f));
         float A = ((last.A / 255f) * (1f - delta)) + (delta * (next.A / 255f));
-
         return new Color(R, G, B, A);
     }
+
+
 
     public static double dist(int x1, int x2, int y1, int y2)
     {
