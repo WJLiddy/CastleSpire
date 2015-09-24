@@ -95,8 +95,7 @@ public class Utils
     {
         f.draw(s, x,y, c, scale, outline);
     }
-
-    /** Hash Edition 
+    
     public static Color mix(float minDuration, float position, Color last, Color next)
     {
         //implement a hash in case we've seen this argument before
@@ -118,9 +117,8 @@ public class Utils
             return colorHash[m];
         }
     }
-       */
 
- 
+    /**
     public static Color mix(float minDuration, float position, Color last, Color next)
     {
         float delta = position / minDuration;
@@ -131,7 +129,8 @@ public class Utils
         float A = ((last.A / 255f) * (1f - delta)) + (delta * (next.A / 255f));
         return new Color(R, G, B, A);
     }
-
+    
+       */
 
 
     public static double dist(int x1, int x2, int y1, int y2)
