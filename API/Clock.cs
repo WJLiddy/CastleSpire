@@ -64,12 +64,7 @@ public class Clock
 
     public String AMPM()
     {
-        bool PM = false;
-        if (time.Hours >= 12)
-        {
-            PM = true;
-        }
-        return (PM ? "PM" : "AM");
+        return (time.Hours >= 12 ? "PM" : "AM");
     }
 }
 

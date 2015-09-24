@@ -70,8 +70,8 @@ class InGame
 
 
         Light soul = null;
-       
-        Light candle = new Light(new Color((100f/255f),  (50f / 255f), 0f, 0.4f + (float)(Utils.random.NextDouble() * 0.1)), 207, 434, 5, 90);
+
+        Light candle = new Light(new Color((100f/255f),  (50f / 255f), 0f, 0.4f + (float)(Utils.random.NextDouble() * 0.1)), 207, 434, 10, 90);
 
         LinkedList<Light> lights = new LinkedList<Light>();
         lights.AddFirst(candle);
@@ -80,20 +80,20 @@ class InGame
          //Before dawn, draw a lightsource at the player spot. That way he/she can see a little bit.
          if (clock.hours() < AmbientLight.hourDawn || clock.hours() >= AmbientLight.hourDusk)
          {
-             soul = new Light(soulcol, player.x + (player.size / 2), player.y + (player.size / 2), 20, 40);
+             soul = new Light(soulcol, player.x + (player.size / 2), player.y + (player.size / 2), 7, 40);
              lights.AddFirst(soul);
          }
 
          if (clock.hours() == AmbientLight.hourDawn && (clock.minutes() < 20))
          {
-             soul = new Light(Utils.mix(20 * 60,(60 * clock.minutes()) + clock.seconds(),soulcol, AmbientLight.ambientColor(clock)), player.x + (player.size / 2), player.y + (player.size / 2), 20,40);
+             soul = new Light(Utils.mix(20 * 60,(60 * clock.minutes()) + clock.seconds(),soulcol, AmbientLight.ambientColor(clock)), player.x + (player.size / 2), player.y + (player.size / 2), 7,40);
              lights.AddFirst(soul);
          }
 
 
         if (clock.hours() == AmbientLight.hourSunset && (clock.minutes() > 40))
         {
-            soul = new Light(Utils.mix(20 * 60, (60 * (clock.minutes() - 40 ) ) + clock.seconds(), AmbientLight.ambientColor(clock), soulcol) , player.x + (player.size / 2), player.y + (player.size / 2), 20, 40);
+            soul = new Light(Utils.mix(20 * 60, (60 * (clock.minutes() - 40 ) ) + clock.seconds(), AmbientLight.ambientColor(clock), soulcol) , player.x + (player.size / 2), player.y + (player.size / 2), 7, 40);
             lights.AddFirst(soul);
         }
 
