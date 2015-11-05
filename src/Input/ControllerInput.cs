@@ -1,0 +1,6 @@
+﻿class ControllerInput : Input
+{
+
+
+
+}

@@ -1,0 +1,22 @@
+<Map>
+	<base>basemap.png</base>
+	<collision>basemap_c.png</collision>
+	<objectmask>basemap_o_m.png</objectmask>
+	<objectlayer>basemap_o.png</objectlayer>
+	
+	<collisionKeyR>255</collisionKeyR>	
+	<collisionKeyG>0</collisionKeyG>
+	<collisionKeyB>255</collisionKeyB>
+	
+	<wallKeyR>0</wallKeyR>	
+	<wallKeyG>255</wallKeyG>
+	<wallKeyB>0</wallKeyB>
+	
+	<objectBaseKeyR>255</objectBaseKeyR>	
+	<objectBaseKeyG>0</objectBaseKeyG>
+	<objectBaseKeyB>0</objectBaseKeyB>
+	
+	<objectHeightKeyR>255</objectHeightKeyR>	
+	<objectHeightKeyG>255</objectHeightKeyG>
+	<objectHeightKeyB>255</objectHeightKeyB>
+</Map>

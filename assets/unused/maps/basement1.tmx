@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="25" tilewidth="24" tileheight="24" nextobjectid="1">
+ <tileset firstgid="1" name="Untitled" tilewidth="24" tileheight="24">
+  <image source="Untitled.png" width="480" height="240"/>
+  <tile id="22">
+   <properties>
+    <property name="Collide" value="1"/>
+   </properties>
+  </tile>
+  <tile id="41">
+   <properties>
+    <property name="Collide" value="1"/>
+    <property name="Save" value="1"/>
+   </properties>
+  </tile>
+  <tile id="61">
+   <properties>
+    <property name="Collide" value="1"/>
+    <property name="Save" value="1"/>
+   </properties>
+  </tile>
+  <tile id="104">
+   <properties>
+    <property name="Barrier" value="1"/>
+    <property name="Collide" value="1"/>
+   </properties>
+  </tile>
+  <tile id="105">
+   <properties>
+    <property name="Barrier" value="1"/>
+    <property name="Collide" value="1"/>
+   </properties>
+  </tile>
+  <tile id="108">
+   <properties>
+    <property name="Collide" value="1"/>
+   </properties>
+  </tile>
+  <tile id="122">
+   <properties>
+    <property name="Collide" value="1"/>
+   </properties>
+  </tile>
+  <tile id="125">
+   <properties>
+    <property name="Collide" value="1"/>
+   </properties>
+  </tile>
+  <tile id="148">
+   <properties>
+    <property name="Collide" value="1"/>
+   </properties>
+  </tile>
+  <tile id="166">
+   <properties>
+    <property name="Collide" value="1"/>
+   </properties>
+  </tile>
+  <tile id="169">
+   <properties>
+    <property name="Collide" value="1"/>
+   </properties>
+  </tile>
+  <tile id="180">
+   <properties>
+    <property name="Collide" value="1"/>
+   </properties>
+  </tile>
+  <tile id="181">
+   <properties>
+    <property name="Collide" value="1"/>
+   </properties>
+  </tile>
+  <tile id="182">
+   <properties>
+    <property name="Collide" value="1"/>
+   </properties>
+  </tile>
+  <tile id="188">
+   <properties>
+    <property name="Slope" value="1"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="201" name="WorldTileset2" tilewidth="24" tileheight="24">
+  <image source="WorldTileset2.png" width="480" height="240"/>
+  <tile id="16">
+   <properties>
+    <property name="Barrier" value="1"/>
+    <property name="Collide" value="1"/>
+    <property name="Heal" value="15"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="401" name="Shading" tilewidth="24" tileheight="24">
+  <image source="Shading.png" width="240" height="240"/>
+ </tileset>
+ <layer name="base" width="25" height="25">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC7WV6w3DIAyE2SITguRs0O7QbNTdSiUsWacjtcH9cYpCkvv8IOYopRxBnV3i1Lngr4za1YaquVa432Gg/z8Z6F3hWUat0NOuPZJrhT3JqNWsD+prtZMHxmx78B7K6jnWKovB9pJeJTEP9GfyMKJzY2WW2Jgxdowf93Qkj5k/Y+C7kTzuao6MjH7oWiPPZHhH++GJd3df4XdC1trk3VUGkzLw//cyvjP6+aNW6sfkYby6LifDzpAIg/1XszNvlcHOHZaHnYWywGgOBqupl7GrD/chNtHECQAA
+  </data>
+ </layer>
+ <layer name="baseDetail" width="25" height="25">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgGLxgOxDXAfFyKA3CuUA8FUmNFoV2bKVQPzFgOxK9HYcaSv2xDUqD/LOcQrNwAWLCyo5Gdg9VAEu/tAA30fAogIBcJIwMpmJRuwcqvodMO9ABNjtWINHVVLBjFFAG6BGmuQy40+FAA3zuWUVFO2jtb3qE8WCORxgAAJPYrQ3ECQAA
+  </data>
+ </layer>
+ <layer name="r1" width="25" height="25">
+  <properties>
+   <property name="Always Cover" value=""/>
+  </properties>
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+WVXQqAIAyA5y06RJct66msp+yxK6aIIGOK+UeR8L0068O5LYDn62IAg2L0wJnZY0lZ+r1dsXoQhRy+77dwTIqzkGOOPEOOY/mJowNDTUcPhrfn6iBqi6rbGAfeT80RTsR4pgPnSRAx8QGHexf4DnRMomcpDosMxHLv/CmpjlBtlapd/I/aKpyD6vFWDncW1nK4szDXQc2q0rmyvWahZmHL/rgBsjW538QJAAA=
+  </data>
+ </layer>
+ <layer name="trig2" width="25" height="25" visible="0">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgGAWjYBSMguEDBCjAo3aM2jFqx6gd9LSDUgAAI+Wk1sQJAAA=
+  </data>
+ </layer>
+ <layer name="r2" width="25" height="25" visible="0">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgGAWjYBSMAtoDcSrgUTtG7Ri1Y9SO4WAHNcwHYQDDC6kLxAkAAA==
+  </data>
+ </layer>
+ <layer name="trig3" width="25" height="25" visible="0">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgIA8IEIkpAaN2jNoxasfwt2MUjIJRMApGAXkAAFNEK7nECQAA
+  </data>
+ </layer>
+ <layer name="r3" width="25" height="25" visible="0">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgIB2Ik4jJAaN2jNoxasfwt2MUjIJRMApGIqBWmQkAO0vPD8QJAAA=
+  </data>
+ </layer>
+</map>
