@@ -5,11 +5,9 @@ using Microsoft.Xna.Framework.Input;
 class Title
 {
     Texture2D Splash;
-    PixelFont F;
     public Title()
     {
         Splash = Utils.TextureLoader(@"misc\splash.png");
-        F = new PixelFont(@"misc\spireFont.png");
         SoundManager.Play("welcome.ogg");
     }
 
