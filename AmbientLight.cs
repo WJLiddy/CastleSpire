@@ -12,7 +12,7 @@ class AmbientLight
     //sun is fully out at 8
     public static readonly int HourSunrise = 8;
     //normal daytime conditions start at 9
-    public static readonly int HourDayStart = 9;
+    public static readonly int HourDayStart = 7;
     //normal daytime conditions terminate at 19.
     public static readonly int HourDayEnd = 19;
     //golden color hits at 20
@@ -29,20 +29,20 @@ class AmbientLight
         }
         else if (c.Hours() == HourDawn)
         {
-            return Utils.Mix(60f, Night, Twilight);
+            return Utils.Mix(c.Minutes() + (c.Seconds() / 60f), Night, Twilight);
         }
         else if (c.Hours() == HourSunrise)
         {
-            return Utils.Mix(60f, Twilight, Day);
+            return Utils.Mix(c.Minutes() + (c.Seconds() / 60f), Twilight, Day);
         }
         
         else if (c.Hours() == HourDayEnd)
         {
-            return Utils.Mix(60f, Day, TwilightNight);
+            return Utils.Mix(c.Minutes() + (c.Seconds() / 60f), Day, TwilightNight);
         }
         else if (c.Hours() == HourSunset)
         {
-            return Utils.Mix(60f, TwilightNight, Night);
+            return Utils.Mix(c.Minutes() + (c.Seconds() / 60f), TwilightNight, Night);
         }
         else
     

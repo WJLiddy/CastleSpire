@@ -5,9 +5,10 @@ public class PC : Creature
 {
     public RaceUtils.Race Race { get; private set; }
     AnimationSet Anim;
-    enum Dir { UP,RIGHT,DOWN,LEFT};
-    Dir Direction = Dir.DOWN;
+    enum Dir { Up,Right,Down,Left};
+    Dir Direction = Dir.Down;
     public string Name { get; private set; }
+    Input OldInput = null;
 
     public PC(int racei)
     {
@@ -182,46 +183,46 @@ public class PC : Creature
         {
             DX = DX - (int)(milliPixelsToMove * Rad2Over2);
             DY = DY - (int)(milliPixelsToMove * Rad2Over2);
-            Direction = Dir.LEFT;
+            Direction = Dir.Left;
         }
         else if (xy[0] == 3 && xy[1] == 2)
         {
             DX = DX - (int)(milliPixelsToMove * Rad2Over2);
             DY = DY + (int)(milliPixelsToMove * Rad2Over2);
-            Direction = Dir.LEFT;
+            Direction = Dir.Left;
         }
         else if (xy[0] == 1 && xy[1] == 0)
         {
             DX = DX + (int)(milliPixelsToMove * Rad2Over2);
             DY = DY - (int)(milliPixelsToMove * Rad2Over2);
-            Direction = Dir.RIGHT;
+            Direction = Dir.Right;
         }
         else if (xy[0] == 1 && xy[1] == 2)
         {
             DX = DX + (int)(milliPixelsToMove * Rad2Over2);
             DY = DY + (int)(milliPixelsToMove * Rad2Over2);
-            Direction = Dir.RIGHT;
+            Direction = Dir.Right;
         }
 
         else if (xy[0] == 1)
         {
             DX = DX + milliPixelsToMove;
-            Direction = Dir.RIGHT;
+            Direction = Dir.Right;
         }
         else if (xy[0] == 3)
         {
             DX = DX - milliPixelsToMove;
-            Direction = Dir.LEFT;
+            Direction = Dir.Left;
         }
         else if (xy[1] == 0)
         {
             DY = DY - milliPixelsToMove;
-            Direction = Dir.UP;
+            Direction = Dir.Up;
         }
         else if (xy[1] == 2)
         {
             DY = DY + milliPixelsToMove;
-            Direction = Dir.DOWN;
+            Direction = Dir.Down;
         }
 
     }
@@ -240,14 +241,20 @@ public class PC : Creature
     {
         if (i.Left || i.Right || i.Up || i.Down)
         {
-            //TODO Enumerate
-            Anim.AutoAnimate("walk", (int)Direction);
+            if (i != OldInput)
+                //TODO Enumerate
+                Anim.AutoAnimate("walk", (int)Direction);
+
+            OldInput = i;
         }
 
         else
         {
             Anim.Hold("idle", 0, (int)Direction);
+
+            OldInput = null;
         }
+
 
         //check to see if my dx would cause a collision.
         if (DX < 0 && !CanMove(3)) DX = 0;

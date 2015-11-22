@@ -28,7 +28,7 @@ public class Clock
         return Time.Seconds;
     }
 
-    public int minutes()
+    public int Minutes()
     {
         return Time.Minutes;
     }
