@@ -3,80 +3,80 @@ using System.Collections.Generic;
 
 public class PC : Creature
 {
-    public RaceUtils.Race race { get; private set; }
-    AnimationSet anim;
+    public RaceUtils.Race Race { get; private set; }
+    AnimationSet Anim;
     enum Dir { UP,RIGHT,DOWN,LEFT};
-    Dir dir = Dir.DOWN;
-    public string name { get; private set; }
+    Dir Direction = Dir.DOWN;
+    public string Name { get; private set; }
 
     public PC(int racei)
     {
         //TODO Clean
-        x = 225;
-        y = 500;
-        race = (RaceUtils.Race)racei;
-        switch (race)
+        X = 225;
+        Y = 500;
+        Race = (RaceUtils.Race)racei;
+        switch (Race)
         {
             case RaceUtils.Race.Pirate:
-                anim = new AnimationSet(@"creatures\pc\pirate\anim.xml");
-                stats = new StatSet(@"creatures\pc\pirate\stat.xml");
-                size = 12;
-                name = "NANCY";
+                Anim = new AnimationSet(@"creatures\pc\pirate\anim.xml");
+                Stats = new StatSet(@"creatures\pc\pirate\stat.xml");
+                Size = 12;
+                Name = "NANCY";
                 break;
             case RaceUtils.Race.Dragon:
-                anim = new AnimationSet(@"creatures\pc\dragon\anim.xml");
-                stats = new StatSet(@"creatures\pc\dragon\stat.xml");
-                size = 16;
-                name = "ALESSIA";
+                Anim = new AnimationSet(@"creatures\pc\dragon\anim.xml");
+                Stats = new StatSet(@"creatures\pc\dragon\stat.xml");
+                Size = 16;
+                Name = "ALESSIA";
                 break;
             case RaceUtils.Race.Meximage:
-                anim = new AnimationSet(@"creatures\pc\meximage\anim.xml");
-                stats = new StatSet(@"creatures\pc\meximage\stat.xml");
-                size = 14;
-                name = "JESUS";
+                Anim = new AnimationSet(@"creatures\pc\meximage\anim.xml");
+                Stats = new StatSet(@"creatures\pc\meximage\stat.xml");
+                Size = 14;
+                Name = "JESUS";
                 break;
             case RaceUtils.Race.Ninja:
-                anim = new AnimationSet(@"creatures\pc\ninja\anim.xml");
-                stats = new StatSet(@"creatures\pc\ninja\stat.xml");
-                size = 12;
-                name = "BIP";
+                Anim = new AnimationSet(@"creatures\pc\ninja\anim.xml");
+                Stats = new StatSet(@"creatures\pc\ninja\stat.xml");
+                Size = 12;
+                Name = "BIP";
                 break;
 
 
         }
 
         //fix!
-        anim.speed = 5;
-        HP = stats.vit();
-        MP = stats.aff();
-        FA = MAX_FATIGUE;
+        Anim.Speed = 5;
+        HP = Stats.Vit();
+        MP = Stats.Aff();
+        FA = MaxFatigue;
     }
 
-    public void update(Input i, GameTime delta)
+    public void Update(Input i, int ms)
     {
         //physically move character.
-        move(i,delta);
-        animateMove(i);
+        Move(i,ms);
+        AnimateMove(i);
 
-        if (i.pressedUSE)
-            use();
+        if (i.PressedUse)
+            Use();
     
-        anim.update();
+        Anim.Update();
     }
 
     //Consider a camera
-    public void draw(int cameraX, int cameraY )
+    public void Draw(AD2SpriteBatch sb, int cameraX, int cameraY )
     {
-        anim.draw(x + - cameraX, y + - cameraY);
+        Anim.Draw(sb, X + - cameraX, Y + - cameraY);
     }
 
-    private void prioritize(int dir)
+    private void Prioritize(int dir)
     {
         int oldDirIndex = 0;
 
-        for(int i = 0; i != prioritySet.Length; i++)
+        for(int i = 0; i != PrioritySet.Length; i++)
         {
-            if(prioritySet[i] == dir)
+            if(PrioritySet[i] == dir)
             {
                 oldDirIndex = i;
                 break;
@@ -85,43 +85,43 @@ public class PC : Creature
 
         for (int i = oldDirIndex; i != 0; i--)
         {
-            prioritySet[i] = prioritySet[i - 1];
+            PrioritySet[i] = PrioritySet[i - 1];
         }
 
-        prioritySet[0] = dir;
+        PrioritySet[0] = dir;
     }
 
-    private bool canMove(int dir)
+    private bool CanMove(int dir)
     {
         switch (dir)
         {
             case 0:
-                for (int top = x; top != x + size; top++)
+                for (int top = X; top != X + Size; top++)
                 {
-                    if (InGame.map.collide(top,y - 1))
+                    if (InGame.Map.collide(top,Y - 1))
                         return false;
                 }
                 return true;
             case 2:
-                for (int bottom = x; bottom != x + size; bottom++)
+                for (int bottom = X; bottom != X + Size; bottom++)
                 {
-                    if (InGame.map.collide(bottom, y + size))
+                    if (InGame.Map.collide(bottom, Y + Size))
                         return false;
                 }
                 return true;
 
             case 1:
-                for (int right = y; right!= y + size; right++)
+                for (int right = Y; right!= Y + Size; right++)
                 {
-                    if (InGame.map.collide(x+size, right))
+                    if (InGame.Map.collide(X+Size, right))
                         return false;
                 }
                 return true;
 
             case 3:
-                for (int left = y; left != y + size; left++)
+                for (int left = Y; left != Y + Size; left++)
                 {
-                    if (InGame.map.collide(x - 1,left))
+                    if (InGame.Map.collide(X - 1,left))
                         return false;
                 }
                 return true;
@@ -131,28 +131,28 @@ public class PC : Creature
         }
     }
     
-    private void move(Input i,GameTime delta)
+    private void Move(Input i, int ms)
     {
-        double pixelsPerSecond = StatSet.baseSpeed + (StatSet.skillSpeed * stats.spd());
-        double pixelsToMove = pixelsPerSecond * delta.ElapsedGameTime.TotalSeconds;
-        int milliPixelsToMove = (int)(DELTA_SCALE * pixelsToMove);
+        double pixelsPerSecond = StatSet.BaseSpeed + (StatSet.SkillSpeed * Stats.Spd());
+        double pixelsToMove = pixelsPerSecond * ((double)ms / 1000);
+        int milliPixelsToMove = (int)(DeltaScale * pixelsToMove);
 
         //look for fresh new inputs.
-        if (i.pressedUP)
+        if (i.PressedUp)
         {
-            prioritize(0);
+            Prioritize(0);
         }
-        if (i.pressedRIGHT)
+        if (i.PressedRight)
         {
-            prioritize(1);
+            Prioritize(1);
         }
-        if (i.pressedDOWN)
+        if (i.PressedDown)
         {
-            prioritize(2);
+            Prioritize(2);
         }
-        if (i.pressedLEFT)
+        if (i.PressedLeft)
         {
-            prioritize(3);
+            Prioritize(3);
         }
 
         //we need to decide what is actually being held down.
@@ -160,73 +160,73 @@ public class PC : Creature
         //first things first: get rid of opposing direction
         int[] xy = new int[2] { -1, -1 };
 
-        for (int x = 0; x != prioritySet.Length; x++)
+        for (int x = 0; x != PrioritySet.Length; x++)
         {
-            if ((prioritySet[x] == 1 && i.RIGHT) || (prioritySet[x] == 3 && i.LEFT))
+            if ((PrioritySet[x] == 1 && i.Right) || (PrioritySet[x] == 3 && i.Left))
             {
-                xy[0] = prioritySet[x];
+                xy[0] = PrioritySet[x];
                 break;
             }
         }
 
-        for (int y = 0; y != prioritySet.Length; y++)
+        for (int y = 0; y != PrioritySet.Length; y++)
         {
-            if ((prioritySet[y] == 0 && i.UP) || (prioritySet[y] == 2 && i.DOWN))
+            if ((PrioritySet[y] == 0 && i.Up) || (PrioritySet[y] == 2 && i.Down))
             {
-                xy[1] = prioritySet[y];
+                xy[1] = PrioritySet[y];
                 break;
             }
         }
 
         if (xy[0] == 3 && xy[1] == 0)
         {
-            dx = dx - (int)(milliPixelsToMove * rad2over2);
-            dy = dy - (int)(milliPixelsToMove * rad2over2);
-            dir = Dir.LEFT;
+            DX = DX - (int)(milliPixelsToMove * Rad2Over2);
+            DY = DY - (int)(milliPixelsToMove * Rad2Over2);
+            Direction = Dir.LEFT;
         }
         else if (xy[0] == 3 && xy[1] == 2)
         {
-            dx = dx - (int)(milliPixelsToMove * rad2over2);
-            dy = dy + (int)(milliPixelsToMove * rad2over2);
-            dir = Dir.LEFT;
+            DX = DX - (int)(milliPixelsToMove * Rad2Over2);
+            DY = DY + (int)(milliPixelsToMove * Rad2Over2);
+            Direction = Dir.LEFT;
         }
         else if (xy[0] == 1 && xy[1] == 0)
         {
-            dx = dx + (int)(milliPixelsToMove * rad2over2);
-            dy = dy - (int)(milliPixelsToMove * rad2over2);
-            dir = Dir.RIGHT;
+            DX = DX + (int)(milliPixelsToMove * Rad2Over2);
+            DY = DY - (int)(milliPixelsToMove * Rad2Over2);
+            Direction = Dir.RIGHT;
         }
         else if (xy[0] == 1 && xy[1] == 2)
         {
-            dx = dx + (int)(milliPixelsToMove * rad2over2);
-            dy = dy + (int)(milliPixelsToMove * rad2over2);
-            dir = Dir.RIGHT;
+            DX = DX + (int)(milliPixelsToMove * Rad2Over2);
+            DY = DY + (int)(milliPixelsToMove * Rad2Over2);
+            Direction = Dir.RIGHT;
         }
 
         else if (xy[0] == 1)
         {
-            dx = dx + milliPixelsToMove;
-            dir = Dir.RIGHT;
+            DX = DX + milliPixelsToMove;
+            Direction = Dir.RIGHT;
         }
         else if (xy[0] == 3)
         {
-            dx = dx - milliPixelsToMove;
-            dir = Dir.LEFT;
+            DX = DX - milliPixelsToMove;
+            Direction = Dir.LEFT;
         }
         else if (xy[1] == 0)
         {
-            dy = dy - milliPixelsToMove;
-            dir = Dir.UP;
+            DY = DY - milliPixelsToMove;
+            Direction = Dir.UP;
         }
         else if (xy[1] == 2)
         {
-            dy = dy + milliPixelsToMove;
-            dir = Dir.DOWN;
+            DY = DY + milliPixelsToMove;
+            Direction = Dir.DOWN;
         }
 
     }
 
-    private Item getItemBelow(LinkedList<Item> floorItems)
+    private Item GetItemBelow(LinkedList<Item> floorItems)
     {
         foreach(Item i in floorItems)
         {
@@ -236,32 +236,33 @@ public class PC : Creature
         return null;
     }
 
-    private void animateMove(Input i)
+    private void AnimateMove(Input i)
     {
-        if (i.LEFT || i.RIGHT || i.UP || i.DOWN)
+        if (i.Left || i.Right || i.Up || i.Down)
         {
             //TODO Enumerate
-            anim.autoAnimate("walk", (int)dir);
+            Anim.AutoAnimate("walk", (int)Direction);
         }
+
         else
         {
-            anim.hold("idle", 0, (int)dir);
+            Anim.Hold("idle", 0, (int)Direction);
         }
 
         //check to see if my dx would cause a collision.
-        if (dx < 0 && !canMove(3)) dx = 0;
-        if (dx >= DELTA_SCALE && !canMove(1)) dx = DELTA_SCALE - 1;
-        if (dy < 0 && !canMove(0)) dy = 0;
-        if (dy >= DELTA_SCALE && !canMove(2)) dy = DELTA_SCALE - 1;
+        if (DX < 0 && !CanMove(3)) DX = 0;
+        if (DX >= DeltaScale && !CanMove(1)) DX = DeltaScale - 1;
+        if (DY < 0 && !CanMove(0)) DY = 0;
+        if (DY >= DeltaScale && !CanMove(2)) DY = DeltaScale - 1;
 
-        while (dx >= DELTA_SCALE) { dx = dx - DELTA_SCALE; x++; } //3 , 1100 -> 4, 100
-        while (dy >= DELTA_SCALE) { dy = dy - DELTA_SCALE; y++; }
-        while (dx < 0) { dx = dx + DELTA_SCALE; x--; } //3, -100 -> 2, 900
-        while (dy < 0) { dy = dy + DELTA_SCALE; y--; }
+        while (DX >= DeltaScale) { DX = DX - DeltaScale; X++; } //3 , 1100 -> 4, 100
+        while (DY >= DeltaScale) { DY = DY - DeltaScale; Y++; }
+        while (DX < 0) { DX = DX + DeltaScale; X--; } //3, -100 -> 2, 900
+        while (DY < 0) { DY = DY + DeltaScale; Y--; }
 
     }
 
-    private void use()
+    private void Use()
     {
   //      if()
 

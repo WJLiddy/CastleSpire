@@ -2,50 +2,50 @@
 
 class AmbientLight
 {
-    public static readonly Color day = new Color(0f, 0f, 0f, 1f);
-    public static readonly Color twilight = new Color(150f / 255f, 100f / 255f, 0f, .5f);
-    public static readonly Color twilightNight = new Color(150f / 255f, 50f / 255f, 0f, .5f);
-    public static readonly Color night = new Color(0f, 0f, 0f, 0f);
+    public static readonly Color Day = new Color(0f, 0f, 0f, 1f);
+    public static readonly Color Twilight = new Color(150f / 255f, 100f / 255f, 0f, .5f);
+    public static readonly Color TwilightNight = new Color(150f / 255f, 50f / 255f, 0f, .5f);
+    public static readonly Color Night = new Color(0f, 0f, 0f, 0f);
 
     //sun peeks out at 7 
-    public static readonly int hourDawn = 7;
+    public static readonly int HourDawn = 7;
     //sun is fully out at 8
-    public static readonly int hourSunrise = 8;
+    public static readonly int HourSunrise = 8;
     //normal daytime conditions start at 9
-    public static readonly int hourDayStart = 9;
+    public static readonly int HourDayStart = 9;
     //normal daytime conditions terminate at 19.
-    public static readonly int hourDayEnd = 19;
+    public static readonly int HourDayEnd = 19;
     //golden color hits at 20
-    public static readonly int hourSunset = 20;
+    public static readonly int HourSunset = 20;
     //cease any light at 21.
-    public static readonly int hourDusk = 21;
+    public static readonly int HourDusk = 21;
         
-    public static Color ambientColor(Clock c)
+    public static Color AmbientColor(Clock c)
     {
         
-        if (c.hours() < hourDawn || c.hours() >= hourDusk)
+        if (c.Hours() < HourDawn || c.Hours() >= HourDusk)
         {
-            return night;
+            return Night;
         }
-        else if (c.hours() == hourDawn)
+        else if (c.Hours() == HourDawn)
         {
-            return Utils.mix(60f,c.minutes() + (c.seconds() / 60f), night, twilight);
+            return Utils.Mix(60f, Night, Twilight);
         }
-        else if (c.hours() == hourSunrise)
+        else if (c.Hours() == HourSunrise)
         {
-            return Utils.mix(60f ,c.minutes() + (c.seconds() / 60f), twilight, day);
+            return Utils.Mix(60f, Twilight, Day);
         }
         
-        else if (c.hours() == hourDayEnd)
+        else if (c.Hours() == HourDayEnd)
         {
-            return Utils.mix(60f, c.minutes() + (c.seconds() / 60f), day, twilightNight);
+            return Utils.Mix(60f, Day, TwilightNight);
         }
-        else if (c.hours() == hourSunset)
+        else if (c.Hours() == HourSunset)
         {
-            return Utils.mix(60f, c.minutes() + (c.seconds() / 60f), twilightNight, night);
+            return Utils.Mix(60f, TwilightNight, Night);
         }
         else
     
-            return day;
+            return Day;
     }
 }

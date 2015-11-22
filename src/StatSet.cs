@@ -2,85 +2,85 @@
 
 public class StatSet
 {
-    public int strXP { get; private set; }
-    public int dexXP { get; private set; }
-    public int affXP { get; private set; }
-    public int vitXP { get; private set; }
-    public int spdXP { get; private set; }
+    public int StrXP { get; private set; }
+    public int DexXP { get; private set; }
+    public int AffXP { get; private set; }
+    public int VitXP { get; private set; }
+    public int SpdXP { get; private set; }
 
-    public readonly int XPperSkill = 50;
+    public readonly int XPPerSkill = 50;
 
-    public static readonly double baseSpeed = 45;
-    public static readonly double skillSpeed = .07;
+    public static readonly double BaseSpeed = 45;
+    public static readonly double SkillSpeed = .07;
 
     public StatSet(string pathToURL)
     {
         XmlReader reader = XmlReader.Create(pathToURL);
 
         reader.ReadToFollowing("str");
-        strXP = XPperSkill * reader.ReadElementContentAsInt();
+        StrXP = XPPerSkill * reader.ReadElementContentAsInt();
 
         reader.ReadToFollowing("dex");
-        dexXP = XPperSkill * reader.ReadElementContentAsInt();
+        DexXP = XPPerSkill * reader.ReadElementContentAsInt();
 
         reader.ReadToFollowing("aff");
-        affXP = XPperSkill * reader.ReadElementContentAsInt();
+        AffXP = XPPerSkill * reader.ReadElementContentAsInt();
 
         reader.ReadToFollowing("vit");
-        vitXP = XPperSkill * reader.ReadElementContentAsInt();
+        VitXP = XPPerSkill * reader.ReadElementContentAsInt();
 
         reader.ReadToFollowing("spd");
-        spdXP = XPperSkill * reader.ReadElementContentAsInt();
+        SpdXP = XPPerSkill * reader.ReadElementContentAsInt();
     }
 
-    public void awardStrXP(int xp)
+    public void AwardStrXP(int xp)
     {
-        strXP += xp;
+        StrXP += xp;
     }
 
-    public void awardDexXP(int xp)
+    public void AwardDexXP(int xp)
     {
-        dexXP += xp;
+        DexXP += xp;
     }
 
-    public void awardAffXP(int xp)
+    public void AwardAffXP(int xp)
     {
-        affXP += xp;
+        AffXP += xp;
     }
 
-    public void awardVitXP(int xp)
+    public void AwardVitXP(int xp)
     {
-        vitXP += xp;
+        VitXP += xp;
     }
 
-    public void awardSpdXP(int xp)
+    public void AwardSpdXP(int xp)
     {
-        spdXP += xp;
+        SpdXP += xp;
     }
 
-    public int str()
+    public int Str()
     {
-        return strXP / XPperSkill;
+        return StrXP / XPPerSkill;
     }
 
-    public int dex()
+    public int Dex()
     {
-        return dexXP / XPperSkill;
+        return DexXP / XPPerSkill;
     }
 
-    public int aff()
+    public int Aff()
     {
-        return affXP / XPperSkill;
+        return AffXP / XPPerSkill;
     }
 
-    public int vit()
+    public int Vit()
     {
-        return vitXP / XPperSkill;
+        return VitXP / XPPerSkill;
     }
 
-    public int spd()
+    public int Spd()
     {
-        return spdXP / XPperSkill;
+        return SpdXP / XPPerSkill;
     }
 }
 

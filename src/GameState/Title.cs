@@ -4,31 +4,31 @@ using Microsoft.Xna.Framework.Input;
 
 class Title
 {
-    Texture2D splash;
-    PixelFont f;
+    Texture2D Splash;
+    PixelFont F;
     public Title()
     {
-        splash = Utils.TextureLoader(@"misc\splash.png");
-        f = new PixelFont(@"misc\spireFont.png");
-        Utils.soundManager.play("welcome.ogg", true);
+        Splash = Utils.TextureLoader(@"misc\splash.png");
+        F = new PixelFont(@"misc\spireFont.png");
+        SoundManager.Play("welcome.ogg");
     }
 
-    public GS.State update(GameTime gs, KeyboardState ks)
+    public GS.State Update(int ms, KeyboardState ks)
     {
         if (ks.IsKeyDown(Keys.Enter))
         {
-            Utils.soundManager.stop();
+            SoundManager.Stop();
             return GS.State.CharSelect;
         }
         else
             return GS.State.Title;
     }
 
-    public void draw()
+    public void Draw(AD2SpriteBatch sb)
     {
-        Utils.sb.Draw(splash,new Rectangle(0,0,360,270),Color.White);
+        sb.Draw(Splash,new Rectangle(0,0,360,270),Color.White);
         //TODO: f.draw center.
-        f.draw("Press ENTER", 100, 200, Color.White, 3, true);
+        Utils.DefaultFont.Draw(sb, "PRESS ENTER", 100, 200, Color.White, 3, true);
 
     }
 }

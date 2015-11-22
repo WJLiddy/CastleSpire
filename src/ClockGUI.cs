@@ -2,20 +2,18 @@
 
 class ClockHUD
 {
-    public static int width = 57;
+    public static int Width = 57;
 
-    public static void draw (Clock c)
+    public static void Draw (AD2SpriteBatch sb, Clock c)
     {
 
-        Utils.drawRect(Color.Black, (CastleSpire.baseWidth / 2) - (width / 2), CastleSpire.baseHeight - 7, width, 7);
+        Utils.DrawRect(sb, (CastleSpire.BaseWidth / 2) - (Width / 2), CastleSpire.BaseHeight - 7, Width, 7, Color.Black);
 
-        Utils.drawString(c.monthDay(), (CastleSpire.baseWidth / 2) - (width / 2) + 1, CastleSpire.baseHeight - 7,Color.Orange,1);
+        Utils.DefaultFont.Draw(sb, c.MonthDay(), (CastleSpire.BaseWidth / 2) - (Width / 2) + 1, CastleSpire.BaseHeight - 7,Color.Orange,1);
 
-        Utils.drawString(c.hourMin(), (CastleSpire.baseWidth / 2) - 1, CastleSpire.baseHeight - 7, Color.Orange, 1);
+        Utils.DefaultFont.Draw(sb, c.HourMin(), (CastleSpire.BaseWidth / 2) - 1, CastleSpire.BaseHeight - 7, Color.Orange, 1);
 
-        Utils.drawString(c.AMPM(), (CastleSpire.baseWidth / 2) + 17, CastleSpire.baseHeight - 7, Color.Orange, 1);
-
-
+        Utils.DefaultFont.Draw(sb, c.AMPM(), (CastleSpire.BaseWidth / 2) + 17, CastleSpire.BaseHeight - 7, Color.Orange, 1);
 
     }
 

@@ -4,83 +4,83 @@ using System.Collections.Generic;
 
 public class LightMap
 {
-    private LinkedList<Light> lights;
+    private LinkedList<Light> Lights;
 
-    private RenderTarget2D lightMap;
-    private SpriteBatch lightBatch;
+    private RenderTarget2D LightMapR;
+    private SpriteBatch LightBatch;
 
-    private RenderTarget2D transMap;
-    private SpriteBatch transBatch;
+    private RenderTarget2D TransMap;
+    private SpriteBatch TransBatch;
 
-    private BlendState alphacomp;
+    private BlendState Alphacomp;
 
     public LightMap(int w, int h)
     {
         // Create a new render target
-        lightMap = new RenderTarget2D(Utils.gfx, w, h);
-        lights = new LinkedList<Light>();
-        lightBatch = new SpriteBatch(Utils.gfx);
-        transMap = new RenderTarget2D(Utils.gfx,w, h);
-        transBatch = new SpriteBatch(Utils.gfx);
+        LightMapR = new RenderTarget2D(Renderer.GraphicsDevice, w, h);
+        Lights = new LinkedList<Light>();
+        LightBatch = new SpriteBatch(Renderer.GraphicsDevice);
+        TransMap = new RenderTarget2D(Renderer.GraphicsDevice, w, h);
+        TransBatch = new SpriteBatch(Renderer.GraphicsDevice);
 
-        alphacomp = new BlendState();
+        Alphacomp = new BlendState();
 
         //Pass alpha as strength of light. It is additive.
-        alphacomp.AlphaDestinationBlend = Blend.One;
-        alphacomp.AlphaSourceBlend = Blend.One;
+        Alphacomp.AlphaDestinationBlend = Blend.One;
+        Alphacomp.AlphaSourceBlend = Blend.One;
 
         //Not sold on color yet.
-        alphacomp.ColorDestinationBlend = Blend.One;
-        alphacomp.ColorSourceBlend = Blend.One;
+        Alphacomp.ColorDestinationBlend = Blend.One;
+        Alphacomp.ColorSourceBlend = Blend.One;
     }
 
-    public void addLight(Light l)
+    public void AddLight(Light l)
     {
-        lights.AddFirst(l);
+        Lights.AddFirst(l);
     }
 
-    public void renderLightMap(Color ambient, int camX, int camY, int w, int h)
+    public void RenderLightMap(AD2SpriteBatch sb, Color ambient, int camX, int camY, int w, int h)
     {
 
-          Utils.gfx.SetRenderTarget(lightMap);
-          clearToAmbient(ambient);
+        Renderer.GraphicsDevice.SetRenderTarget(LightMapR);
+        ClearToAmbient(ambient);
 
-         lightBatch.Begin(SpriteSortMode.Deferred, alphacomp, null, null, null);
+        LightBatch.Begin(SpriteSortMode.Deferred, Alphacomp, null, null, null);
 
-        foreach (Light l in lights)
+        foreach (Light l in Lights)
         {
-            drawLight(l,camX,camY);
+            DrawLight(l,camX,camY);
         }
 
-         lightBatch.End();
+         LightBatch.End();
 
-        Utils.gfx.SetRenderTarget(null);
+        Renderer.GraphicsDevice.SetRenderTarget(null);
 
-        toTransparent();
-        Utils.drawTexture(transMap,0,0);
+        ToTransparent();
+        sb.DrawTexture(TransMap,0,0);
 
     }
 
 
-    private static bool inCameraArray(int lit_x, int lit_y, int camX, int camY, int w, int h)
+    private static bool InCameraArray(int lit_x, int lit_y, int camX, int camY, int w, int h)
     {
         return 0 <= (lit_x - camX) && (lit_x - camX) < w && 0 <= (lit_y - camY) && (lit_y - camY) < h;
     }
 
-    private void drawLight(Light l,int camX, int camY)
+    private void DrawLight(Light l,int camX, int camY)
     {
-        lightBatch.Draw(l.texture, new Rectangle(l.getX() - camX, l.getY() - camY,l.texture.Width,l.texture.Height),Color.White);
+        LightBatch.Draw(l.Texture, new Rectangle(l.GetX() - camX, l.GetY() - camY,l.Texture.Width,l.Texture.Height),Color.White);
     }
 
-    private void clearToAmbient(Color c)
+    private void ClearToAmbient(Color c)
     {
-        Utils.gfx.Clear(c);
+        Renderer.GraphicsDevice.Clear(c);
     } 
 
-    private void toTransparent()
+    private void ToTransparent()
     {
-        Utils.gfx.SetRenderTarget(transMap);
-        Utils.gfx.Clear(new Color(0, 0, 0, 1f));
+        Renderer.GraphicsDevice.SetRenderTarget(TransMap);
+        Renderer.GraphicsDevice.Clear(new Color(0, 0, 0, 1f));
 
         BlendState b = new BlendState();
 
@@ -90,11 +90,11 @@ public class LightMap
         b.AlphaSourceBlend = Blend.Zero;
         b.ColorSourceBlend = Blend.One;
        
-        transBatch.Begin(SpriteSortMode.Deferred,b, null, null, null);
-        transBatch.Draw(lightMap, new Rectangle(0,0,transMap.Width,transMap.Height), Color.White);
+        TransBatch.Begin(SpriteSortMode.Deferred,b, null, null, null);
+        TransBatch.Draw(LightMapR, new Rectangle(0,0,TransMap.Width,TransMap.Height), Color.White);
 
-        transBatch.End();
-        Utils.gfx.SetRenderTarget(null);
+        TransBatch.End();
+        Renderer.GraphicsDevice.SetRenderTarget(null);
        
     }
 }

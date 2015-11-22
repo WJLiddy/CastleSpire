@@ -10,46 +10,44 @@ public class GS
 {
     //Game States we can be in.
     public enum State { Title, CharSelect, InGame }
-    static State state;
+    static State GState;
 
     //TODO: There must be a smarter texture2d copier function. We don't want to constantly read from disk. UTILS can help us here.
 
     //Title screen draw/updater.
-    static Title title;
+    static Title Title;
     //Character Select draw/updater
-    static CharSelect charSelect;
+    static CharSelect CharSelect;
     //Game draw/updater
-    static InGame inGame;
+    static InGame InGame;
     
-    public static Texture2D logo;
-
-    public static GameTime lastDelta;
+    public static Texture2D Logo;
 
     //A single input set.
-    public static Input[] inputs { get; private set; }
+    public static Input[] Inputs { get; private set; }
 
-    public static ControllerManager controllerManager;
+    public static ControllerManager ControllerManager;
 
     //Need to initalize stuff specific to the game? Do it here!
     public GS()
     {
-        inputs = new Input[4];
-        state = State.Title;
+        Inputs = new Input[4];
+        GState = State.Title;
 
         KeyboardInput k = new KeyboardInput();
-        k.UPkey = Keys.Up;
-        k.DOWNkey = Keys.Down;
-        k.LEFTkey = Keys.Left;
-        k.RIGHTkey = Keys.Right;
-        k.INVLkey = Keys.Q;
-        k.FIREkey = Keys.K;
+        k.UpKey = Keys.Up;
+        k.DownKey = Keys.Down;
+        k.LeftKey = Keys.Left;
+        k.RightKey = Keys.Right;
+        k.InventoryLKey = Keys.Q;
+        k.FireKey = Keys.K;
 
-        inputs[0] = k;
+        Inputs[0] = k;
         KeyboardInput k2 = new KeyboardInput();
 
-        inputs[1] = k2;
-        inputs[2] = k2;
-        inputs[3] = k2;
+        Inputs[1] = k2;
+        Inputs[2] = k2;
+        Inputs[3] = k2;
         /**
         for (int i = 1; i != 4; i++)
         {
@@ -66,50 +64,49 @@ public class GS
         }
     */
     
-        controllerManager = new ControllerManager();
-        title = new Title();
-        logo = Utils.TextureLoader(@"misc\logo.png");
+        ControllerManager = new ControllerManager();
+        Title = new Title();
+        Logo = Utils.TextureLoader(@"misc\logo.png");
     }
 
 
-    public static void update(GameTime delta, Microsoft.Xna.Framework.Input.KeyboardState ks, GamePadState[] gs)
+    public static void Update(int ms, Microsoft.Xna.Framework.Input.KeyboardState ks, GamePadState[] gs)
     {
-        lastDelta = delta;
 
-        SlimDX.DirectInput.JoystickState[] joyStates = controllerManager.getState();    
+        SlimDX.DirectInput.JoystickState[] joyStates = ControllerManager.GetState();    
 
         for (int i = 0; i != 4; i++)
         {
-            if (inputs[i] is KeyboardInput)
-                ((KeyboardInput)inputs[i]).update(ks);
+            if (Inputs[i] is KeyboardInput)
+                ((KeyboardInput)Inputs[i]).Update(ks);
         }
 
         State newState;
-        switch (state)
+        switch (GState)
         {
             case State.Title:
-                newState = title.update(delta,ks);
+                newState = Title.Update(ms,ks);
                 if (newState == State.CharSelect)
                 {
-                    state = State.CharSelect;
-                    charSelect = new CharSelect();
+                    GState = State.CharSelect;
+                    CharSelect = new CharSelect();
                 }
                 break;
 
             case State.CharSelect:
 
-                newState = charSelect.update(delta);
+                newState = CharSelect.Update(ms);
                if (newState == State.InGame)
                {
-                    state = State.InGame;
-                    inGame = new InGame(charSelect.charSelect);
+                    GState = State.InGame;
+                    InGame = new InGame(CharSelect.CharacterSelect);
                }
                 break;
 
 
             case State.InGame:
 
-                newState = inGame.update(delta);
+                newState = InGame.Update(ms);
                 if (newState == State.Title)
                 {
                 }
@@ -117,23 +114,23 @@ public class GS
         }
     }
 
-    public static void draw()
+    public static void Draw(AD2SpriteBatch sb)
     {
 
-      switch (state)
+      switch (GState)
         {
             case State.Title:
-                title.draw();
+                Title.Draw(sb);
                 break;
             case State.CharSelect:
-                charSelect.draw();
+                CharSelect.Draw(sb);
                 break;
             case State.InGame:
-                inGame.draw();
+                InGame.Draw(sb);
                 break;
         }
 
-        Utils.drawString(lastDelta.IsRunningSlowly ? "SLOW!" : "", 100, 1, Color.BlanchedAlmond, 1, true);
+        //Utils.DefaultFont.Draw(sb, LastDelta.IsRunningSlowly ? "SLOW!" : "", 100, 1, Color.BlanchedAlmond, 1, true);
     }
 }
 

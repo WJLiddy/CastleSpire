@@ -8,75 +8,80 @@ using Microsoft.Xna.Framework.Graphics;
 
 class CharSelect
 {
-    private AnimationSet pirate;
-    private AnimationSet ninja;
-    private AnimationSet meximage;
-    private AnimationSet dragon;
-    private Texture2D arrow;
+    private AnimationSet Pirate;
+    private AnimationSet Ninja;
+    private AnimationSet Meximage;
+    private AnimationSet Dragon;
+    private Texture2D Arrow;
 
-    public int charSelect { get; private set; } = 0;
+    public int CharacterSelect { get; private set; } = 0;
 
     public CharSelect()
     {
-        pirate = new AnimationSet(@"creatures\pc\pirate\anim.xml");
-        ninja = new AnimationSet(@"creatures\pc\ninja\anim.xml");
-        meximage = new AnimationSet(@"creatures\pc\meximage\anim.xml");
-        dragon = new AnimationSet(@"creatures\pc\dragon\anim.xml");
+        Pirate = new AnimationSet(@"creatures\pc\pirate\anim.xml");
+        Ninja = new AnimationSet(@"creatures\pc\ninja\anim.xml");
+        Meximage = new AnimationSet(@"creatures\pc\meximage\anim.xml");
+        Dragon = new AnimationSet(@"creatures\pc\dragon\anim.xml");
 
-        pirate.hold("swing", 0, 2);
-        ninja.hold("idle", 0, 2);
-        meximage.hold("idle", 0, 2);
-        dragon.hold("idle", 0, 2);
+        Pirate.Hold("swing", 0, 2);
+        Ninja.Hold("idle", 0, 2);
+        Meximage.Hold("idle", 0, 2);
+        Dragon.Hold("idle", 0, 2);
 
-        arrow = Utils.TextureLoader(@"misc\bigDownArrow.png");
-        Utils.soundManager.play("origin.ogg", true);
+        Arrow = Utils.TextureLoader(@"misc\bigDownArrow.png");
+        SoundManager.Play("originlong.ogg");
 
     }
 
     //Load each of the characters.
-    public GS.State update(GameTime delta)
+    public GS.State Update(int ms)
     {
-        if(GS.inputs[0].pressedRIGHT)
+        if(GS.Inputs[0].PressedRight)
         {
-            charSelect = (charSelect + 1) % 4;
+            CharacterSelect = (CharacterSelect + 1) % 4;
         }
 
-        if (GS.inputs[0].pressedLEFT)
+        if (GS.Inputs[0].PressedLeft)
         {
-            charSelect = charSelect == 0 ? 3 : charSelect - 1;
+            CharacterSelect = CharacterSelect == 0 ? 3 : CharacterSelect - 1;
         }
 
-        if (GS.inputs[0].pressedRIGHT || GS.inputs[0].pressedLEFT)
+        if (GS.Inputs[0].PressedRight || GS.Inputs[0].PressedLeft)
         {
 
-            pirate.hold("idle", 0, 2);
-            ninja.hold("idle", 0, 2);
-            meximage.hold("idle", 0, 2);
-            dragon.hold("idle", 0, 2);
+            Pirate.Hold("idle", 0, 2);
+            Ninja.Hold("idle", 0, 2);
+            Meximage.Hold("idle", 0, 2);
+            Dragon.Hold("idle", 0, 2);
 
-            if (charSelect == 0)
-                pirate.hold("swing", 0, 2);
-            if (charSelect == 1)
-                dragon.hold("swing", 0, 2);
-            if (charSelect == 2)
-                meximage.hold("swing", 0, 2);
-            if (charSelect == 3)
-                ninja.hold("swing", 0, 2);
+            if (CharacterSelect == 0)
+                Pirate.Hold("swing", 0, 2);
+            if (CharacterSelect == 1)
+                Dragon.Hold("swing", 0, 2);
+            if (CharacterSelect == 2)
+                Meximage.Hold("swing", 0, 2);
+            if (CharacterSelect == 3)
+                Ninja.Hold("swing", 0, 2);
         }
 
-        return GS.inputs[0].pressedFIRE ? GS.State.InGame : GS.State.CharSelect;
+        return GS.Inputs[0].PressedFire ? GS.State.InGame : GS.State.CharSelect;
     }
 
-    public void draw()
+    public void Draw(AD2SpriteBatch sb)
     {
-        Utils.gfx.Clear(new Color (20,0,28));
-        Utils.drawString("CHOOSE yOUR CHARACTER", 50, 50, Color.White, 3);
-        pirate.draw(10 + 50, 10 + 100,24*2,32*2);
-        dragon.draw(10 + 100, 10 + 100, 24 * 2, 32 * 2);
-        meximage.draw(10 + 150, 10 + 100, 24 * 2, 32 * 2);
-        ninja.draw(10 + 200, 10 + 100, 24 * 2, 32 * 2);
+        Renderer.GraphicsDevice.Clear(new Color (20,0,28));
+        Utils.DefaultFont.Draw(sb, "CHOOSE YOUR CHARACTER", 50, 50, Color.White, 3);
+        Pirate.Draw(sb, 10 + 50, 10 + 100,24*2,32*2);
+        Dragon.Draw(sb, 10 + 100, 10 + 100, 24 * 2, 32 * 2);
+        Meximage.Draw(sb, 10 + 150, 10 + 100, 24 * 2, 32 * 2);
+        Ninja.Draw(sb, 10 + 200, 10 + 100, 24 * 2, 32 * 2);
 
-        Utils.drawTexture(arrow, 63 + (50 * charSelect), 91, Color.DarkOrange);
+        sb.DrawTexture(Arrow, 63 + (50 * CharacterSelect), 91, Color.DarkOrange);
+    }
+
+    internal void Draw()
+    {
+        throw new NotImplementedException();
     }
 }
 

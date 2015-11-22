@@ -5,78 +5,79 @@ using System.Collections.Generic;
 class InGame
 {
     //TODO: Proper data struct
-    PC[] players = new PC[4];
-    private LinkedList<PC> playerList = new LinkedList<PC>();
+    PC[] Players = new PC[4];
+    private LinkedList<PC> PlayerList = new LinkedList<PC>();
 
-    HUD[] huds = new HUD[4];
-    Color soulcol = new Color(0, 0, 0.1f, 0.5f);
-    Clock clock;
-    double TICK_TIME = (60.0 / 75.0);
-    LightMap lightmap;
-    Light l;
-    LinkedList<Item> floorItems;
+    HUD[] HUDs = new HUD[4];
+    Color SoulCol = new Color(0, 0, 0.1f, 0.5f);
+    Clock Clock;
+    double TickTime = (60.0 / 75.0);
+    LightMap Lightmap;
+    Light L;
+    LinkedList<Item> FloorItems;
 
 
     Color[] LosTemp;
-    Texture2D[] playerLosOverlay;
-    RenderTarget2D totalLosOverlay;
+    Texture2D[] PlayerLosOverlay;
+    RenderTarget2D TotalLosOverlay;
 
-    public static Map map;
+    public static ObliqueMap Map;
     int LOSturn = 0;
 
     public InGame(int race)
     {
-        Utils.soundManager.stop();
-        players[0] = new PC(race);
-        playerList.AddFirst(players[0]);
-        huds[0] = new HUD(players[0], HUD.Corner.TOPLEFT);
+        SoundManager.Stop();
+        Players[0] = new PC(race);
+        PlayerList.AddFirst(Players[0]);
+        HUDs[0] = new HUD(Players[0], HUD.Corner.TOPLEFT);
 
-        map = new Map(@"maps\testmap.xml", CastleSpire.baseWidth, CastleSpire.baseHeight);
-        lightmap = new LightMap(CastleSpire.baseWidth, CastleSpire.baseHeight);
-        floorItems = new LinkedList<Item>();
+        Map = new ObliqueMap(@"maps\testmap.xml", CastleSpire.BaseWidth, CastleSpire.BaseHeight);
 
-        totalLosOverlay = new RenderTarget2D(Utils.gfx, CastleSpire.baseWidth, CastleSpire.baseHeight);
-        LosTemp = new Color[CastleSpire.baseWidth * CastleSpire.baseHeight];
-        playerLosOverlay = new Texture2D[4];
+        Lightmap = new LightMap(CastleSpire.BaseWidth, CastleSpire.BaseHeight);
+        FloorItems = new LinkedList<Item>();
+
+        TotalLosOverlay = new RenderTarget2D(Renderer.GraphicsDevice, CastleSpire.BaseWidth, CastleSpire.BaseHeight);
+        LosTemp = new Color[CastleSpire.BaseWidth * CastleSpire.BaseHeight];
+        PlayerLosOverlay = new Texture2D[4];
 
         for (int i = 0; i != 4; i++)
         {
-           playerLosOverlay[i] = new Texture2D(Utils.gfx, CastleSpire.baseWidth, CastleSpire.baseHeight);
+           PlayerLosOverlay[i] = new Texture2D(Renderer.GraphicsDevice, CastleSpire.BaseWidth, CastleSpire.BaseHeight);
         }
 
-        l = new Light(.1f, .1f, .2f, 50, 50, 50);
-        lightmap.addLight(l);
+        L = new Light(.1f, .1f, .2f, 50, 50, 50);
+        Lightmap.AddLight(L);
        
-        lightmap.addLight(new Light(.1f, .0f, .0f, 300, 100, 100));
-        lightmap.addLight(new Light(.0f, .0f, .1f, 400, 200, 100));
-        lightmap.addLight(new Light(.0f, .1f, .0f, 500, 300, 100));
-        lightmap.addLight(new Light(.3f, .0f, .3f, 100, 100, 50));
-        lightmap.addLight(new Light(.3f, .3f, .0f, 200, 150, 50));
-        lightmap.addLight(new Light(.0f, .3f, .3f, 300, 200, 50));
-        lightmap.addLight(new Light(.5f, .5f, .5f, 300, 600, 70));
-        clock = new Clock();
+        Lightmap.AddLight(new Light(.1f, .0f, .0f, 300, 100, 100));
+        Lightmap.AddLight(new Light(.0f, .0f, .1f, 400, 200, 100));
+        Lightmap.AddLight(new Light(.0f, .1f, .0f, 500, 300, 100));
+        Lightmap.AddLight(new Light(.3f, .0f, .3f, 100, 100, 50));
+        Lightmap.AddLight(new Light(.3f, .3f, .0f, 200, 150, 50));
+        Lightmap.AddLight(new Light(.0f, .3f, .3f, 300, 200, 50));
+        Lightmap.AddLight(new Light(.5f, .5f, .5f, 300, 600, 70));
+        Clock = new Clock();
 
-        floorItems.AddFirst(new Item(@"items\melee\axe.xml",300,300));
+        FloorItems.AddFirst(new Item(@"items\melee\axe.xml",300,300));
 
-        Utils.soundManager.play("night.ogg", true);
+        SoundManager.Play("night.ogg", true);
     }
 
     //Load each of the characters.
-    public GS.State update(GameTime delta)
+    public GS.State Update(int ms)
     {
-        join();
+        Join();
 
-        updatePlayersAndHud(delta);
+        UpdatePlayersAndHud(ms);
 
-        clock.tick(TICK_TIME);
+        Clock.Tick(TickTime);
         return GS.State.InGame;
     }
 
-    public void draw()
+    public void Draw(AD2SpriteBatch sb)
     {
 
 
-        Utils.gfx.Clear(Color.White);
+        Renderer.GraphicsDevice.Clear(Color.White);
 
         //figure out camera stuff
         int cameraX = 0; 
@@ -84,8 +85,8 @@ class InGame
 
         foreach(PC p in allPlayers())
         {
-            cameraX += p.x - (CastleSpire.baseWidth / 2);
-            cameraY += p.y - (CastleSpire.baseHeight / 2);
+            cameraX += p.X - (CastleSpire.BaseWidth / 2);
+            cameraY += p.Y - (CastleSpire.BaseHeight / 2);
         }
 
         cameraX /= allPlayers().Count;
@@ -95,8 +96,8 @@ class InGame
        // l.center_x = p.x + player.size/2;
         //l.center_y = player.y + player.size/2;
 
-        drawWorldNoLighting(cameraX,cameraY);
-        lightmap.renderLightMap(AmbientLight.ambientColor(clock), cameraX, cameraY, CastleSpire.baseWidth, CastleSpire.baseHeight);
+        DrawWorldNoLighting(sb, cameraX,cameraY);
+        Lightmap.RenderLightMap(sb, AmbientLight.AmbientColor(Clock), cameraX, cameraY, CastleSpire.BaseWidth, CastleSpire.BaseHeight);
         
 
         /*** LIGHTING STUFF    
@@ -121,102 +122,100 @@ class InGame
          */
         for (int i = 0; i != 4; i++)
         {
-            if(huds[i] != null)
-                huds[i].draw();
+            if(HUDs[i] != null)
+                HUDs[i].Draw(sb);
         }
 
-        ClockHUD.draw(clock);
+        ClockHUD.Draw(sb, Clock);
 
     }
 
-    private void drawWorldNoLighting(int cameraX, int cameraY)
+    private void DrawWorldNoLighting(AD2SpriteBatch sb, int cameraX, int cameraY)
     {
-        map.drawBase(cameraX, cameraY, CastleSpire.baseWidth, CastleSpire.baseHeight);
+        Map.drawBase(sb, cameraX, cameraY, CastleSpire.BaseWidth, CastleSpire.BaseHeight);
 
-        Item.drawGlowingItems(allPlayers(), floorItems, cameraX, cameraY);
-        foreach( Item i in floorItems)
+        Item.DrawGlowingItems(sb, allPlayers(), FloorItems, cameraX, cameraY);
+        foreach( Item i in FloorItems)
         {
-            i.draw(cameraX,cameraY);
+            i.Draw(sb, cameraX,cameraY);
         }
 
-        for (int y = 0; y != CastleSpire.baseHeight + Map.MAX_OBJECT_HEIGHT; y++)
+        for (int y = 0; y != CastleSpire.BaseHeight + 120; y++)
         {
-            map.drawObjectLine(cameraX, cameraY, CastleSpire.baseWidth, CastleSpire.baseHeight, y);
+            Map.drawObjectLine(sb, cameraX, cameraY, CastleSpire.BaseWidth, CastleSpire.BaseHeight, y);
 
             //THIS WILL WORK when drawObjectLine correctly does
             //Keep in mind draw object line should look for a low wall then rise up.
             //What this is doing is over-drawing all of the walls. 
             foreach (PC p in allPlayers())
             {
-                if ((cameraY + y) == (p.y + (p.size - 1)))
-                    p.draw(cameraX, cameraY);
+                if ((cameraY + y) == (p.Y + (p.Size - 1)))
+                    p.Draw(sb, cameraX, cameraY);
             }
         }
 
-        map.renderRoofs(getLOS(cameraX, cameraY), cameraX, cameraY, CastleSpire.baseWidth, CastleSpire.baseHeight);
-
-        map.drawAlways(cameraX, cameraY, CastleSpire.baseWidth, CastleSpire.baseHeight);
+        Map.drawAlways(sb, cameraX, cameraY, CastleSpire.BaseWidth, CastleSpire.BaseHeight);
     }
 
-    private void join()
+    private void Join()
     {
         for (int i = 1; i != 4; i++)
         {
             //have people join. 
-            if (players[i] == null)
+            if (Players[i] == null)
             {
-                if (GS.inputs[i].pressedUP)
-                    players[i] = new PC((int)RaceUtils.Race.Pirate);
-                else if (GS.inputs[i].pressedRIGHT)
-                    players[i] = new PC((int)RaceUtils.Race.Dragon);
-                else if (GS.inputs[i].pressedDOWN)
-                    players[i] = new PC((int)RaceUtils.Race.Meximage);
-                else if (GS.inputs[i].pressedLEFT)
-                    players[i] = new PC((int)RaceUtils.Race.Ninja);
+                if (GS.Inputs[i].PressedUp)
+                    Players[i] = new PC((int)RaceUtils.Race.Pirate);
+                else if (GS.Inputs[i].PressedRight)
+                    Players[i] = new PC((int)RaceUtils.Race.Dragon);
+                else if (GS.Inputs[i].PressedDown)
+                    Players[i] = new PC((int)RaceUtils.Race.Meximage);
+                else if (GS.Inputs[i].PressedLeft)
+                    Players[i] = new PC((int)RaceUtils.Race.Ninja);
 
-                if (players[i] != null)
+                if (Players[i] != null)
                 {
-                    huds[i] = new HUD(players[i], (HUD.Corner)i);
-                    playerList.AddFirst(players[i]);
+                    HUDs[i] = new HUD(Players[i], (HUD.Corner)i);
+                    PlayerList.AddFirst(Players[i]);
                 }
             }
         }
     }
 
 
-    public void updatePlayersAndHud(GameTime delta)
+    public void UpdatePlayersAndHud(int ms)
     {
         for (int i = 0; i != 4; i++)
         {
-            if (players[i] != null)
+            if (Players[i] != null)
             {
-                players[i].update(GS.inputs[i], delta);
-                huds[i].update(GS.inputs[i], delta);
+                Players[i].Update(GS.Inputs[i], ms);
+                HUDs[i].Update(GS.Inputs[i], ms);
             }
         }
     }
 
-    private Texture2D getLOS(int cameraX, int cameraY)
+    private Texture2D GetLOS(int cameraX, int cameraY)
     {
-        LOSturn = ++LOSturn % playerList.Count;
+        LOSturn = ++LOSturn % PlayerList.Count;
 
         //100% opaque
         Color opaque = new Color(0,0,0,1f);
         
         //faster using GPU
-        for (int i = 0; i != CastleSpire.baseHeight * CastleSpire.baseWidth; i++)
+        for (int i = 0; i != CastleSpire.BaseHeight * CastleSpire.BaseWidth; i++)
         {
             LosTemp[i] = opaque;
         }
 
         //Now, when we raycast, we update the the associated player's LOS if it is their turn.
-        raycast(players[LOSturn],LosTemp,cameraX,cameraY);
+        Raycast(Players[LOSturn],LosTemp,cameraX,cameraY);
 
-        playerLosOverlay[LOSturn].SetData<Color>(LosTemp);
+        PlayerLosOverlay[LOSturn].SetData<Color>(LosTemp);
         //now we have updated this character's LOS.
 
-        Utils.gfx.SetRenderTarget(totalLosOverlay);
-        Utils.gfx.Clear(opaque);
+        Renderer.GraphicsDevice.SetRenderTarget(TotalLosOverlay);
+        Renderer.GraphicsDevice.Clear(opaque);
 
         //TODO : use this on LIGHTS!!!!
         BlendState zeroOr = new BlendState();
@@ -224,59 +223,59 @@ class InGame
         zeroOr.AlphaDestinationBlend = Blend.One;
         zeroOr.AlphaSourceBlend = Blend.One;
 
-        SpriteBatch b = new SpriteBatch(Utils.gfx);
+        SpriteBatch b = new SpriteBatch(Renderer.GraphicsDevice);
 
         b.Begin(SpriteSortMode.Deferred,zeroOr,null,null,null);
 
-        for (int i = 0; i != playerList.Count; i++)
+        for (int i = 0; i != PlayerList.Count; i++)
         {
-            b.Draw(playerLosOverlay[i],new Rectangle(0,0,CastleSpire.baseWidth,CastleSpire.baseHeight), Color.White);
+            b.Draw(PlayerLosOverlay[i],new Rectangle(0,0,CastleSpire.BaseWidth,CastleSpire.BaseHeight), Color.White);
         }
         b.End();
-        Utils.gfx.SetRenderTarget(null);
+        Renderer.GraphicsDevice.SetRenderTarget(null);
         
         //We need to OR all of the lines of sight.
 
-        return totalLosOverlay;
+        return TotalLosOverlay;
     }
 
-    private void raycast(PC p, Color[] losData, int cameraX, int cameraY)
+    private void Raycast(PC p, Color[] losData, int cameraX, int cameraY)
     {
-        int playerX = p.x + (p.size / 2);
-        int playerY = p.y + (p.size / 2);
+        int playerX = p.X + (p.Size / 2);
+        int playerY = p.Y + (p.Size / 2);
         //for top
         int destY = cameraY;
 
-        for (int ddestX = cameraX; ddestX != cameraX + CastleSpire.baseWidth; ddestX++)
+        for (int ddestX = cameraX; ddestX != cameraX + CastleSpire.BaseWidth; ddestX++)
         {
-            raycastLinear(playerX, playerY, ddestX, destY, cameraX, cameraY, losData);       
+            RaycastLinear(playerX, playerY, ddestX, destY, cameraX, cameraY, losData);       
         }
 
         //for bottom
-        destY = cameraY + CastleSpire.baseHeight;
-        for (int ddestX = cameraX; ddestX != cameraX + CastleSpire.baseWidth; ddestX++)
+        destY = cameraY + CastleSpire.BaseHeight;
+        for (int ddestX = cameraX; ddestX != cameraX + CastleSpire.BaseWidth; ddestX++)
         {
-            raycastLinear(playerX, playerY, ddestX, destY, cameraX, cameraY, losData);
+            RaycastLinear(playerX, playerY, ddestX, destY, cameraX, cameraY, losData);
         }
 
         //for left
         int destX = cameraX;
-        for (int ddestY = cameraY; ddestY != cameraY + CastleSpire.baseHeight; ddestY++)
+        for (int ddestY = cameraY; ddestY != cameraY + CastleSpire.BaseHeight; ddestY++)
         {
-            raycastLinear(playerX, playerY, destX, ddestY, cameraX, cameraY, losData);
+            RaycastLinear(playerX, playerY, destX, ddestY, cameraX, cameraY, losData);
         }
 
         //for right
-        destX = cameraX + CastleSpire.baseWidth;
-        for (int ddestY = cameraY; ddestY != cameraY + CastleSpire.baseHeight; ddestY++)
+        destX = cameraX + CastleSpire.BaseWidth;
+        for (int ddestY = cameraY; ddestY != cameraY + CastleSpire.BaseHeight; ddestY++)
         {
-            raycastLinear(playerX, playerY, destX, ddestY, cameraX, cameraY, losData);
+            RaycastLinear(playerX, playerY, destX, ddestY, cameraX, cameraY, losData);
         }
     }
 
-    private void raycastLinear(int startX, int startY, int destX, int destY, int cameraX, int cameraY, Color[] losData)
+    private void RaycastLinear(int startX, int startY, int destX, int destY, int cameraX, int cameraY, Color[] losData)
     {
-        int distToDest = (int)(1 + Utils.dist(startX, destX, startY, destY));
+        int distToDest = (int)(1 + Utils.Dist(startX, destX, startY, destY));
 
         double dx = destX - startX;
         double dy = destY - startY;
@@ -296,11 +295,11 @@ class InGame
             int y = (int)yDouble;
 
 
-            int index = ((x - cameraX) + (CastleSpire.baseWidth * (y - cameraY)));
+            int index = ((x - cameraX) + (CastleSpire.BaseWidth * (y - cameraY)));
 
-            if (map.wall[x, y])
+            if (Map.wall[x, y])
                 return;
-            else if (index >= 0 && index < CastleSpire.baseWidth * CastleSpire.baseHeight)
+            else if (index >= 0 && index < CastleSpire.BaseWidth * CastleSpire.BaseHeight)
                 losData[index] = Color.Transparent;
 
         }
@@ -310,6 +309,6 @@ class InGame
 
     public LinkedList<PC> allPlayers()
     {
-        return playerList;
+        return PlayerList;
     }
 }

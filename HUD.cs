@@ -5,110 +5,110 @@ class HUD
 {
     public enum Corner { TOPLEFT, TOPRIGHT, BOTTOMLEFT, BOTTOMRIGHT}
 
-    Texture2D backPanel;
-    Texture2D itemFrame;
-    Texture2D itemFrameBig;
-    Texture2D statBar;
+    Texture2D BackPanel;
+    Texture2D ItemFrame;
+    Texture2D ItemFrameBig;
+    Texture2D StatBar;
 
     //The entire panel area for the HUD.
-    private static readonly int PANELWIDTH = 52;
-    private static readonly int PANELHEIGHT = 86;
+    private static readonly int PanelWidth = 52;
+    private static readonly int PanelHeight = 86;
 
 
-    private static readonly int PORTRAITHEIGHT = 29;
-    private static readonly int PORTRAITWIDTH = 30;
+    private static readonly int PortraitHeight = 29;
+    private static readonly int PortraitWidth = 30;
 
     //Width, height of stats bar.
-    private static readonly int BARHEIGHT = 31;
-    private static readonly int BARWIDTH = 22;
+    private static readonly int BarHeight = 31;
+    private static readonly int BarWidth = 22;
 
-    private static readonly int ITEMBARWIDTH = 117;
+    private static readonly int ItemBarWidth = 117;
 
 
     //Height of the Name.
-    private static readonly int NAMESPACEY = 9;
+    private static readonly int NameSpaceY = 9;
 
     //Location of the name.
-    private static readonly int NAMEX = 2;
-    private static readonly int NAMEY = 1;
+    private static readonly int NameX = 2;
+    private static readonly int NameY = 1;
 
     //Height of name frmae
-    private static readonly int ITEMFRAMEHEIGHT = 21;
+    private static readonly int ItemFrameHeight = 21;
 
     //Height of name frmae
-    private static readonly int ITEMFRAMEBIGWIDTH = 117;
+    private static readonly int ItemFrameWidth = 117;
 
     //The extend factor. 0 to 1.
-    private  double extend = 0;
+    private double Extend = 0;
 
     //if we should extend teh GUI out then true.
-    private bool extendify = false;
+    private bool Extendify = false;
 
     //Timer to wait before shrinking the gui.
-    private double idleTimer;
-    private double idleTimerMax = 1.0;
+    private double IdleTimer;
+    private double IdleTimerMax = 1.0;
 
     private class DrawParams
     {
-        public int x_HUD = 0;
-        public int y_HUD = 0;
-        public int x_NAME = 0;
-        public int y_NAME = 0;
-        public bool reflectX = false;
-        public bool reflectY = false;
+        public int HUDX = 0;
+        public int HUDY = 0;
+        public int NameX = 0;
+        public int NameY = 0;
+        public bool ReflectX = false;
+        public bool ReflectY = false;
     }
 
     
     private class Coord
     {
-        public int x = 0;
-        public int y = 0;
+        public int X = 0;
+        public int Y = 0;
     }
 
 
-    PC player;
-    Corner corner;
+    PC Player;
+    Corner Ccorner;
 
     public HUD(PC player, Corner corner)
     {
         //TODO: again, a textureloader.
         //load up all the things.
-        backPanel = Utils.TextureLoader("hud/backPanel.png");
-        itemFrame = Utils.TextureLoader("hud/itemFrame.png");
-        itemFrameBig = Utils.TextureLoader("hud/itemFrameBig.png");
-        statBar = Utils.TextureLoader("hud/statBar.png");
-        this.player = player;
-        this.corner = corner;
+        BackPanel = Utils.TextureLoader("hud/backPanel.png");
+        ItemFrame = Utils.TextureLoader("hud/itemFrame.png");
+        ItemFrameBig = Utils.TextureLoader("hud/itemFrameBig.png");
+        StatBar = Utils.TextureLoader("hud/statBar.png");
+        Player = player;
+        Ccorner = corner;
     }
 
-    public void draw()
+    public void Draw(AD2SpriteBatch sb)
     {
-        drawBars();
+        DrawBars(sb);
     }
 
-    public void update(Input i, GameTime dsec)
+    public void Update(Input i, int ms)
     {
-        if (!extendify)
+        if (!Extendify)
         {
-            if (idleTimer > 0)
-                idleTimer -= dsec.ElapsedGameTime.TotalSeconds;
-            else if (extend > 0)
+            if (IdleTimer > 0)
+                IdleTimer -= (double)ms/1000;
+            else if (Extend > 0)
             {
-                extend -= dsec.ElapsedGameTime.TotalSeconds;
+                Extend -= (double)ms / 1000;
             }
         }
 
-        if ((i.INVL || i.INVR))
-            extendify = true;
+        if ((i.InventoryL || i.InventoryR))
+            Extendify = true;
 
-        if (extendify)
+        if (Extendify)
         {
-            idleTimer = idleTimerMax;
-            extend += dsec.ElapsedGameTime.TotalSeconds;
-            if (extend >= 1)
+            IdleTimer = IdleTimerMax;
+            Extend += (double)ms / 1000;
+            if (Extend >= 1)
             {
-                extend = 1;
-                extendify = false;
+                Extend = 1;
+                Extendify = false;
             }
         }
 
@@ -117,28 +117,28 @@ class HUD
 
 
     //Corner args
-    public void drawBars()
+    public void DrawBars(AD2SpriteBatch sb)
     {
         DrawParams d = generateDrawParams();
         //name
-        Utils.drawString(player.name, d.x_NAME, d.y_NAME, Color.White, 1, true);
+        Utils.DefaultFont.Draw(sb, Player.Name, d.NameX, d.NameY, Color.White, 1, true);
         Coord bar = findBarPosition(d);
         Coord item = findItemPosition(d, bar);
         //Extended GUI.
-        drawExtendedHUD(d,item);
+        drawExtendedHUD(sb, d,item);
 
 
-        Utils.drawTexture(statBar, d.x_HUD + bar.x, d.y_HUD + bar.y);
+        sb.DrawTexture(StatBar, d.HUDX + bar.X, d.HUDY + bar.Y);
 
-        Utils.drawTexture(itemFrame, d.x_HUD + item.x, d.y_HUD  + item.y);       
+        sb.DrawTexture(ItemFrame, d.HUDX + item.X, d.HUDY  + item.Y);       
 
-        Utils.drawRect(Color.Red, d.x_HUD + 1 + bar.x, d.y_HUD + 1 + bar.y, 20, 9);
-        Utils.drawRect(Color.Blue, d.x_HUD + 1 + bar.x, d.y_HUD + 11 + bar.y, 20, 9);
-        Utils.drawRect(Color.Green, d.x_HUD + 1 + bar.x, d.y_HUD + 21 + bar.y, 20, 9);
+        Utils.DrawRect(sb, d.HUDX + 1 + bar.X, d.HUDY + 1 + bar.Y, 20, 9, Color.Red);
+        Utils.DrawRect(sb, d.HUDX + 1 + bar.X, d.HUDY + 11 + bar.Y, 20, 9, Color.Blue);
+        Utils.DrawRect(sb, d.HUDX + 1 + bar.X, d.HUDY + 21 + bar.Y, 20, 9, Color.Green);
 
-        Utils.drawString(player.HP.ToString(), d.x_HUD + 4 + bar.x, d.y_HUD + 2 + bar.y, Color.White, 1, true);
-        Utils.drawString(player.MP.ToString(), d.x_HUD + 4 + bar.x, d.y_HUD + 12 + bar.y, Color.White, 1, true);
-        Utils.drawString(player.FA.ToString(), d.x_HUD + 4 + bar.x, d.y_HUD + 22 + bar.y, Color.White, 1, true);
+        Utils.DefaultFont.Draw(sb, Player.HP.ToString(), d.HUDX + 4 + bar.X, d.HUDY + 2 + bar.Y, Color.White, 1, true);
+        Utils.DefaultFont.Draw(sb, Player.MP.ToString(), d.HUDX + 4 + bar.X, d.HUDY + 12 + bar.Y, Color.White, 1, true);
+        Utils.DefaultFont.Draw(sb, Player.FA.ToString(), d.HUDX + 4 + bar.X, d.HUDY + 22 + bar.Y, Color.White, 1, true);
 
   
     }
@@ -147,71 +147,71 @@ class HUD
     {
         DrawParams d = new DrawParams(); 
 
-        switch (corner)
+        switch (Ccorner)
         {
             case Corner.TOPLEFT:
-                d.x_NAME = NAMEX;
-                d.y_NAME = NAMEY;
-                d.x_HUD = 0;
-                d.y_HUD = NAMESPACEY;
-                d.reflectX = false;
-                d.reflectY = false;
+                d.NameX = NameX;
+                d.NameY = NameY;
+                d.HUDX = 0;
+                d.HUDY = NameSpaceY;
+                d.ReflectX = false;
+                d.ReflectY = false;
                 break;
 
             case Corner.TOPRIGHT:
                 //fake
-                d.x_NAME = CastleSpire.baseWidth - Utils.defaultFont.getWidth(player.name, true);
-                d.y_NAME = NAMEY;
-                d.x_HUD = CastleSpire.baseWidth - PANELWIDTH;
-                d.y_HUD = NAMESPACEY;
-                d.reflectX = true;
-                d.reflectY = false;
+                d.NameX = CastleSpire.BaseWidth - Utils.DefaultFont.GetWidth(Player.Name, true);
+                d.NameY = NameY;
+                d.HUDX = CastleSpire.BaseWidth - PanelWidth;
+                d.HUDY = NameSpaceY;
+                d.ReflectX = true;
+                d.ReflectY = false;
                 break;
 
             case Corner.BOTTOMLEFT:
-                d.x_NAME = NAMEX;
-                d.y_NAME = CastleSpire.baseHeight - NAMESPACEY + 1;
-                d.x_HUD = 0;
-                d.y_HUD = CastleSpire.baseHeight + -NAMESPACEY + -PANELHEIGHT;
-                d.reflectX = false;
-                d.reflectY = true;
+                d.NameX = NameX;
+                d.NameY = CastleSpire.BaseHeight - NameSpaceY + 1;
+                d.HUDX = 0;
+                d.HUDY = CastleSpire.BaseHeight + -NameSpaceY + -PanelHeight;
+                d.ReflectX = false;
+                d.ReflectY = true;
                 break;
 
             case Corner.BOTTOMRIGHT:
-                d.x_NAME = CastleSpire.baseWidth - Utils.defaultFont.getWidth(player.name, true);
-                d.y_NAME = CastleSpire.baseHeight + -NAMESPACEY + 1;
-                d.x_HUD = CastleSpire.baseWidth - PANELWIDTH;
-                d.y_HUD = CastleSpire.baseHeight + -NAMESPACEY + -PANELHEIGHT;
-                d.reflectX = true;
-                d.reflectY = true;
+                d.NameX = CastleSpire.BaseWidth - Utils.DefaultFont.GetWidth(Player.Name, true);
+                d.NameY = CastleSpire.BaseHeight + -NameSpaceY + 1;
+                d.HUDX = CastleSpire.BaseWidth - PanelWidth;
+                d.HUDY = CastleSpire.BaseHeight + -NameSpaceY + -PanelHeight;
+                d.ReflectX = true;
+                d.ReflectY = true;
                 break;
         }
         return d;
     }
 
-    private void drawExtendedHUD(DrawParams d, Coord item)
+    private void drawExtendedHUD(AD2SpriteBatch sb, DrawParams d, Coord item)
     {
         //back panel
-        int hideOffset = (d.reflectX ? (PANELWIDTH + -(int)(extend * PANELWIDTH)) : (-PANELWIDTH + (int)(extend * PANELWIDTH)));
+        int hideOffset = (d.ReflectX ? (PanelWidth + -(int)(Extend * PanelWidth)) : (-PanelWidth + (int)(Extend * PanelWidth)));
 
-        Utils.drawTexture(backPanel, d.x_HUD + hideOffset, d.y_HUD);
+        sb.DrawTexture(BackPanel, d.HUDX + hideOffset, d.HUDY);
 
         Coord portrait = findPortraitPosition(d, hideOffset);
 
-        int itemHideOffset = (d.reflectX ? (ITEMFRAMEBIGWIDTH + -(int)(extend * ITEMFRAMEBIGWIDTH)) : (-ITEMFRAMEBIGWIDTH + (int)(extend * ITEMFRAMEBIGWIDTH)));
+        int itemHideOffset = (d.ReflectX ? (ItemFrameWidth + -(int)(Extend * ItemFrameWidth)) : (-ItemFrameWidth + (int)(Extend * ItemFrameWidth)));
         Coord itemBar = findItemBarPosition(d, item, itemHideOffset);
 
 
         //portrait
-        if (d.reflectX)
+        if (d.ReflectX)
         {
-            Utils.drawTextureHFlip(RaceUtils.getPotrait(player.race), d.x_HUD + portrait.x, d.y_HUD + portrait.y);
-            Utils.drawTextureHFlip(itemFrameBig, d.x_HUD + itemBar.x, d.y_HUD + itemBar.y);
+            sb.DrawTextureHFlip(RaceUtils.GetPotrait(Player.Race), d.HUDX + portrait.X, d.HUDY + portrait.Y);
+            sb.DrawTextureHFlip(ItemFrameBig, d.HUDX + itemBar.X, d.HUDY + itemBar.Y);
         }
         else
         {
-            Utils.drawTexture(RaceUtils.getPotrait(player.race), d.x_HUD + portrait.x, d.y_HUD + portrait.y);
-            Utils.drawTexture(itemFrameBig, d.x_HUD + itemBar.x, d.y_HUD + itemBar.y);
+            sb.DrawTexture(RaceUtils.GetPotrait(Player.Race), d.HUDX + portrait.X, d.HUDY + portrait.Y);
+            sb.DrawTexture(ItemFrameBig, d.HUDX + itemBar.X, d.HUDY + itemBar.Y);
         }
         
     }
@@ -220,11 +220,11 @@ class HUD
     {
         Coord bar = new Coord();
 
-        if (d.reflectY)
-            bar.y = PANELHEIGHT - BARHEIGHT;
+        if (d.ReflectY)
+            bar.Y = PanelHeight - BarHeight;
 
-        if (d.reflectX)
-            bar.x = PANELWIDTH - BARWIDTH;
+        if (d.ReflectX)
+            bar.X = PanelWidth - BarWidth;
 
         return bar;
     }
@@ -232,14 +232,14 @@ class HUD
     private Coord findItemPosition(DrawParams d, Coord bar)
     {
        Coord item = new Coord();
-       item.y = bar.y + BARHEIGHT + (-1);
-       item.x = 0;
+       item.Y = bar.Y + BarHeight + (-1);
+       item.X = 0;
 
-        if (d.reflectY)
-            item.y = PANELHEIGHT + -BARHEIGHT + -ITEMFRAMEHEIGHT + (1);
+        if (d.ReflectY)
+            item.Y = PanelHeight + -BarHeight + -ItemFrameHeight + (1);
 
-        if (d.reflectX)
-            item.x = PANELWIDTH + -ITEMFRAMEHEIGHT;
+        if (d.ReflectX)
+            item.X = PanelWidth + -ItemFrameHeight;
 
         return item;
     }
@@ -247,14 +247,14 @@ class HUD
     private Coord findPortraitPosition(DrawParams d, int hideOffset)
     {
         Coord portrait = new Coord();
-        portrait.y = 1;
-        portrait.x = PANELWIDTH +- (PORTRAITWIDTH) + -1 + hideOffset;
+        portrait.Y = 1;
+        portrait.X = PanelWidth +- (PortraitWidth) + -1 + hideOffset;
 
-        if (d.reflectY)
-            portrait.y = PANELHEIGHT + -PORTRAITHEIGHT  + -1;
+        if (d.ReflectY)
+            portrait.Y = PanelHeight + -PortraitHeight  + -1;
 
-        if (d.reflectX)
-            portrait.x = 1 + hideOffset;
+        if (d.ReflectX)
+            portrait.X = 1 + hideOffset;
 
         return portrait;
     }
@@ -262,11 +262,11 @@ class HUD
     private Coord findItemBarPosition(DrawParams d, Coord item, int itemOffset)
     {
         Coord itemBar = new Coord();
-        itemBar.y = item.y;
-        itemBar.x = itemOffset;
+        itemBar.Y = item.Y;
+        itemBar.X = itemOffset;
 
-        if (d.reflectX)
-            itemBar.x = -ITEMBARWIDTH + PANELWIDTH + itemOffset;
+        if (d.ReflectX)
+            itemBar.X = -ItemBarWidth + PanelWidth + itemOffset;
 
         return itemBar;
     }

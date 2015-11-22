@@ -2,60 +2,60 @@
 
 class KeyboardInput : Input
 {
-    public Keys FIREkey;
-    public Keys BLOCKkey;
-    public Keys SPECIALkey;
-    public Keys USEkey;
+    public Keys FireKey;
+    public Keys BlockKey;
+    public Keys SpecialKey;
+    public Keys UseKey;
 
-    public Keys UPkey;
-    public Keys DOWNkey;
-    public Keys LEFTkey;
-    public Keys RIGHTkey;
+    public Keys UpKey;
+    public Keys DownKey;
+    public Keys LeftKey;
+    public Keys RightKey;
 
-    public Keys INVRkey;
-    public Keys INVLkey;
-    public Keys STARTkey;
+    public Keys InventoryRKey;
+    public Keys InventoryLKey;
+    public Keys StartKey;
     
-    public void update(KeyboardState k)
+    public void Update(KeyboardState k)
     {
 
-        pressedFIRE = isPressed(k, FIRE, FIREkey);
-        pressedBLOCK = isPressed(k, BLOCK, BLOCKkey);
-        pressedSPECIAL = isPressed(k, SPECIAL, SPECIALkey);
-        pressedUSE = isPressed(k, USE, USEkey);
+        PressedFire = IsPressed(k, Fire, FireKey);
+        PressedBlock = IsPressed(k, Block, BlockKey);
+        PressedSpecial = IsPressed(k, Special, SpecialKey);
+        PressedUse = IsPressed(k, Use, UseKey);
 
-        pressedUP = isPressed(k, UP, USEkey);
-        pressedLEFT = isPressed(k, LEFT, LEFTkey);
-        pressedRIGHT = isPressed(k, RIGHT, RIGHTkey);
-        pressedDOWN = isPressed(k, DOWN, DOWNkey);
+        PressedUp = IsPressed(k, Up, UseKey);
+        PressedLeft = IsPressed(k, Left, LeftKey);
+        PressedRight = IsPressed(k, Right, RightKey);
+        PressedDown = IsPressed(k, Down, DownKey);
 
-        pressedINVR = isPressed(k, INVR, INVRkey);
-        pressedINVL = isPressed(k, INVL, INVLkey);
-        pressedSTART = isPressed(k, START, STARTkey);
+        PressedInventoryR = IsPressed(k, InventoryR, InventoryRKey);
+        PressedInventoryL = IsPressed(k, InventoryL, InventoryLKey);
+        PressedStart = IsPressed(k, Start, StartKey);
 
 
-        FIRE = isHeld(k, FIRE, FIREkey);
-        BLOCK = isHeld(k, BLOCK, BLOCKkey);
-        SPECIAL = isHeld(k, SPECIAL, SPECIALkey);
-        USE = isHeld(k, USE, USEkey);
+        Fire = IsHeld(k, Fire, FireKey);
+        Block = IsHeld(k, Block, BlockKey);
+        Special = IsHeld(k, Special, SpecialKey);
+        Use = IsHeld(k, Use, UseKey);
 
-        UP = isHeld(k, UP, UPkey);
-        LEFT = isHeld(k, LEFT, LEFTkey);
-        RIGHT = isHeld(k, RIGHT, RIGHTkey);
-        DOWN = isHeld(k, DOWN, DOWNkey);
+        Up = IsHeld(k, Up, UpKey);
+        Left = IsHeld(k, Left, LeftKey);
+        Right = IsHeld(k, Right, RightKey);
+        Down = IsHeld(k, Down, DownKey);
 
-        INVR = isHeld(k, INVR, INVRkey);
-        INVL = isHeld(k, INVL, INVLkey);
-        START = isHeld(k, START, STARTkey);
+        InventoryR = IsHeld(k, InventoryR, InventoryRKey);
+        InventoryL = IsHeld(k, InventoryL, InventoryLKey);
+        Start = IsHeld(k, Start, StartKey);
     }
 
 
-    private bool isPressed(KeyboardState state, bool command, Keys key)
+    private bool IsPressed(KeyboardState state, bool command, Keys key)
     {
         return (!command && state.IsKeyDown(key));
     }
 
-    private bool isHeld(KeyboardState state, bool command, Keys key)
+    private bool IsHeld(KeyboardState state, bool command, Keys key)
     {
         return (state.IsKeyDown(key));
     }

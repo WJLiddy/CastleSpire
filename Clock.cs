@@ -3,68 +3,68 @@ using System;
 
 public class Clock
 {
-    private TimeSpan time;
-    private static readonly TimeSpan second = new TimeSpan(0, 0, 1);
-    private double deltaSec;
+    private TimeSpan Time;
+    private static readonly TimeSpan Second = new TimeSpan(0, 0, 1);
+    private double DeltaSec;
 
     public Clock()
     {
-        time = new TimeSpan(1, 9, 30, 0);
-        deltaSec = 0;
+        Time = new TimeSpan(1, 9, 30, 0);
+        DeltaSec = 0;
     }
 
-    public void tick(double dsec)
+    public void Tick(double dsec)
     {
-        deltaSec += dsec;
-        while (deltaSec >= 1)
+        DeltaSec += dsec;
+        while (DeltaSec >= 1)
         {
-            time = time.Add(second);
-            deltaSec = deltaSec - 1;
+            Time = Time.Add(Second);
+            DeltaSec = DeltaSec - 1;
         }
     }
 
-    public int seconds()
+    public int Seconds()
     {
-        return time.Seconds;
+        return Time.Seconds;
     }
 
     public int minutes()
     {
-        return time.Minutes;
+        return Time.Minutes;
     }
 
-    public int hours()
+    public int Hours()
     {
-        return time.Hours;
+        return Time.Hours;
     }
 
-    public int days()
+    public int Days()
     {
-        return time.Days;
+        return Time.Days;
     }
 
-    public String monthDay()
+    public string MonthDay()
     {
-        return "OCT " + time.Days;
+        return "OCT " + Time.Days;
     }
 
-    public String hourMin()
+    public string HourMin()
     {
-        int hour = time.Hours;
-        if (time.Hours == 0)
+        int hour = Time.Hours;
+        if (Time.Hours == 0)
         {
             hour = 12;
         }
-        if (time.Hours >= 13)
+        if (Time.Hours >= 13)
         {
-            hour = time.Hours - 12;
+            hour = Time.Hours - 12;
         }
-        return hour + ":" + time.Minutes.ToString("00");
+        return hour + ":" + Time.Minutes.ToString("00");
     }
 
-    public String AMPM()
+    public string AMPM()
     {
-        return (time.Hours >= 12 ? "PM" : "AM");
+        return (Time.Hours >= 12 ? "PM" : "AM");
     }
 }
 
