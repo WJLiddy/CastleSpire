@@ -1,14 +1,13 @@
-﻿using Microsoft.Xna.Framework;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 public class PC : Creature
 {
     public RaceUtils.Race Race { get; private set; }
     AnimationSet Anim;
+    //TODO nummbers -> enums
     enum Dir { Up,Right,Down,Left};
     Dir Direction = Dir.Down;
     public string Name { get; private set; }
-    Input OldInput = null;
 
     public PC(int racei)
     {
@@ -47,7 +46,7 @@ public class PC : Creature
         }
 
         //fix!
-        Anim.Speed = 5;
+        Anim.Speed = 9;
         HP = Stats.Vit();
         MP = Stats.Aff();
         FA = MaxFatigue;
@@ -70,13 +69,15 @@ public class PC : Creature
     {
         Anim.Draw(sb, X + - cameraX, Y + - cameraY);
     }
-
+    
+    //Put the priority to move "dir" direction first.
     private void Prioritize(int dir)
     {
         int oldDirIndex = 0;
 
         for(int i = 0; i != PrioritySet.Length; i++)
         {
+            //Find where the old direction was in the set.
             if(PrioritySet[i] == dir)
             {
                 oldDirIndex = i;
@@ -84,11 +85,13 @@ public class PC : Creature
             }
         }
 
+        //Shift everything else down.
         for (int i = oldDirIndex; i != 0; i--)
         {
             PrioritySet[i] = PrioritySet[i - 1];
         }
 
+        //Put this priority first.
         PrioritySet[0] = dir;
     }
 
@@ -241,18 +244,14 @@ public class PC : Creature
     {
         if (i.Left || i.Right || i.Up || i.Down)
         {
-            if (i != OldInput)
-                //TODO Enumerate
+            if (Anim.CurrentAnimationName.Equals("idle") || Anim.YFrame != (int)Direction)
                 Anim.AutoAnimate("walk", (int)Direction);
-
-            OldInput = i;
         }
 
         else
         {
             Anim.Hold("idle", 0, (int)Direction);
-
-            OldInput = null;
+            
         }
 
 
