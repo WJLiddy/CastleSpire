@@ -95,6 +95,7 @@ public class PC : Creature
         PrioritySet[0] = dir;
     }
 
+    //push this to entity
     private bool CanMove(int dir)
     {
         switch (dir)
@@ -102,14 +103,14 @@ public class PC : Creature
             case 0:
                 for (int top = X; top != X + Size; top++)
                 {
-                    if (InGame.Map.collide(top,Y - 1))
+                    if (InGame.Map.Collide(top,Y - 1))
                         return false;
                 }
                 return true;
             case 2:
                 for (int bottom = X; bottom != X + Size; bottom++)
                 {
-                    if (InGame.Map.collide(bottom, Y + Size))
+                    if (InGame.Map.Collide(bottom, Y + Size))
                         return false;
                 }
                 return true;
@@ -117,7 +118,7 @@ public class PC : Creature
             case 1:
                 for (int right = Y; right!= Y + Size; right++)
                 {
-                    if (InGame.Map.collide(X+Size, right))
+                    if (InGame.Map.Collide(X+Size, right))
                         return false;
                 }
                 return true;
@@ -125,7 +126,7 @@ public class PC : Creature
             case 3:
                 for (int left = Y; left != Y + Size; left++)
                 {
-                    if (InGame.Map.collide(X - 1,left))
+                    if (InGame.Map.Collide(X - 1,left))
                         return false;
                 }
                 return true;

@@ -1,6 +1,6 @@
 ﻿public abstract class Entity
 {
-    //change
+
     public int X { get; protected set; }
     public int Y { get; protected set; }
     public int Size { get; protected set; }

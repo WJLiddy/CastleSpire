@@ -1,10 +1,8 @@
 <Map>
 	<base>basemap.png</base>
 	<collision>collision.png</collision>
-	<objectmask>objectMask.png</objectmask>
-	<objectlayer>object.png</objectlayer>
+	<occlude>roof.png</occlude>
 	<always>always.png</always>
-	<roof>roof.png</roof>
 	
 	<collisionKeyR>255</collisionKeyR>	
 	<collisionKeyG>0</collisionKeyG>
@@ -13,6 +11,9 @@
 	<wallKeyR>0</wallKeyR>	
 	<wallKeyG>255</wallKeyG>
 	<wallKeyB>0</wallKeyB>
+		
+	<objectMask>objectMask.png</objectMask>
+	<object>object.png</object>
 	
 	<objectBaseKeyR>255</objectBaseKeyR>	
 	<objectBaseKeyG>0</objectBaseKeyG>
