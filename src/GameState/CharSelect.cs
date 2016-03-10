@@ -8,7 +8,7 @@ class CharSelect
     private AnimationSet Ninja;
     private AnimationSet Meximage;
     private AnimationSet Dragon;
-    private Texture2D Arrow;
+    private Texture2D Template;
 
     public int CharacterSelect { get; private set; } = 0;
 
@@ -23,8 +23,8 @@ class CharSelect
         Ninja.Hold("idle", 0, 2);
         Meximage.Hold("idle", 0, 2);
         Dragon.Hold("idle", 0, 2);
-
-        Arrow = Utils.TextureLoader(@"misc\bigDownArrow.png");
+        
+        Template = Utils.TextureLoader(@"misc\controller\template.png");
         SoundManager.Play("originlong.ogg");
 
     }
@@ -50,6 +50,7 @@ class CharSelect
             Meximage.Hold("idle", 0, 2);
             Dragon.Hold("idle", 0, 2);
 
+            /**
             if (CharacterSelect == 0)
                 Pirate.Hold("swing", 0, 2);
             if (CharacterSelect == 1)
@@ -58,6 +59,7 @@ class CharSelect
                 Meximage.Hold("swing", 0, 2);
             if (CharacterSelect == 3)
                 Ninja.Hold("swing", 0, 2);
+            */
         }
 
         return GS.Inputs[0].PressedFire ? GS.State.InGame : GS.State.CharSelect;
@@ -66,13 +68,20 @@ class CharSelect
     public void Draw(AD2SpriteBatch sb)
     {
         Renderer.GraphicsDevice.Clear(new Color (20,0,28));
-        Utils.DefaultFont.Draw(sb, "CHOOSE YOUR CHARACTER", 50, 50, Color.White, 3);
-        Pirate.Draw(sb, 10 + 50, 10 + 100,24*2,32*2);
-        Dragon.Draw(sb, 10 + 100, 10 + 100, 24 * 2, 32 * 2);
-        Meximage.Draw(sb, 10 + 150, 10 + 100, 24 * 2, 32 * 2);
-        Ninja.Draw(sb, 10 + 200, 10 + 100, 24 * 2, 32 * 2);
+        Utils.DrawRect(sb, CastleSpire.BaseWidth / 2, 0, 1, CastleSpire.BaseHeight, Color.White);
+        Utils.DrawRect(sb, 0, CastleSpire.BaseHeight / 2, CastleSpire.BaseWidth, 1, Color.White);
 
-        sb.DrawTexture(Arrow, 63 + (50 * CharacterSelect), 91, Color.DarkOrange);
+        for (int playerID = 0; playerID != 4; playerID++)
+        {
+            int baseX = (CastleSpire.BaseWidth / 2) * (playerID % 2);
+            int baseY = (CastleSpire.BaseHeight / 2) * (playerID / 2);
+            Pirate.Draw(sb, 10 + baseX, 20 + baseY);
+            Dragon.Draw(sb, 30 + baseX, 20 + baseY);
+            Meximage.Draw(sb, 50 + baseX, 20 + baseY);
+            Ninja.Draw(sb, 70 + baseX, 20 + baseY);
+            sb.DrawTexture(Template, 70+ baseX, 70 + baseY);
+        }
+        
     }
 
     internal void Draw()
