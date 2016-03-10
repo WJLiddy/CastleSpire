@@ -10,7 +10,7 @@ class InGame
     HUD[] HUDs = new HUD[4];
     LinkedList<Item> FloorItems;
   
-    public static ObliqueMap Map;
+    public static CollisionMap Map;
 
     public InGame(int race)
     {
@@ -19,10 +19,10 @@ class InGame
         PlayerList.AddFirst(Players[0]);
         HUDs[0] = new HUD(Players[0], HUD.Corner.TOPLEFT);
 
-        Map = new ObliqueMap(@"maps\testmap.xml", CastleSpire.BaseWidth, CastleSpire.BaseHeight);
+        Map = new CollisionMap(@"maps\zombieBase.xml", CastleSpire.BaseWidth, CastleSpire.BaseHeight);
 
         FloorItems = new LinkedList<Item>();
-        FloorItems.AddFirst(new Item(@"items\melee\axe.xml",300,300));
+        FloorItems.AddFirst(new Item(@"items\melee\axe.xml",200,200));
 
         SoundManager.Play("night.ogg", true);
     }
@@ -70,20 +70,12 @@ class InGame
         {
             i.Draw(sb, cameraX,cameraY);
         }
-       
-        //HARDCODED 120: will go away when ObliqueMap is done.
-        for (int y = 0; y != CastleSpire.BaseHeight + 120; y++)
+
+        foreach (PC p in allPlayers())
         {
-            Map.DrawObjectLine(sb, cameraX, cameraY, y);
-
-            foreach (PC p in allPlayers())
-            {
-                if ((cameraY + y) == (p.Y + (p.Size - 1)))
-                    p.Draw(sb, cameraX, cameraY);
-            }
+            p.Draw(sb, cameraX, cameraY);
         }
-
-        Map.RenderRoofs(sb, Map.getLOS(PlayerCoordsLinkedList(),cameraX,cameraY),cameraX,cameraY);
+       
         Map.DrawAlways(sb, cameraX, cameraY);
     }
 

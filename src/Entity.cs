@@ -12,6 +12,5 @@
         (Y > e.Y + (e.Size - 1)) ||
         (X > e.X + (e.Size - 1) ||
         (X + (Size - 1) < e.X)));
-
     }
 }

@@ -1,10 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using System.Diagnostics;
-using System.IO;
-
-public class CastleSpire : AD2Game
+﻿public class CastleSpire : AD2Game
 {
     //our minimum game dimensions. Needed for setting resolution.
     public static readonly int BaseWidth = 360;
@@ -17,27 +11,16 @@ public class CastleSpire : AD2Game
       
     protected override void AD2LoadContent()
     {
-        //Init our gamestate with basically will handle everything.
         new GS();
     }
     
-    protected override void AD2Logic(int ms, KeyboardState keyboardState, GamePadState[] gamePadState)
+    protected override void AD2Logic(int ms, Microsoft.Xna.Framework.Input.KeyboardState keyboardState, SlimDX.DirectInput.JoystickState[] gamePadState)
     {
 
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+        if (Microsoft.Xna.Framework.Input.Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
             Exit();
-
-        if (Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
-
-        // Check the device for Player One
-        GamePadState[] gamepads = new GamePadState[4]{
-            GamePad.GetState(PlayerIndex.One),
-            GamePad.GetState(PlayerIndex.Two),
-            GamePad.GetState(PlayerIndex.Three),
-            GamePad.GetState(PlayerIndex.Four)
-        };
-
-        GS.Update(ms, Keyboard.GetState(),gamepads);
+      
+        GS.Update(ms, Microsoft.Xna.Framework.Input.Keyboard.GetState(),gamePadState);
     }
     
     protected override void AD2Draw(AD2SpriteBatch sb)
