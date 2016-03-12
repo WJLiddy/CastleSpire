@@ -8,11 +8,6 @@ class ControllerInput : Input
     public int SpecialKey;
     public int UseKey;
 
-    public int UpKey;
-    public int DownKey;
-    public int LeftKey;
-    public int RightKey;
-
     public int InventoryRKey;
     public int InventoryLKey;
     public int StartKey;
@@ -26,10 +21,10 @@ class ControllerInput : Input
         PressedSpecial = IsPressed(k, Special, SpecialKey);
         PressedUse = IsPressed(k, Use, UseKey);
 
-        PressedUp = IsPressed(k, Up, UseKey);
-        PressedLeft = IsPressed(k, Left, LeftKey);
-        PressedRight = IsPressed(k, Right, RightKey);
-        PressedDown = IsPressed(k, Down, DownKey);
+        PressedUp = AxisIsPressed(k, Up, k.Y,false);
+        PressedLeft = AxisIsPressed(k, Up, k.X, true);
+        PressedRight = AxisIsPressed(k, Up, k.X, false);
+        PressedDown = AxisIsPressed(k, Up, k.Y, true);
 
         PressedInventoryR = IsPressed(k, InventoryR, InventoryRKey);
         PressedInventoryL = IsPressed(k, InventoryL, InventoryLKey);
@@ -41,10 +36,10 @@ class ControllerInput : Input
         Special = IsHeld(k, Special, SpecialKey);
         Use = IsHeld(k, Use, UseKey);
 
-        Up = IsHeld(k, Up, UpKey);
-        Left = IsHeld(k, Left, LeftKey);
-        Right = IsHeld(k, Right, RightKey);
-        Down = IsHeld(k, Down, DownKey);
+        Up = AxisIsHeld(k, Up, k.Y, false);
+        Left = AxisIsHeld(k, Up, k.X, true);
+        Right = AxisIsHeld(k, Up, k.X, false);
+        Down = AxisIsHeld(k, Up, k.Y, true);
 
         InventoryR = IsHeld(k, InventoryR, InventoryRKey);
         InventoryL = IsHeld(k, InventoryL, InventoryLKey);
@@ -52,6 +47,7 @@ class ControllerInput : Input
     }
 
 
+    // command refers to the if the key was held down last time.
     private bool IsPressed(JoystickState state, bool command, int key)
     {
         return (!command && state.IsPressed(key));
@@ -60,6 +56,16 @@ class ControllerInput : Input
     private bool IsHeld(JoystickState state, bool command, int key)
     {
         return (state.IsPressed(key));
+    }
+
+    private bool AxisIsPressed(JoystickState state, bool command, int axisValue, bool negative)
+    {
+        return (!command && negative ? axisValue < 0 : axisValue > 0);
+    }
+
+    private bool AxisIsHeld(JoystickState state, bool command, int axisValue, bool negative)
+    {
+        return negative ? axisValue < 0 : axisValue > 0;
     }
 }
 

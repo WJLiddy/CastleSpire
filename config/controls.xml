@@ -1,8 +1,0 @@
-<Controls>
-	<P1Input>keyboard</P1Input>
-  <P1Up>W</P1UP>
-  ...
-  <P2Input>controller0</P2Input>
-  <P2Block>2</P2Block>
-  
-</Map>

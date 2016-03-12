@@ -1,0 +1,52 @@
+<Controls>
+
+	<P1Input>keyboard</P1Input>
+  
+  <P1Up>W</P1Up>
+  <P1Down>S</P1Down>
+  <P1Left>A</P1Left>
+  <P1Right>D</P1Right>
+  
+  <P1Fight>L</P1Fight>
+  <P1Block>K</P1Block>
+  <P1Use>O</P1Use>
+  <P1Special>P</P1Special>
+  
+  <P1Start>T</P1Start>
+  <P1InvLeft>Q</P1InvLeft>
+  <P1InvRight>E</P1InvRight>
+
+  <P2Input>controller0</P2Input>
+  
+  <P2Fight>1</P2Fight>
+  <P2Block>2</P2Block>
+  <P2Use>3</P2Use>
+  <P2Special>4</P2Special>
+  
+  <P2Start>5</P2Start>
+  <P2InvLeft>6</P2InvLeft>
+  <P2InvRight>7</P2InvRight>
+  
+  <P3Input>controller1</P3Input>
+  
+  <P3Fight>1</P3Fight>
+  <P3Block>2</P3Block>
+  <P2Use>3</P2Use>
+  <P2Special>4</P2Special>
+  
+  <P2Start>5</P2Start>
+  <P2InvLeft>6</P2InvLeft>
+  <P2InvRight>7</P2InvRight>
+  
+  <P4Input>controller2</P4Input>
+  
+  <P4Fight>1</P4Fight>
+  <P4Block>2</P4Block>
+  <P2Use>3</P2Use>
+  <P2Special>4</P2Special>
+  
+  <P2Start>5</P2Start>
+  <P2InvLeft>6</P2InvLeft>
+  <P2InvRight>7</P2InvRight>
+  
+</Controls>

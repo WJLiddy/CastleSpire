@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
+using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 public class GS
 {
@@ -31,39 +33,40 @@ public class GS
         Inputs = new Input[4];
         GState = State.Title;
 
-        /** This is how to do a keyboard input.
-        KeyboardInput k = new KeyboardInput();
-        k.UpKey = Keys.Up;
-        k.DownKey = Keys.Down;
-        k.LeftKey = Keys.Left;
-        k.RightKey = Keys.Right;
-        k.InventoryLKey = Keys.Q;
-        k.FireKey = Keys.K;
-        */
+        Dictionary<string,LinkedList<string>> control = Utils.GetXMLEntriesHash("config/controls.xml");
 
-        /** This is how to controller input..
-        KeyboardInput k = new KeyboardInput();
-        k.UpKey = Keys.Up;
-        k.DownKey = Keys.Down;
-        k.LeftKey = Keys.Left;
-        k.RightKey = Keys.Right;
-        k.InventoryLKey = Keys.Q;
-        k.FireKey = Keys.K;
-*/
+        for (int i = 1; i != 5; i++)
+        {
+            if (!control.ContainsKey("P" + i + "Input"))
+                continue;
+            if (control["P" + i + "Input"].First.Value.Equals("keyboard"))
+            {
+                Utils.Log("Player " + i + " is using a keyboard");
 
+                KeyboardInput kinput = new KeyboardInput();
 
-        
-        ControllerInput k = new ControllerInput();
-        k.ControllerNumber = 0;
-        k.UpKey = 2;
-        Inputs[0] = k;
-        
+                kinput.UpKey = findKey(control["P" + i + "Up"].First.Value);
+                kinput.DownKey = findKey(control["P" + i + "Down"].First.Value);
+                kinput.LeftKey = findKey(control["P" + i + "Left"].First.Value);
+                kinput.RightKey = findKey(control["P" + i + "Right"].First.Value);
+                kinput.FireKey = findKey(control["P" + i + "Fight"].First.Value);
+                kinput.BlockKey = findKey(control["P" + i + "Block"].First.Value);
+                Inputs[i - 1] = kinput;
 
-        Inputs[1] = null;
-        Inputs[2] = null;
-        Inputs[3] = null;
-    
-        ControllerManager = new ControllerManager();
+            }
+            if (control["P" + i + "Input"].First.Value.Contains("controller"))
+            {
+                string controllerNo = control["P" + i + "Input"].First.Value;
+                int number = Int32.Parse(Regex.Match(controllerNo, @"\d+").Value);
+                Utils.Log("Player " + i + " is using controller " + number);
+                //controller stuff.
+                ControllerInput cinput = new ControllerInput();
+                cinput.FireKey = Int32.Parse(control["P" + i + "Fight"].First.Value);
+                cinput.BlockKey = Int32.Parse(control["P" + i + "Block"].First.Value);
+                Inputs[i - 1] = cinput;
+            }
+        }
+
         Title = new Title();
         Logo = Utils.TextureLoader(@"misc\logo.png");
     }
@@ -98,7 +101,7 @@ public class GS
                if (newState == State.InGame)
                {
                     GState = State.InGame;
-                    InGame = new InGame(CharSelect.CharacterSelect);
+                    InGame = new InGame(CharSelect.CharacterSelect[0]);
                }
                 break;
 
@@ -130,6 +133,18 @@ public class GS
         }
 
         //Utils.DefaultFont.Draw(sb, LastDelta.IsRunningSlowly ? "SLOW!" : "", 100, 1, Color.BlanchedAlmond, 1, true);
+    }
+
+
+    private Keys findKey(string key)
+    {
+        foreach(Keys k in Enum.GetValues(typeof(Keys)))
+        {
+            if (key.Equals(k.ToString()))
+                return k;
+        }
+        Utils.Log("Warning: key " + key + " could not be found on the keyboard, so it was not bound.");
+        return Keys.None;
     }
 }
 
