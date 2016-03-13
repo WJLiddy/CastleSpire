@@ -30,13 +30,18 @@ class InGame
                     HUDs[i] = new HUD(Players[i], HUD.Corner.BOTTOMRIGHT);
             }
         }
-        
+
         // Just using a collisionmap for now.
         Map = new CollisionMap(@"maps\zombieBase.xml", CastleSpire.BaseWidth, CastleSpire.BaseHeight);
 
         // And a single item.
         FloorItems = new LinkedList<Item>();
-        FloorItems.AddFirst(new Item(@"items\melee\axe.xml",200,200));
+        for (int i = 0; i != 100; i++)
+        {
+            BasicMeleeWeapon b = BasicMeleeWeapon.generateBasicWeapon(30);
+            b.SetCoords((int)(20 + Utils.RandomNumber() * 300), (int)(20 + Utils.RandomNumber() * 300));
+            FloorItems.AddFirst(b);
+        }
 
         SoundManager.Play("night.ogg", true);
     }

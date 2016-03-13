@@ -8,6 +8,14 @@ public class PC : Creature
     Dir Direction = Dir.Down;
     public string Name { get; private set; }
 
+    private int AttackFramesLeft = 0;
+    private int TimeLeftOnFrame = 0;
+    // Game runs at 60 FPS.
+    // An attack has frames: Wind-up, Diagonal, Horizontal, Delivery, Recover I, Recover II.
+    //                             2   3   4  5   6 
+    // Weapon speeds can then be: 12, 18, 24, 30, 36 frames.
+
+
     public PC(int racei)
     {
         //TODO Clean
@@ -57,6 +65,9 @@ public class PC : Creature
 
         if (i.PressedUse)
             Use();
+        if (i.PressedFire)
+            Fire();
+
     
         Anim.Update();
     }
@@ -289,9 +300,11 @@ public class PC : Creature
         {
             InGame.FloorItems.Remove(item);
         }
+    }
 
-
-
+    private void Fire()
+    {
+        
     }
 
 }

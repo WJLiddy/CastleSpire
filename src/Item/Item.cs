@@ -5,24 +5,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
-public class Item : Entity
+public abstract class Item : Entity
 {
-    private Texture2D Texture;
+    protected Texture2D Texture;
     private Texture2D Outline;
-    private int OffsetX;
-    private int OffsetY;
+    protected int OffsetX { get; private set; }
+    protected int OffsetY { get; private set; }
     private int HandX;
     private int HandY;
 
-    public Item(String pathToXML,int x,int y)
+    public Item(string pathToXML)
     {
         ReadMapXML(pathToXML);
         Texture = Utils.TextureLoader(Path.ChangeExtension(pathToXML, ".png"));
         makeOutline();
-        this.X = x;
-        this.Y = y;
     }
-
     public void ReadMapXML(String url)
     {
         XmlReader reader = XmlReader.Create(url);
@@ -50,12 +47,12 @@ public class Item : Entity
         reader.Close();
     }
 
-    public void DrawOnFloor(AD2SpriteBatch sb, int camX, int camY)
+    public virtual void DrawOnFloor(AD2SpriteBatch sb, int camX, int camY)
     {
         sb.Draw(Texture, new Rectangle((-camX + X + -OffsetX), (-camY + Y + -OffsetY),Texture.Width/4,Texture.Height), new Rectangle(16, 0, Texture.Width/4, Texture.Height),Color.White);
     }
 
-    public void DrawAlone(AD2SpriteBatch sb, int x, int y)
+    public virtual void DrawAlone(AD2SpriteBatch sb, int x, int y)
     {
         sb.Draw(Texture, new Rectangle(x, y, Texture.Width / 4, Texture.Height), new Rectangle(16, 0, Texture.Width / 4, Texture.Height), Color.White);
     }
@@ -85,7 +82,7 @@ public class Item : Entity
 
     }
 
-    public void makeOutline()
+    private void makeOutline()
     {
         Outline = new Texture2D(Renderer.GraphicsDevice, Texture.Width, Texture.Height);
         Color[] itemTexture = new Color[Texture.Width * Texture.Height];

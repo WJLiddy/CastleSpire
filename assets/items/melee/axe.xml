@@ -1,7 +1,10 @@
 <ItemDesc>
+<!-- Refers to top-left of item in view 2 -->
    <x>1</x>
    <y>3</y>
+   <!-- Refers to length of item -->
    <size>13</size>
+   <!-- Refers to one pixel above bottom outline -->
    <handX>8</handX>
    <handY>14</handY>
 </ItemDesc>
