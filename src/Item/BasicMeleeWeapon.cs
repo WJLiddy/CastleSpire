@@ -119,8 +119,8 @@ class BasicMeleeWeapon : Item
         sb.Draw(Texture, new Rectangle((-camX + X + -OffsetX), (-camY + Y + -OffsetY), Texture.Width / 4, Texture.Height), new Rectangle(16, 0, Texture.Width / 4, Texture.Height), Tint);
     }
 
-    public override void DrawAlone(AD2SpriteBatch sb, int x, int y)
+    public override void DrawAlone(AD2SpriteBatch sb, int x, int y, int dir)
     {
-        sb.Draw(Texture, new Rectangle(x, y, Texture.Width / 4, Texture.Height), new Rectangle(16, 0, Texture.Width / 4, Texture.Height), Tint);
+        sb.Draw(Texture, new Rectangle(x, y, Texture.Width / 4, Texture.Height), new Rectangle(dir*16, 0, Texture.Width / 4, Texture.Height), Tint);
     }
 }

@@ -134,7 +134,7 @@ class HUD
 
         if (Player.Inventory[Player.InvIndex] != null)
         {
-            Player.Inventory[Player.InvIndex].DrawAlone(sb, d.HUDX + item.X, d.HUDY + item.Y + 2);
+            Player.Inventory[Player.InvIndex].DrawAlone(sb, d.HUDX + item.X, d.HUDY + item.Y + 2,1);
         }
 
 

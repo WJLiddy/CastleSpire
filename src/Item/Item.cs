@@ -11,8 +11,8 @@ public abstract class Item : Entity
     private Texture2D Outline;
     protected int OffsetX { get; private set; }
     protected int OffsetY { get; private set; }
-    private int HandX;
-    private int HandY;
+    public int HandX { get; private set; }
+    public int HandY { get; private set; }
 
     public Item(string pathToXML)
     {
@@ -52,9 +52,9 @@ public abstract class Item : Entity
         sb.Draw(Texture, new Rectangle((-camX + X + -OffsetX), (-camY + Y + -OffsetY),Texture.Width/4,Texture.Height), new Rectangle(16, 0, Texture.Width/4, Texture.Height),Color.White);
     }
 
-    public virtual void DrawAlone(AD2SpriteBatch sb, int x, int y)
+    public virtual void DrawAlone(AD2SpriteBatch sb, int x, int y, int dir)
     {
-        sb.Draw(Texture, new Rectangle(x, y, Texture.Width / 4, Texture.Height), new Rectangle(16, 0, Texture.Width / 4, Texture.Height), Color.White);
+        sb.Draw(Texture, new Rectangle(x, y, Texture.Width / 4, Texture.Height), new Rectangle(dir*16, 0, Texture.Width / 4, Texture.Height), Color.White);
     }
 
     public static void DrawGlowingItems(AD2SpriteBatch sb, LinkedList<PC> activeCharacters, LinkedList<Item> items, int camX, int camY)

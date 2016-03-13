@@ -1,0 +1,23 @@
+<Hands>
+  <!-- Should refer to the middle-lower-endge part of the hand. -->
+  <walk00>13,88</walk00>
+  <walk10>13,87</walk10>
+  <walk20>13,88</walk20>
+  <walk30>13,87</walk30>
+  
+  <walk01>18,56</walk01>
+  <walk11>42,55</walk11>
+  <walk21>66,56</walk21>
+  <walk31>90,55</walk31>
+  
+  <walk02>8,88</walk02>
+  <walk12>33,87</walk12>
+  <walk22>57,88</walk22>
+  <walk32>81,87</walk32>
+  
+  <!-- Using right-hand-exposed as a reference -->
+  <walk03>6,56</walk03>
+  <walk13>6,55</walk13>
+  <walk23>6,56</walk23>
+  <walk33>6,55</walk33>
+</Hands>

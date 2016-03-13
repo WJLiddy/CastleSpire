@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 public class PC : Creature
 {
@@ -10,6 +11,8 @@ public class PC : Creature
 
     private int AttackFramesLeft = 0;
     private int TimeLeftOnFrame = 0;
+
+    int[,,] WalkingHandPositions;
     // Game runs at 60 FPS.
     // An attack has frames: Wind-up, Diagonal, Horizontal, Delivery, Recover I, Recover II.
     //                             2   3   4  5   6 
@@ -27,12 +30,14 @@ public class PC : Creature
             case RaceUtils.Race.Pirate:
                 Anim = new AnimationSet(@"creatures\pc\pirate\anim.xml");
                 Stats = new StatSet(@"creatures\pc\pirate\stat.xml");
+                FillWalkingHandPositions(@"creatures\pc\pirate\hands.xml");
                 Size = 12;
                 Name = "NANCY";
                 break;
             case RaceUtils.Race.Dragon:
                 Anim = new AnimationSet(@"creatures\pc\dragon\anim.xml");
                 Stats = new StatSet(@"creatures\pc\dragon\stat.xml");
+                FillWalkingHandPositions(@"creatures\pc\dragon\hands.xml");
                 Size = 16;
                 Name = "ALESSIA";
                 break;
@@ -75,7 +80,27 @@ public class PC : Creature
     //Consider a camera
     public void Draw(AD2SpriteBatch sb, int cameraX, int cameraY )
     {
-        Anim.Draw(sb, X + - cameraX, Y + - cameraY);
+        if(Direction == Dir.Down || Direction == Dir.Right)
+            Anim.Draw(sb, X + - cameraX, Y + - cameraY);
+        if (Inventory[0] != null)
+        {
+            if (Anim.CurrentAnimationName.Equals("walk"))
+            {
+                // First we center up on the top left corner of the character by subtracting the XOffset. 
+                // Then we add the hand offset. Then we subtract the item's hand offset. Then the camera.
+            
+                //should center item on top left corner of sprite
+                Utils.Log("" + Inventory[0].HandX);
+
+                int XHandPosition = X + -Anim.CurrentAnimation.XOffset + WalkingHandPositions[Anim.XFrame,(int)Direction, 0] +- Inventory[0].HandX + -cameraX;
+                int YHandPosition = Y + -Anim.CurrentAnimation.YOffset + WalkingHandPositions[Anim.XFrame,(int)Direction, 1] + -Inventory[0].HandY + -cameraY;
+
+
+                Inventory[0].DrawAlone(sb, XHandPosition, YHandPosition, (int)Direction);
+            }
+        }
+        if (Direction == Dir.Left || Direction == Dir.Up)
+            Anim.Draw(sb, X + -cameraX, Y + -cameraY);
     }
     
     //Put the priority to move "dir" direction first.
@@ -305,6 +330,25 @@ public class PC : Creature
     private void Fire()
     {
         
+    }
+
+    private void FillWalkingHandPositions(string xml)
+    {
+        Dictionary<string,LinkedList<string>> hands = Utils.GetXMLEntriesHash(xml);
+        
+        WalkingHandPositions = new int[4, 4 , 2];
+        for(int x = 0; x != 4; x++)
+        {
+            for(int y = 0; y != 4; y++)
+            {
+                String coords = hands["walk" + x + y].First.Value;
+                String[] coordsSplit = coords.Split(',');
+                // X COORD : 24
+                WalkingHandPositions[x, y, 0] = Int32.Parse(coordsSplit[0]) % 24;
+                // Y COORD : 32
+                WalkingHandPositions[x, y, 1] = Int32.Parse(coordsSplit[1]) % 32;
+            }
+        }
     }
 
 }
