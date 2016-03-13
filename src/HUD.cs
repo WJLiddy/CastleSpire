@@ -129,8 +129,14 @@ class HUD
 
 
         sb.DrawTexture(StatBar, d.HUDX + bar.X, d.HUDY + bar.Y);
+       
+        sb.DrawTexture(ItemFrame, d.HUDX + item.X, d.HUDY  + item.Y);
 
-        sb.DrawTexture(ItemFrame, d.HUDX + item.X, d.HUDY  + item.Y);       
+        if (Player.Inventory[Player.InvIndex] != null)
+        {
+            Player.Inventory[Player.InvIndex].DrawAlone(sb, d.HUDX + item.X, d.HUDY + item.Y + 2);
+        }
+
 
         Utils.DrawRect(sb, d.HUDX + 1 + bar.X, d.HUDY + 1 + bar.Y, 20, 9, Color.Red);
         Utils.DrawRect(sb, d.HUDX + 1 + bar.X, d.HUDY + 11 + bar.Y, 20, 9, Color.Blue);

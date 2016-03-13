@@ -50,9 +50,14 @@ public class Item : Entity
         reader.Close();
     }
 
-    public void Draw(AD2SpriteBatch sb, int camX, int camY)
+    public void DrawOnFloor(AD2SpriteBatch sb, int camX, int camY)
     {
         sb.Draw(Texture, new Rectangle((-camX + X + -OffsetX), (-camY + Y + -OffsetY),Texture.Width/4,Texture.Height), new Rectangle(16, 0, Texture.Width/4, Texture.Height),Color.White);
+    }
+
+    public void DrawAlone(AD2SpriteBatch sb, int x, int y)
+    {
+        sb.Draw(Texture, new Rectangle(x, y, Texture.Width / 4, Texture.Height), new Rectangle(16, 0, Texture.Width / 4, Texture.Height), Color.White);
     }
 
     public static void DrawGlowingItems(AD2SpriteBatch sb, LinkedList<PC> activeCharacters, LinkedList<Item> items, int camX, int camY)

@@ -14,17 +14,26 @@ class ControllerInput : Input
 
     public void Update(JoystickState[] allStates)
     {
-        JoystickState k = allStates[ControllerNumber];
+        JoystickState k;
+        if (ControllerNumber < allStates.Length && allStates[ControllerNumber] != null)
+        {
+            k = allStates[ControllerNumber];
+        } else
+        {
+            return;
+        }
 
         PressedFire = IsPressed(k, Fire, FireKey);
         PressedBlock = IsPressed(k, Block, BlockKey);
         PressedSpecial = IsPressed(k, Special, SpecialKey);
         PressedUse = IsPressed(k, Use, UseKey);
 
-        PressedUp = AxisIsPressed(k, Up, k.Y,false);
-        PressedLeft = AxisIsPressed(k, Up, k.X, true);
-        PressedRight = AxisIsPressed(k, Up, k.X, false);
-        PressedDown = AxisIsPressed(k, Up, k.Y, true);
+        PressedUp = AxisIsPressed(k, Up, k.Y,true);
+
+        PressedLeft = AxisIsPressed(k, Left, k.X, true);
+        PressedRight = AxisIsPressed(k, Right, k.X, false);
+
+        PressedDown = AxisIsPressed(k, Down, k.Y, false);
 
         PressedInventoryR = IsPressed(k, InventoryR, InventoryRKey);
         PressedInventoryL = IsPressed(k, InventoryL, InventoryLKey);
@@ -36,10 +45,12 @@ class ControllerInput : Input
         Special = IsHeld(k, Special, SpecialKey);
         Use = IsHeld(k, Use, UseKey);
 
-        Up = AxisIsHeld(k, Up, k.Y, false);
-        Left = AxisIsHeld(k, Up, k.X, true);
-        Right = AxisIsHeld(k, Up, k.X, false);
-        Down = AxisIsHeld(k, Up, k.Y, true);
+        Up = AxisIsHeld(k, Up, k.Y, true);
+
+        Left = AxisIsHeld(k, Left, k.X, true);
+        Right = AxisIsHeld(k, Right, k.X, false);
+
+        Down = AxisIsHeld(k, Down, k.Y, false);
 
         InventoryR = IsHeld(k, InventoryR, InventoryRKey);
         InventoryL = IsHeld(k, InventoryL, InventoryLKey);
@@ -60,7 +71,7 @@ class ControllerInput : Input
 
     private bool AxisIsPressed(JoystickState state, bool command, int axisValue, bool negative)
     {
-        return (!command && negative ? axisValue < 0 : axisValue > 0);
+        return (!command && (negative ? axisValue < 0 : axisValue > 0));
     }
 
     private bool AxisIsHeld(JoystickState state, bool command, int axisValue, bool negative)

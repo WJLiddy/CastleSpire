@@ -32,41 +32,7 @@ public class GS
         // Input for each player. This is read from an XML.
         Inputs = new Input[4];
         GState = State.Title;
-
-        Dictionary<string,LinkedList<string>> control = Utils.GetXMLEntriesHash("config/controls.xml");
-
-        for (int i = 1; i != 5; i++)
-        {
-            if (!control.ContainsKey("P" + i + "Input"))
-                continue;
-            if (control["P" + i + "Input"].First.Value.Equals("keyboard"))
-            {
-                Utils.Log("Player " + i + " is using a keyboard");
-
-                KeyboardInput kinput = new KeyboardInput();
-
-                kinput.UpKey = findKey(control["P" + i + "Up"].First.Value);
-                kinput.DownKey = findKey(control["P" + i + "Down"].First.Value);
-                kinput.LeftKey = findKey(control["P" + i + "Left"].First.Value);
-                kinput.RightKey = findKey(control["P" + i + "Right"].First.Value);
-                kinput.FireKey = findKey(control["P" + i + "Fight"].First.Value);
-                kinput.BlockKey = findKey(control["P" + i + "Block"].First.Value);
-                Inputs[i - 1] = kinput;
-
-            }
-            if (control["P" + i + "Input"].First.Value.Contains("controller"))
-            {
-                string controllerNo = control["P" + i + "Input"].First.Value;
-                int number = Int32.Parse(Regex.Match(controllerNo, @"\d+").Value);
-                Utils.Log("Player " + i + " is using controller " + number);
-                //controller stuff.
-                ControllerInput cinput = new ControllerInput();
-                cinput.FireKey = Int32.Parse(control["P" + i + "Fight"].First.Value);
-                cinput.BlockKey = Int32.Parse(control["P" + i + "Block"].First.Value);
-                Inputs[i - 1] = cinput;
-            }
-        }
-
+        SetUpControls();
         Title = new Title();
         Logo = Utils.TextureLoader(@"misc\logo.png");
     }
@@ -101,7 +67,7 @@ public class GS
                if (newState == State.InGame)
                {
                     GState = State.InGame;
-                    InGame = new InGame(CharSelect.CharacterSelect[0]);
+                    InGame = new InGame(CharSelect.CharacterSelect, CharSelect.Ready);
                }
                 break;
 
@@ -145,6 +111,57 @@ public class GS
         }
         Utils.Log("Warning: key " + key + " could not be found on the keyboard, so it was not bound.");
         return Keys.None;
+    }
+
+    private void SetUpControls()
+    {
+        Dictionary<string, LinkedList<string>> control = Utils.GetXMLEntriesHash("config/controls.xml");
+
+        for (int i = 1; i != 5; i++)
+        {
+            if (!control.ContainsKey("P" + i + "Input"))
+                continue;
+            if (control["P" + i + "Input"].First.Value.Equals("keyboard"))
+            {
+                Utils.Log("Player " + i + " is using a keyboard");
+
+                KeyboardInput kinput = new KeyboardInput();
+
+                kinput.UpKey = findKey(control["P" + i + "Up"].First.Value);
+                kinput.DownKey = findKey(control["P" + i + "Down"].First.Value);
+                kinput.LeftKey = findKey(control["P" + i + "Left"].First.Value);
+                kinput.RightKey = findKey(control["P" + i + "Right"].First.Value);
+
+                kinput.FireKey = findKey(control["P" + i + "Fight"].First.Value);
+                kinput.BlockKey = findKey(control["P" + i + "Block"].First.Value);
+
+                kinput.UseKey = findKey(control["P" + i + "Use"].First.Value);
+                kinput.SpecialKey = findKey(control["P" + i + "Special"].First.Value);
+
+                kinput.InventoryLKey = findKey(control["P" + i + "InvLeft"].First.Value);
+                kinput.InventoryRKey = findKey(control["P" + i + "InvRight"].First.Value);
+
+                Inputs[i - 1] = kinput;
+
+            }
+            if (control["P" + i + "Input"].First.Value.Contains("controller"))
+            {
+                string controllerNo = control["P" + i + "Input"].First.Value;
+                int number = Int32.Parse(Regex.Match(controllerNo, @"\d+").Value);
+                Utils.Log("Player " + i + " is using controller " + number);
+                //controller stuff.
+                ControllerInput cinput = new ControllerInput();
+                cinput.ControllerNumber = number;
+                cinput.FireKey = Int32.Parse(control["P" + i + "Fight"].First.Value);
+                cinput.BlockKey = Int32.Parse(control["P" + i + "Block"].First.Value);
+                cinput.UseKey = Int32.Parse(control["P" + i + "Use"].First.Value);
+                cinput.SpecialKey = Int32.Parse(control["P" + i + "Special"].First.Value);
+
+                cinput.InventoryLKey = Int32.Parse(control["P" + i + "InvLeft"].First.Value);
+                cinput.InventoryRKey = Int32.Parse(control["P" + i + "InvRight"].First.Value);
+                Inputs[i - 1] = cinput;
+            }
+        }
     }
 }
 

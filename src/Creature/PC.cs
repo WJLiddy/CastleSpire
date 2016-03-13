@@ -4,7 +4,6 @@ public class PC : Creature
 {
     public RaceUtils.Race Race { get; private set; }
     AnimationSet Anim;
-    //TODO nummbers -> enums
     enum Dir { Up,Right,Down,Left};
     Dir Direction = Dir.Down;
     public string Name { get; private set; }
@@ -41,14 +40,12 @@ public class PC : Creature
                 Size = 12;
                 Name = "BIP";
                 break;
-
-
         }
 
         //fix!
         Anim.Speed = 9;
-        HP = Stats.Vit();
-        MP = Stats.Aff();
+        HP = StatSet.MPPerStat * Stats.Vit();
+        MP = StatSet.MPPerStat * Stats.Aff();
         FA = MaxFatigue;
     }
 
@@ -251,8 +248,7 @@ public class PC : Creature
 
         else
         {
-            Anim.Hold("idle", 0, (int)Direction);
-            
+            Anim.Hold("idle", 0, (int)Direction);    
         }
 
 
@@ -271,7 +267,28 @@ public class PC : Creature
 
     private void Use()
     {
-  //      if()
+        //get ground pick-uppable items and grab them all
+        LinkedList<Item> removeList = new LinkedList<Item>();
+        foreach (Item item in InGame.FloorItems)
+        {
+            if (item.collide(this))
+            {
+                for (int i = 0; i != Inventory.Length; i++)
+                {
+                    if(Inventory[i] == null)
+                    {
+                        Inventory[i] = item;
+                        removeList.AddFirst(item);
+                        break;
+                    }
+                }
+            }
+        }
+
+        foreach (Item item in removeList)
+        {
+            InGame.FloorItems.Remove(item);
+        }
 
 
 

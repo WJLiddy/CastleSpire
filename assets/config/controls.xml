@@ -31,22 +31,20 @@
   
   <P3Fight>1</P3Fight>
   <P3Block>2</P3Block>
-  <P2Use>3</P2Use>
-  <P2Special>4</P2Special>
+    <P3Use>3</P3Use>
+  <P3Special>4</P3Special>
   
-  <P2Start>5</P2Start>
-  <P2InvLeft>6</P2InvLeft>
-  <P2InvRight>7</P2InvRight>
+  <P3InvLeft>6</P3InvLeft>
+  <P3InvRight>7</P3InvRight>
   
   <P4Input>controller2</P4Input>
   
   <P4Fight>1</P4Fight>
   <P4Block>2</P4Block>
-  <P2Use>3</P2Use>
-  <P2Special>4</P2Special>
+    <P4Use>3</P4Use>
+  <P4Special>4</P4Special>
   
-  <P2Start>5</P2Start>
-  <P2InvLeft>6</P2InvLeft>
-  <P2InvRight>7</P2InvRight>
+  <P4InvLeft>6</P4InvLeft>
+  <P4InvRight>7</P4InvRight>
   
 </Controls>

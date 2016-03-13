@@ -16,7 +16,6 @@ public abstract class Creature : Entity
 
     public StatSet Stats { get; protected set; }
 
-
     public int InvIndex { get; protected set; } = 0;
     public Item[] Inventory { get; protected set; }
 

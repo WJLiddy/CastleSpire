@@ -3,24 +3,38 @@
 //Singletonize.
 class InGame
 {
-    //TODO: Proper data struct
-    PC[] Players = new PC[4];
-    private LinkedList<PC> PlayerList = new LinkedList<PC>();
 
-    HUD[] HUDs = new HUD[4];
-    LinkedList<Item> FloorItems;
-  
-    public static CollisionMap Map;
+    private static PC[] Players = new PC[4];
+    private static LinkedList<PC> PlayerList = new LinkedList<PC>();
 
-    public InGame(int race)
+    private static HUD[] HUDs = new HUD[4];
+    public static LinkedList<Item> FloorItems { get; private set; }
+    public static CollisionMap Map { get; private set; }
+
+    public InGame(int[] race, bool[] ready)
     {
         SoundManager.Stop();
-        Players[0] = new PC(race);
-        PlayerList.AddFirst(Players[0]);
-        HUDs[0] = new HUD(Players[0], HUD.Corner.TOPLEFT);
-
+        for (int i = 0; i != 4; i++)
+        {
+            if (ready[i])
+            {
+                Players[i] = new PC(race[i]);
+                PlayerList.AddFirst(Players[i]);
+                if (i == 0)
+                    HUDs[i] = new HUD(Players[i], HUD.Corner.TOPLEFT);
+                if (i == 1)
+                    HUDs[i] = new HUD(Players[i], HUD.Corner.TOPRIGHT);
+                if (i == 2)
+                    HUDs[i] = new HUD(Players[i], HUD.Corner.BOTTOMLEFT);
+                if (i == 3)
+                    HUDs[i] = new HUD(Players[i], HUD.Corner.BOTTOMRIGHT);
+            }
+        }
+        
+        // Just using a collisionmap for now.
         Map = new CollisionMap(@"maps\zombieBase.xml", CastleSpire.BaseWidth, CastleSpire.BaseHeight);
 
+        // And a single item.
         FloorItems = new LinkedList<Item>();
         FloorItems.AddFirst(new Item(@"items\melee\axe.xml",200,200));
 
@@ -30,7 +44,6 @@ class InGame
     //Load each of the characters.
     public GS.State Update(int ms)
     {
-        Join();
         UpdatePlayersAndHud(ms);
         return GS.State.InGame;
     }
@@ -68,7 +81,7 @@ class InGame
 
         foreach( Item i in FloorItems)
         {
-            i.Draw(sb, cameraX,cameraY);
+            i.DrawOnFloor(sb, cameraX,cameraY);
         }
 
         foreach (PC p in allPlayers())
@@ -78,33 +91,7 @@ class InGame
        
         Map.DrawAlways(sb, cameraX, cameraY);
     }
-
-    private void Join()
-    {
-        for (int i = 1; i != 4; i++)
-        {
-            //have people join. 
-            if (Players[i] == null)
-            {
-                if (GS.Inputs[i].PressedUp)
-                    Players[i] = new PC((int)RaceUtils.Race.Pirate);
-                else if (GS.Inputs[i].PressedRight)
-                    Players[i] = new PC((int)RaceUtils.Race.Dragon);
-                else if (GS.Inputs[i].PressedDown)
-                    Players[i] = new PC((int)RaceUtils.Race.Meximage);
-                else if (GS.Inputs[i].PressedLeft)
-                    Players[i] = new PC((int)RaceUtils.Race.Ninja);
-
-                if (Players[i] != null)
-                {
-                    HUDs[i] = new HUD(Players[i], (HUD.Corner)i);
-                    PlayerList.AddFirst(Players[i]);
-                }
-            }
-        }
-    }
-
-
+    
     public void UpdatePlayersAndHud(int ms)
     {
         for (int i = 0; i != 4; i++)
