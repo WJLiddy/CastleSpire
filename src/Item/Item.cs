@@ -68,7 +68,6 @@ public abstract class Item : Entity
                 if (item.collide(c))
                 {
                     item.DrawOutline(sb, camX, camY);
-                    break;
                 }
             }
 

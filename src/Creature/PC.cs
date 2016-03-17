@@ -3,21 +3,24 @@ using System.Collections.Generic;
 
 public class PC : Creature
 {
+    public static readonly double AttackMovementPercent = 0.5;
+    public enum PlayerState { IDLE, WALKING, USING };
+    enum Dir { Up, Right, Down, Left };
+
     public RaceUtils.Race Race { get; private set; }
-    AnimationSet Anim;
-    enum Dir { Up,Right,Down,Left};
+    private AnimationSet Anim;
+    public PlayerState State { get; private set; } = PlayerState.IDLE;
     Dir Direction = Dir.Down;
     public string Name { get; private set; }
 
-    private int AttackFramesLeft = 0;
-    private int TimeLeftOnFrame = 0;
+    private int UseFramesLeft = 0;
+    private int TimeLeftOnUseFrame = 0;
 
     int[,,] WalkingHandPositions;
     // Game runs at 60 FPS.
     // An attack has frames: Wind-up, Diagonal, Horizontal, Delivery, Recover I, Recover II.
     //                             2   3   4  5   6 
     // Weapon speeds can then be: 12, 18, 24, 30, 36 frames.
-
 
     public PC(int racei)
     {
@@ -65,21 +68,29 @@ public class PC : Creature
     public void Update(Input i, int ms)
     {
         //physically move character.
-        Move(i,ms);
-        AnimateMove(i);
 
-        if (i.PressedUse)
-            Use();
-        if (i.PressedFire)
-            Fire();
+        if (State != PlayerState.USING)
+        {
+            Move(i, ms);
+            AnimateMove(i);
+            if (i.PressedInventoryL)
+                ShiftItemsLeft();
+            if (i.PressedInventoryR)
+                ShiftItemsRight();
+            if (i.PressedUse)
+                Use();
+            if (i.PressedFire)
+                Fire();
+        }
 
-        if (i.PressedInventoryL && AttackFramesLeft == 0)
-            ShiftItemsLeft();
-        if (i.PressedInventoryR && AttackFramesLeft == 0)
-            ShiftItemsRight();
+
+        if(State == PlayerState.USING)
+        {
+            UseLogic(ms);
+        }
 
 
-
+        ConvertDXDYToMovement();
         Anim.Update();
     }
 
@@ -100,6 +111,7 @@ public class PC : Creature
     //Consider a camera
     public void Draw(AD2SpriteBatch sb, int cameraX, int cameraY )
     {
+        //If facing down or right, the weapon draws over player.
         if(Direction == Dir.Down || Direction == Dir.Right)
             Anim.Draw(sb, X + - cameraX, Y + - cameraY);
         if (Inventory[InvIndex] != null)
@@ -108,10 +120,6 @@ public class PC : Creature
             {
                 // First we center up on the top left corner of the character by subtracting the XOffset. 
                 // Then we add the hand offset. Then we subtract the item's hand offset. Then the camera.
-            
-                //should center item on top left corner of sprite
-                Utils.Log("" + Inventory[InvIndex].HandX);
-
                 int XHandPosition = X + -Anim.CurrentAnimation.XOffset + WalkingHandPositions[Anim.XFrame,(int)Direction, 0] +- Inventory[InvIndex].HandX + -cameraX;
                 int YHandPosition = Y + -Anim.CurrentAnimation.YOffset + WalkingHandPositions[Anim.XFrame,(int)Direction, 1] + -Inventory[InvIndex].HandY + -cameraY;
 
@@ -119,6 +127,7 @@ public class PC : Creature
                 Inventory[InvIndex].DrawAlone(sb, XHandPosition, YHandPosition, (int)Direction);
             }
         }
+        // If facing left or up, the weapon draws under player.
         if (Direction == Dir.Left || Direction == Dir.Up)
             Anim.Draw(sb, X + -cameraX, Y + -cameraY);
     }
@@ -307,7 +316,10 @@ public class PC : Creature
             Anim.Hold("idle", 0, (int)Direction);    
         }
 
+    }
 
+    private void ConvertDXDYToMovement()
+    {
         //check to see if my dx would cause a collision.
         if (DX < 0 && !CanMove(3)) DX = 0;
         if (DX >= DeltaScale && !CanMove(1)) DX = DeltaScale - 1;
@@ -318,7 +330,6 @@ public class PC : Creature
         while (DY >= DeltaScale) { DY = DY - DeltaScale; Y++; }
         while (DX < 0) { DX = DX + DeltaScale; X--; } //3, -100 -> 2, 900
         while (DY < 0) { DY = DY + DeltaScale; Y--; }
-
     }
 
     private void Use()
@@ -349,8 +360,52 @@ public class PC : Creature
 
     private void Fire()
     {
-        
+        UseFramesLeft = 6;
+        TimeLeftOnUseFrame = ((BasicMeleeWeapon)Inventory[InvIndex]).FrameTime;
+        Anim.Speed = TimeLeftOnUseFrame;
+        State = PlayerState.USING;
+        Anim.AutoAnimateOnce("swing", (int)Direction);
     }
+
+    private void UseLogic(int ms)
+    {
+        //TODO functionize if I like how this looks.
+        double pixelsPerSecond = StatSet.BaseSpeed + (StatSet.SkillSpeed * Stats.Spd());
+        double pixelsToMove = pixelsPerSecond * ((double)ms / 1000);
+        int milliPixelsToMove = (int)(DeltaScale * pixelsToMove * AttackMovementPercent);
+
+        if (CanMove((int)Direction))
+        {
+            switch(Direction)
+            {
+                case Dir.Down:
+                    DY += milliPixelsToMove;
+                    break;
+                case Dir.Up:
+                    DY -= milliPixelsToMove;
+                    break;
+                case Dir.Left:
+                    DX -= milliPixelsToMove;
+                    break;
+                case Dir.Right:
+                    DX += milliPixelsToMove;
+                    break;
+            }
+        }
+        TimeLeftOnUseFrame--;
+        if (TimeLeftOnUseFrame == 0)
+        {
+            UseFramesLeft--;
+            TimeLeftOnUseFrame = ((BasicMeleeWeapon)Inventory[InvIndex]).FrameTime;
+        }
+        if (UseFramesLeft == 0)
+        {
+            State = PlayerState.IDLE;
+            // MMMMAGIc NUMBER!
+            Anim.Speed = 9;
+            Anim.Hold("idle", 0,  (int)Direction);
+        }
+     }
 
     private void FillWalkingHandPositions(string xml)
     {

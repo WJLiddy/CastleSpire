@@ -60,6 +60,7 @@ class BasicMeleeWeapon : Item
         else if (percentStrength <= 1.0)
         {
             int damage = 1 + (int)((rarityNumber * percentStrength) / 1.7);
+            //!!
             i = new BasicMeleeWeapon(@"items\melee\hammer.xml", "TEST HAMMER", str, dex, 6, damage, color);
         }
         return i;
