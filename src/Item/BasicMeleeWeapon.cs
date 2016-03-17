@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 class BasicMeleeWeapon : Item
 {
@@ -8,11 +10,8 @@ class BasicMeleeWeapon : Item
     public int Damage { get; private set; }
     public Color Tint { get; private set; }
 
-
-
-
     //generate based on some level requirement
-    private BasicMeleeWeapon(string pathToXML, int strReq, int dexReq, int frameTime, int damage, Color c) : base(pathToXML)
+    private BasicMeleeWeapon(string pathToXML, string name, int strReq, int dexReq, int frameTime, int damage, Color c) : base(pathToXML,name)
     {
         StrengthRequirement = strReq;
         DexterityRequirement = dexReq;
@@ -31,7 +30,6 @@ class BasicMeleeWeapon : Item
 
         double percentStrength = Utils.RandomNumber();
         double rarityNumber = generateRarity();
-        string name = GenerateAdjective();
 
         Color color = generateRarityColor(rarityNumber);
         int str = (int)(level * percentStrength);
@@ -42,27 +40,27 @@ class BasicMeleeWeapon : Item
         if (percentStrength < .2)
         {
             int damage = 1 + (int)((rarityNumber*percentStrength) / 5.0);
-            i = new BasicMeleeWeapon(@"items\melee\knife.xml",str,dex,2,damage,color);
+            i = new BasicMeleeWeapon(@"items\melee\knife.xml","TEST KNIFE",str,dex,2,damage,color);
         }
         else if (percentStrength < .4)
         {
             int damage = 1 + (int)((rarityNumber * percentStrength) / 3.3);
-            i = new BasicMeleeWeapon(@"items\melee\saber.xml", str, dex, 3, damage, color);
+            i = new BasicMeleeWeapon(@"items\melee\saber.xml", "TEST SABER", str, dex, 3, damage, color);
         }
         else if (percentStrength < .6)
         {
             int damage = 1 + (int)((rarityNumber * percentStrength) / 2.5);
-            i = new BasicMeleeWeapon(@"items\melee\sword.xml", str, dex, 4, damage, color);
+            i = new BasicMeleeWeapon(@"items\melee\sword.xml", "TEST SWORD", str, dex, 4, damage, color);
         }
         else if (percentStrength < .8)
         {
             int damage = 1 + (int)((rarityNumber * percentStrength) / 2.0);
-            i = new BasicMeleeWeapon(@"items\melee\axe.xml", str, dex, 5, damage, color);
+            i = new BasicMeleeWeapon(@"items\melee\axe.xml", "TEST AXE", str, dex, 5, damage, color);
         }
         else if (percentStrength <= 1.0)
         {
             int damage = 1 + (int)((rarityNumber * percentStrength) / 1.7);
-            i = new BasicMeleeWeapon(@"items\melee\hammer.xml", str, dex, 6, damage, color);
+            i = new BasicMeleeWeapon(@"items\melee\hammer.xml", "TEST HAMMER", str, dex, 6, damage, color);
         }
         return i;
     }
@@ -103,10 +101,6 @@ class BasicMeleeWeapon : Item
         return Color.White;
     }
 
-    public static string GenerateAdjective()
-    {
-        return "Test";
-    }
 
     public void SetCoords(int x, int y)
     {
@@ -122,5 +116,18 @@ class BasicMeleeWeapon : Item
     public override void DrawAlone(AD2SpriteBatch sb, int x, int y, int dir)
     {
         sb.Draw(Texture, new Rectangle(x, y, Texture.Width / 4, Texture.Height), new Rectangle(dir*16, 0, Texture.Width / 4, Texture.Height), Tint);
+    }
+
+    public override void DrawHUDDescription(PC p, AD2SpriteBatch sb, int tx, int ty)
+    {
+        int nameStartX = tx + ((HUD.PanelWidth / 2) - (Utils.DefaultFont.GetWidth(Name, false) / 2));
+        Utils.DefaultFont.Draw(sb, Name, nameStartX, ty, Tint);
+        Utils.DefaultFont.Draw(sb, "SWING: " + Damage, 1 + tx, 7 + ty, Color.Red);
+        Utils.DefaultFont.Draw(sb, Name, nameStartX, ty, Tint);
+    }
+
+    public override bool CanUse(Creature c)
+    {
+        return true;
     }
 }

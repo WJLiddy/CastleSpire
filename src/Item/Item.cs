@@ -13,9 +13,11 @@ public abstract class Item : Entity
     protected int OffsetY { get; private set; }
     public int HandX { get; private set; }
     public int HandY { get; private set; }
+    public string Name { get; private set; }
 
-    public Item(string pathToXML)
+    public Item(string pathToXML, string name)
     {
+        this.Name = name;
         ReadMapXML(pathToXML);
         Texture = Utils.TextureLoader(Path.ChangeExtension(pathToXML, ".png"));
         makeOutline();
@@ -99,4 +101,7 @@ public abstract class Item : Entity
         Outline.SetData<Color>(outlineData);
     }
 
+
+    public abstract void DrawHUDDescription(PC p, AD2SpriteBatch sb, int x, int y);
+    public abstract bool CanUse(Creature c);
 }

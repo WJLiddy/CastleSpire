@@ -11,7 +11,7 @@ class HUD
     Texture2D StatBar;
 
     //The entire panel area for the HUD.
-    private static readonly int PanelWidth = 52;
+    public static readonly int PanelWidth = 52;
     private static readonly int PanelHeight = 86;
 
 
@@ -36,7 +36,7 @@ class HUD
     private static readonly int ItemFrameHeight = 21;
 
     //Height of name frmae
-    private static readonly int ItemFrameWidth = 117;
+    public static readonly int ItemFrameWidth = 117;
 
     //The extend factor. 0 to 1.
     private double Extend = 0;
@@ -202,6 +202,9 @@ class HUD
 
         sb.DrawTexture(BackPanel, d.HUDX + hideOffset, d.HUDY);
 
+
+
+
         Coord portrait = findPortraitPosition(d, hideOffset);
 
         int itemHideOffset = (d.ReflectX ? (ItemFrameWidth + -(int)(Extend * ItemFrameWidth)) : (-ItemFrameWidth + (int)(Extend * ItemFrameWidth)));
@@ -219,7 +222,36 @@ class HUD
             sb.DrawTexture(RaceUtils.GetPotrait(Player.Race), d.HUDX + portrait.X, d.HUDY + portrait.Y);
             sb.DrawTexture(ItemFrameBig, d.HUDX + itemBar.X, d.HUDY + itemBar.Y);
         }
-        
+
+        // Held Item
+        if (Player.Inventory[Player.InvIndex] != null)
+        {
+            Player.Inventory[Player.InvIndex].DrawHUDDescription(Player, sb, d.HUDX + hideOffset, d.HUDY + itemBar.Y + ItemFrameHeight);
+        }
+
+        //Item Strip.
+        for(int i = Player.InvIndex + 1; i < Player.Inventory.Length; i++)
+        {
+            Item itemToDraw = Player.Inventory[i];
+
+            if (itemToDraw == null)
+                continue;
+
+            itemToDraw.DrawAlone(sb, d.HUDX + itemBar.X + ((i - Player.InvIndex)* 16), d.HUDY + itemBar.Y + 2,1);
+        }
+
+        //Item Strip, wraparound
+        for (int i = Player.InvIndex - 1; i >= 0; i--)
+        {
+            Item itemToDraw = Player.Inventory[i];
+
+            if (itemToDraw == null)
+                continue;
+
+            itemToDraw.DrawAlone(sb, d.HUDX + itemBar.X + (Player.Inventory.Length - (Player.InvIndex - i)) * 16, d.HUDY + itemBar.Y + 2, 1);
+        }
+
+
     }
 
     private Coord findBarPosition(DrawParams d)

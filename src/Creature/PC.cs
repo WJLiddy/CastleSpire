@@ -73,8 +73,28 @@ public class PC : Creature
         if (i.PressedFire)
             Fire();
 
-    
+        if (i.PressedInventoryL && AttackFramesLeft == 0)
+            ShiftItemsLeft();
+        if (i.PressedInventoryR && AttackFramesLeft == 0)
+            ShiftItemsRight();
+
+
+
         Anim.Update();
+    }
+
+    private void ShiftItemsLeft()
+    {
+        InvIndex--;
+        if(InvIndex < 0)
+            InvIndex = Inventory.Length - 1;
+    }
+
+    private void ShiftItemsRight()
+    {
+        InvIndex++;
+        if (InvIndex >= Inventory.Length)
+            InvIndex = 0;
     }
 
     //Consider a camera
@@ -82,7 +102,7 @@ public class PC : Creature
     {
         if(Direction == Dir.Down || Direction == Dir.Right)
             Anim.Draw(sb, X + - cameraX, Y + - cameraY);
-        if (Inventory[0] != null)
+        if (Inventory[InvIndex] != null)
         {
             if (Anim.CurrentAnimationName.Equals("walk"))
             {
@@ -90,13 +110,13 @@ public class PC : Creature
                 // Then we add the hand offset. Then we subtract the item's hand offset. Then the camera.
             
                 //should center item on top left corner of sprite
-                Utils.Log("" + Inventory[0].HandX);
+                Utils.Log("" + Inventory[InvIndex].HandX);
 
-                int XHandPosition = X + -Anim.CurrentAnimation.XOffset + WalkingHandPositions[Anim.XFrame,(int)Direction, 0] +- Inventory[0].HandX + -cameraX;
-                int YHandPosition = Y + -Anim.CurrentAnimation.YOffset + WalkingHandPositions[Anim.XFrame,(int)Direction, 1] + -Inventory[0].HandY + -cameraY;
+                int XHandPosition = X + -Anim.CurrentAnimation.XOffset + WalkingHandPositions[Anim.XFrame,(int)Direction, 0] +- Inventory[InvIndex].HandX + -cameraX;
+                int YHandPosition = Y + -Anim.CurrentAnimation.YOffset + WalkingHandPositions[Anim.XFrame,(int)Direction, 1] + -Inventory[InvIndex].HandY + -cameraY;
 
 
-                Inventory[0].DrawAlone(sb, XHandPosition, YHandPosition, (int)Direction);
+                Inventory[InvIndex].DrawAlone(sb, XHandPosition, YHandPosition, (int)Direction);
             }
         }
         if (Direction == Dir.Left || Direction == Dir.Up)
