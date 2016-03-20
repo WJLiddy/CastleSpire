@@ -382,7 +382,7 @@ public class PC : Creature
 
     private void UseLogic(int ms)
     {
-        //TODO functionize if I like how this looks.
+        //Functionize
         double pixelsPerSecond = StatSet.BaseSpeed + (StatSet.SkillSpeed * Stats.Spd());
         double pixelsToMove = pixelsPerSecond * ((double)ms / 1000);
         int milliPixelsToMove = (int)(DeltaScale * pixelsToMove * AttackMovementPercent);

@@ -1,0 +1,62 @@
+<Hands>
+  <!-- If you hold your hand in a fist, Should refer to the "pinky" pixel of the hand. -->
+  <!-- X = frame, Y = direction" !-->
+  <walk00>15,23</walk00>
+  <walk10>15,22</walk10>
+  <walk20>15,23</walk20>
+  <walk30>15,22</walk30>
+  
+  <walk01>13,57</walk01>
+  <walk11>13,56</walk11>
+  <walk21>13,57</walk21>
+  <walk31>13,56</walk31>
+  
+  <walk02>7,89</walk02>
+  <walk12>7,88</walk12>
+  <walk22>7,89</walk22>
+  <walk32>7,88</walk32>
+  
+  <!-- Using right-hand-exposed as a reference -->
+  <walk03>9,57</walk03>
+  <walk13>9,56</walk13>
+  <walk23>9,57</walk23>
+  <walk33>9,56</walk33>
+  
+  <idle00>15,21</idle00>
+  <idle01>15,56</idle01>
+  <idle02>7,88</idle02>
+  <idle03>9,56</idle03>
+  
+  <!-- up facing swing: difficult so I'm not going to try this one -->
+  <swing00>13,88</swing00>
+  <swing10>13,88</swing10>
+  <swing20>13,88</swing20>
+  <swing30>13,88</swing30>
+  <swing40>13,88</swing40>
+  <swing50>13,88</swing50>
+  
+  <!-- Right swing -->
+  <swing01>15,44</swing01>
+  <swing11>45,48</swing11>
+  <swing21>71,52</swing21>
+  <swing31>95,56</swing31>
+  <swing41>119,56</swing41>
+  <swing51>141,54</swing51>
+  
+    <!-- Down swing -->
+  <swing02>5,79</swing02>
+  <swing12>31,82</swing12>
+  <swing22>58,86</swing22>
+  <swing32>87,88</swing32>
+  <swing42>87,88</swing42>
+  <swing52>131,87</swing52>
+  
+      <!-- Left swing -->
+  <swing03>9,107</swing03>
+  <swing13>26,113</swing13>
+  <swing23>48,166</swing23>
+  <swing33>72,120</swing33>
+  <swing43>72,120</swing43>
+  <swing53>123,118</swing53>
+  
+</Hands>
