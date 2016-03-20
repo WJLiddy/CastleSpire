@@ -1,5 +1,6 @@
 <Hands>
-  <!-- Should refer to the middle-lower-endge part of the hand. -->
+  <!-- Should refer to the middle-lower-end part of the hand. -->
+  <!-- X = frame, Y = direction" !-->
   <walk00>13,88</walk00>
   <walk10>13,87</walk10>
   <walk20>13,88</walk20>
@@ -20,4 +21,42 @@
   <walk13>6,55</walk13>
   <walk23>6,56</walk23>
   <walk33>6,55</walk33>
+  
+  <idle00>17,20</idle00>
+  <idle01>18,55</idle01>
+  <idle02>7,87</idle02>
+  <idle03>5,55</idle03>
+  
+  <!-- up facing swing: difficult so I'm not going to try this one -->
+  <swing00>13,88</swing00>
+  <swing10>13,88</swing10>
+  <swing20>13,88</swing20>
+  <swing30>13,88</swing30>
+  <swing40>13,88</swing40>
+  <swing50>13,88</swing50>
+  
+  <!-- Right swing -->
+  <swing01>15,44</swing01>
+  <swing11>45,48</swing11>
+  <swing21>71,52</swing21>
+  <swing31>95,56</swing31>
+  <swing41>119,56</swing41>
+  <swing51>141,54</swing51>
+  
+    <!-- Down swing -->
+  <swing02>5,79</swing02>
+  <swing12>31,82</swing12>
+  <swing22>58,86</swing22>
+  <swing32>87,88</swing32>
+  <swing42>87,88</swing42>
+  <swing52>131,87</swing52>
+  
+      <!-- Left swing -->
+  <swing03>9,107</swing03>
+  <swing13>26,113</swing13>
+  <swing23>48,166</swing23>
+  <swing33>72,120</swing33>
+  <swing43>72,120</swing43>
+  <swing53>123,118</swing53>
+  
 </Hands>

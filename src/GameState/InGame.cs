@@ -34,14 +34,32 @@ class InGame
         // Just using a collisionmap for now.
         Map = new CollisionMap(@"maps\zombieBase.xml", CastleSpire.BaseWidth, CastleSpire.BaseHeight);
 
-        // And a single item.
+        // knives
         FloorItems = new LinkedList<Item>();
         for (int i = 0; i != 100; i++)
         {
-            BasicMeleeWeapon b = BasicMeleeWeapon.generateBasicWeapon(30);
-            b.SetCoords((int)(20 + Utils.RandomNumber() * 300), (int)(20 + Utils.RandomNumber() * 300));
+            //knives
+            BasicMeleeWeapon b = BasicMeleeWeapon.generateBasicWeapon(30,0.1);
+            b.SetCoords((int)(70 + Utils.RandomNumber() * 20), (int)(70 + Utils.RandomNumber() * 20));
+            FloorItems.AddFirst(b);
+            //sabers
+            b = BasicMeleeWeapon.generateBasicWeapon(30,0.3);
+            b.SetCoords((int)(85 + Utils.RandomNumber() * 20), (int)(105 + Utils.RandomNumber() * 20));
+            FloorItems.AddFirst(b);
+            //swords
+            b = BasicMeleeWeapon.generateBasicWeapon(30,0.5);
+            b.SetCoords((int)(85 + Utils.RandomNumber() * 20), (int)(175 + Utils.RandomNumber() * 20));
+            FloorItems.AddFirst(b);
+            //axes
+            b = BasicMeleeWeapon.generateBasicWeapon(30,0.7);
+            b.SetCoords((int)(100 + Utils.RandomNumber() * 20), (int)(210 + Utils.RandomNumber() * 20));
+            FloorItems.AddFirst(b);
+            //hammers
+            b = BasicMeleeWeapon.generateBasicWeapon(30,0.9);
+            b.SetCoords((int)(130+ Utils.RandomNumber() * 20), (int)(180 + Utils.RandomNumber() * 20));
             FloorItems.AddFirst(b);
         }
+
 
         SoundManager.Play("night.ogg", true);
     }

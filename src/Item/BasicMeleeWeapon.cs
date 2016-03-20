@@ -22,13 +22,19 @@ class BasicMeleeWeapon : Item
 
     public static BasicMeleeWeapon generateBasicWeapon(int level)
     {
+        return generateBasicWeapon(level, Utils.RandomNumber());
+    }
+
+
+    public static BasicMeleeWeapon generateBasicWeapon(int level, double percentStrength)
+
+    {
         //SWING SPEED (12) : SLOW = 5x
         //SWING SPEED (18) : SLOW = 3.3x
         //SWING SPEED (24) : SLOW = 2.5x
         //SWING SPEED (30) : SLOW = 2x
         //SWING SPEED (36) : SLOW = 1.6x
-
-        double percentStrength = Utils.RandomNumber();
+        
         double rarityNumber = generateRarity();
 
         Color color = generateRarityColor(rarityNumber);
@@ -39,8 +45,8 @@ class BasicMeleeWeapon : Item
 
         if (percentStrength < .2)
         {
-            int damage = 1 + (int)((rarityNumber*percentStrength) / 5.0);
-            i = new BasicMeleeWeapon(@"items\melee\knife.xml","TEST KNIFE",str,dex,2,damage,color);
+            int damage = 1 + (int)((rarityNumber * percentStrength) / 5.0);
+            i = new BasicMeleeWeapon(@"items\melee\knife.xml", "TEST KNIFE", str, dex, 2, damage, color);
         }
         else if (percentStrength < .4)
         {

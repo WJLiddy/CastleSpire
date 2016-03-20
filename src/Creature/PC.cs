@@ -16,7 +16,9 @@ public class PC : Creature
     private int UseFramesLeft = 0;
     private int TimeLeftOnUseFrame = 0;
 
+    int[,] IdleHandPositions;
     int[,,] WalkingHandPositions;
+    int[,,] SwingingHandPositions;
     // Game runs at 60 FPS.
     // An attack has frames: Wind-up, Diagonal, Horizontal, Delivery, Recover I, Recover II.
     //                             2   3   4  5   6 
@@ -33,14 +35,14 @@ public class PC : Creature
             case RaceUtils.Race.Pirate:
                 Anim = new AnimationSet(@"creatures\pc\pirate\anim.xml");
                 Stats = new StatSet(@"creatures\pc\pirate\stat.xml");
-                FillWalkingHandPositions(@"creatures\pc\pirate\hands.xml");
+                FillHandPositions(@"creatures\pc\pirate\hands.xml");
                 Size = 12;
                 Name = "NANCY";
                 break;
             case RaceUtils.Race.Dragon:
                 Anim = new AnimationSet(@"creatures\pc\dragon\anim.xml");
                 Stats = new StatSet(@"creatures\pc\dragon\stat.xml");
-                FillWalkingHandPositions(@"creatures\pc\dragon\hands.xml");
+                FillHandPositions(@"creatures\pc\dragon\hands.xml");
                 Size = 16;
                 Name = "ALESSIA";
                 break;
@@ -67,8 +69,6 @@ public class PC : Creature
 
     public void Update(Input i, int ms)
     {
-        //physically move character.
-
         if (State != PlayerState.USING)
         {
             Move(i, ms);
@@ -83,12 +83,10 @@ public class PC : Creature
                 Fire();
         }
 
-
         if(State == PlayerState.USING)
         {
             UseLogic(ms);
         }
-
 
         ConvertDXDYToMovement();
         Anim.Update();
@@ -116,16 +114,31 @@ public class PC : Creature
             Anim.Draw(sb, X + - cameraX, Y + - cameraY);
         if (Inventory[InvIndex] != null)
         {
-            if (Anim.CurrentAnimationName.Equals("walk"))
+            int handPositionX = 0;
+            int handPositionY = 0;
+            switch(Anim.CurrentAnimationName)
             {
-                // First we center up on the top left corner of the character by subtracting the XOffset. 
-                // Then we add the hand offset. Then we subtract the item's hand offset. Then the camera.
-                int XHandPosition = X + -Anim.CurrentAnimation.XOffset + WalkingHandPositions[Anim.XFrame,(int)Direction, 0] +- Inventory[InvIndex].HandX + -cameraX;
-                int YHandPosition = Y + -Anim.CurrentAnimation.YOffset + WalkingHandPositions[Anim.XFrame,(int)Direction, 1] + -Inventory[InvIndex].HandY + -cameraY;
+                case "idle":
+                    handPositionX = IdleHandPositions[(int)Direction, 0];
+                    handPositionY = IdleHandPositions[(int)Direction, 1];
+                    break;
+                case "walk":
+                    handPositionX = WalkingHandPositions[(int)Direction, Anim.XFrame, 0];
+                    handPositionY = WalkingHandPositions[(int)Direction, Anim.XFrame, 1];
+                    ///
+                    break;
+                case "swing":
+                    handPositionX = SwingingHandPositions[(int)Direction, Anim.XFrame, 0];
+                    handPositionY = SwingingHandPositions[(int)Direction, Anim.XFrame, 1];
+                    break;
+            }
+
+                Utils.Log(handPositionY +"");
+                int XHandPosition = X + -Anim.CurrentAnimation.XOffset + handPositionX +- Inventory[InvIndex].HandX + -cameraX;
+                int YHandPosition = Y + -Anim.CurrentAnimation.YOffset + handPositionY + -Inventory[InvIndex].HandY + -cameraY;
 
 
                 Inventory[InvIndex].DrawAlone(sb, XHandPosition, YHandPosition, (int)Direction);
-            }
         }
         // If facing left or up, the weapon draws under player.
         if (Direction == Dir.Left || Direction == Dir.Up)
@@ -401,29 +414,50 @@ public class PC : Creature
         if (UseFramesLeft == 0)
         {
             State = PlayerState.IDLE;
-            // MMMMAGIc NUMBER!
             Anim.Speed = 9;
             Anim.Hold("idle", 0,  (int)Direction);
         }
      }
 
-    private void FillWalkingHandPositions(string xml)
+    private void FillHandPositions(string xml)
     {
         Dictionary<string,LinkedList<string>> hands = Utils.GetXMLEntriesHash(xml);
         
         WalkingHandPositions = new int[4, 4 , 2];
-        for(int x = 0; x != 4; x++)
+        IdleHandPositions = new int[4, 2];
+        SwingingHandPositions = new int[4, 6, 2];
+
+        for (int dir = 0; dir != 4; dir++)
         {
-            for(int y = 0; y != 4; y++)
+            IdleHandPositions[dir,0] = retrieveHandCoords(hands, "walk", dir, 0, true) % 24;
+            IdleHandPositions[dir,1] = retrieveHandCoords(hands, "walk", dir, 0, false) % 32;
+
+            for (int frame = 0; frame != 4; frame++)
             {
-                String coords = hands["walk" + x + y].First.Value;
-                String[] coordsSplit = coords.Split(',');
-                // X COORD : 24
-                WalkingHandPositions[x, y, 0] = Int32.Parse(coordsSplit[0]) % 24;
-                // Y COORD : 32
-                WalkingHandPositions[x, y, 1] = Int32.Parse(coordsSplit[1]) % 32;
+                WalkingHandPositions[dir, frame, 0] = retrieveHandCoords(hands,"walk",dir,frame,true) % 24;
+                WalkingHandPositions[dir, frame, 1] = retrieveHandCoords(hands, "walk", dir, frame, false) % 32;
             }
+
+            for (int frame = 0; frame != 6; frame++)
+            {
+                SwingingHandPositions[dir, frame, 0] = retrieveHandCoords(hands, "swing", dir, frame, true) % 24;
+                SwingingHandPositions[dir, frame, 1] = retrieveHandCoords(hands, "swing", dir, frame, false) % 32;
+            }
+
         }
     }
 
+    private int retrieveHandCoords(Dictionary<string, LinkedList<string>> hands, string name, int dir, int frame,bool getX)
+    {
+        try
+        {
+            string walkcoords = hands[name + frame + dir].First.Value;
+            return Int32.Parse(walkcoords.Split(',')[getX? 0 : 1]);
+        }
+        catch (Exception)
+        {
+            Utils.Log("Failed to get hand coords for : " + name + dir + frame);
+            return 0;
+        }
+    }
 }
