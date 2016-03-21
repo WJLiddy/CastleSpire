@@ -107,8 +107,10 @@ public class PC : Creature
     }
 
     //Consider a camera
-    public void Draw(AD2SpriteBatch sb, int cameraX, int cameraY )
+    public void Draw(AD2SpriteBatch sb, int cameraX, int cameraY, int floor )
     {
+        if(Y + (Size - 1) != floor)
+            return;
         //If facing down or right, the weapon draws over player.
         if(Direction == Dir.Down || Direction == Dir.Right)
             Anim.Draw(sb, X + - cameraX, Y + - cameraY);

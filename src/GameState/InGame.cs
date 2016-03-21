@@ -9,7 +9,7 @@ class InGame
 
     private static HUD[] HUDs = new HUD[4];
     public static LinkedList<Item> FloorItems { get; private set; }
-    public static CollisionMap Map { get; private set; }
+    public static ObjectMap Map { get; private set; }
 
     public InGame(int[] race, bool[] ready)
     {
@@ -32,7 +32,7 @@ class InGame
         }
 
         // Just using a collisionmap for now.
-        Map = new CollisionMap(@"maps\zombieBase.xml", CastleSpire.BaseWidth, CastleSpire.BaseHeight);
+        Map = new ObjectMap(@"maps\zombieBase.xml", CastleSpire.BaseWidth, CastleSpire.BaseHeight);
 
         // knives
         FloorItems = new LinkedList<Item>();
@@ -75,14 +75,13 @@ class InGame
     { 
         //figure out camera stuff
         int cameraX = 0; 
-        int cameraY = 0; 
+        int cameraY = 0;
 
-        foreach(PC p in allPlayers())
+        foreach (PC p in allPlayers())
         {
             cameraX += p.X - (CastleSpire.BaseWidth / 2);
             cameraY += p.Y - (CastleSpire.BaseHeight / 2);
         }
-
         cameraX /= allPlayers().Count;
         cameraY /= allPlayers().Count;
 
@@ -94,24 +93,26 @@ class InGame
             if(HUDs[i] != null)
                 HUDs[i].Draw(sb);
         }
+
     }
 
     private void DrawWorld(AD2SpriteBatch sb, int cameraX, int cameraY)
     {
         Map.DrawBase(sb, cameraX, cameraY);
-
         Item.DrawGlowingItems(sb, allPlayers(), FloorItems, cameraX, cameraY);
-
-        foreach( Item i in FloorItems)
+        foreach (Item i in FloorItems)
         {
-            i.DrawOnFloor(sb, cameraX,cameraY);
+            i.DrawOnFloor(sb, cameraX, cameraY);
         }
 
-        foreach (PC p in allPlayers())
+        for (int floor = 0; floor != Map.BaseMap.Height; floor++)
         {
-            p.Draw(sb, cameraX, cameraY);
-        }
-       
+            Map.DrawObjects(sb, cameraX, cameraY, floor);
+            foreach (PC p in allPlayers())
+            {
+                p.Draw(sb, cameraX, cameraY,floor);
+            }
+        }   
         Map.DrawAlways(sb, cameraX, cameraY);
     }
     
