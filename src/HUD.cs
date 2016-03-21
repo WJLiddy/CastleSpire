@@ -140,7 +140,7 @@ class HUD
 
         Utils.DrawRect(sb, d.HUDX + 1 + bar.X, d.HUDY + 1 + bar.Y, 20, 9, Color.Red);
         Utils.DrawRect(sb, d.HUDX + 1 + bar.X, d.HUDY + 11 + bar.Y, 20, 9, Color.Blue);
-        Utils.DrawRect(sb, d.HUDX + 1 + bar.X, d.HUDY + 21 + bar.Y, 20, 9, Color.Green);
+        Utils.DrawRect(sb, d.HUDX + 1 + bar.X, d.HUDY + 21 + bar.Y, (int)(20.0 *((double)Player.FA  / Creature.MaxFatigue)), 9, Color.Green);
 
         Utils.DefaultFont.Draw(sb, Player.HP.ToString(), d.HUDX + 4 + bar.X, d.HUDY + 2 + bar.Y, Color.White, 1, true);
         Utils.DefaultFont.Draw(sb, Player.MP.ToString(), d.HUDX + 4 + bar.X, d.HUDY + 12 + bar.Y, Color.White, 1, true);

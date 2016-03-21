@@ -69,8 +69,16 @@ public class PC : Creature
 
     public void Update(Input i, int ms)
     {
+        
         if (State != PlayerState.USING)
         {
+            TimeToNextFatiguePoint--;
+            if(TimeToNextFatiguePoint < 0)
+            {
+                if (FA < MaxFatigue)
+                    FA++;
+                TimeToNextFatiguePoint = FatigueRegenFrames;
+            }
             Move(i, ms);
             AnimateMove(i);
             if (i.PressedInventoryL)
@@ -375,6 +383,14 @@ public class PC : Creature
 
     private void Fire()
     {
+        if(Inventory[InvIndex] is BasicMeleeWeapon)
+        {
+            BasicMeleeWeapon w = ((BasicMeleeWeapon)Inventory[InvIndex]);
+            if (w.CanUse(this) && FA >= w.FatigueCost())
+                FA -= w.FatigueCost();
+            else
+                return;
+        }
         UseFramesLeft = 6;
         TimeLeftOnUseFrame = ((BasicMeleeWeapon)Inventory[InvIndex]).FrameTime;
         Anim.Speed = TimeLeftOnUseFrame;

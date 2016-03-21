@@ -2,7 +2,7 @@
 {
     public static readonly double Rad2Over2 = .7071067812;
     public static readonly int MaxFatigue = 100;
-    public static readonly int FatigueRegenSec = 5;
+    public static readonly int FatigueRegenFrames = 12;
     public static readonly int InvSize = 7;
 
     //TODO Document
@@ -11,7 +11,7 @@
     public int HP { get; protected set; }
     public int MP { get; protected set; }
     public int FA { get; protected set; }
-
+    protected int TimeToNextFatiguePoint = 0;
     public StatSet Stats { get; protected set; }
 
     public int InvIndex { get; protected set; } = 0;
