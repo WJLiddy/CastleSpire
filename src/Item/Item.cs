@@ -103,4 +103,5 @@ public abstract class Item : Entity
 
     public abstract void DrawHUDDescription(PC p, AD2SpriteBatch sb, int x, int y);
     public abstract bool CanUse(Creature c);
+    
 }

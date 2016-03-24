@@ -6,21 +6,21 @@
   <walk20>13,85</walk20>
   <walk30>13,84</walk30>
   
-  <walk01>18,56</walk01>
-  <walk11>42,55</walk11>
-  <walk21>66,56</walk21>
-  <walk31>90,55</walk31>
+  <walk01>16,56</walk01>
+  <walk11>40,55</walk11>
+  <walk21>64,56</walk21>
+  <walk31>88,55</walk31>
   
-  <walk02>9,88</walk02>
-  <walk12>33,87</walk12>
-  <walk22>57,88</walk22>
-  <walk32>81,87</walk32>
+  <walk02>8,89</walk02>
+  <walk12>32,89</walk12>
+  <walk22>56,89</walk22>
+  <walk32>80,88</walk32>
   
   <!-- Using right-hand-exposed as a reference -->
-  <walk03>5,56</walk03>
-  <walk13>5,55</walk13>
-  <walk23>5,56</walk23>
-  <walk33>5,55</walk33>
+  <walk03>7,120</walk03>
+  <walk13>31,119</walk13>
+  <walk23>55,120</walk23>
+  <walk33>79,119</walk33>
   
   <idle00>13,21</idle00>
   <idle01>18,55</idle01>
@@ -28,12 +28,12 @@
   <idle03>5,55</idle03>
   
   <!-- up facing swing: difficult so I'm not going to try this one yet-->
-  <swing00>14,8</swing00>
-  <swing10>38,11</swing10>
-  <swing20>59,16</swing20>
-  <swing30>80,19</swing30>
-  <swing40>80,19</swing40>
-  <swing50>59,16</swing50>
+  <swing00>13,88</swing00>
+  <swing10>13,88</swing10>
+  <swing20>13,88</swing20>
+  <swing30>13,88</swing30>
+  <swing40>13,88</swing40>
+  <swing50>13,88</swing50>
   
   <!-- Right swing -->
   <swing01>14,44</swing01>

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 
 public class PC : Creature
 {
+    public static readonly bool HandDebug = true;
     public static readonly double AttackMovementPercent = 0.5;
+    public static readonly int PunchFrames = 60;
     public enum PlayerState { IDLE, WALKING, USING };
     enum Dir { Up, Right, Down, Left };
 
@@ -62,6 +64,8 @@ public class PC : Creature
 
         //fix!
         Anim.Speed = 9;
+        //Fix this too
+        Anim.Hold("idle", 0, (int)Direction);
         HP = StatSet.MPPerStat * Stats.Vit();
         MP = StatSet.MPPerStat * Stats.Aff();
         FA = MaxFatigue;
@@ -147,12 +151,44 @@ public class PC : Creature
                 int XHandPosition = X + -Anim.CurrentAnimation.XOffset + handPositionX +- Inventory[InvIndex].HandX + -cameraX;
                 int YHandPosition = Y + -Anim.CurrentAnimation.YOffset + handPositionY + -Inventory[InvIndex].HandY + -cameraY;
 
+                if(HandDebug)
+                {
+                    Utils.DrawRect(sb, XHandPosition, YHandPosition, 1, 1, new Microsoft.Xna.Framework.Color(255, 0, 255));
+                }
 
                 Inventory[InvIndex].DrawAlone(sb, XHandPosition, YHandPosition, (int)Direction);
         }
+
         // If facing left or up, the weapon draws under player.
         if (Direction == Dir.Left || Direction == Dir.Up)
             Anim.Draw(sb, X + -cameraX, Y + -cameraY);
+
+        if (HandDebug)
+        {
+            //f'nize
+            int handPositionX = 0;
+            int handPositionY = 0;
+            switch (Anim.CurrentAnimationName)
+            {
+                case "idle":
+                    handPositionX = IdleHandPositions[(int)Direction, 0];
+                    handPositionY = IdleHandPositions[(int)Direction, 1];
+                    break;
+                case "walk":
+                    handPositionX = WalkingHandPositions[(int)Direction, Anim.XFrame, 0];
+                    handPositionY = WalkingHandPositions[(int)Direction, Anim.XFrame, 1];
+                    ///
+                    break;
+                case "swing":
+                    handPositionX = SwingingHandPositions[(int)Direction, Anim.XFrame, 0];
+                    handPositionY = SwingingHandPositions[(int)Direction, Anim.XFrame, 1];
+                    break;
+                default:
+                    //error!
+                    break;
+            }
+            Utils.DrawRect(sb, X + -Anim.CurrentAnimation.XOffset + handPositionX + + -cameraX, Y + -Anim.CurrentAnimation.YOffset + handPositionY + -cameraY, 1, 1, new Microsoft.Xna.Framework.Color(255, 0, 255));
+        }
     }
     
     //Put the priority to move "dir" direction first.
@@ -383,16 +419,23 @@ public class PC : Creature
 
     private void Fire()
     {
-        if(Inventory[InvIndex] is BasicMeleeWeapon)
+        if(Inventory[InvIndex] != null && Inventory[InvIndex] is BasicMeleeWeapon)
         {
             BasicMeleeWeapon w = ((BasicMeleeWeapon)Inventory[InvIndex]);
             if (w.CanUse(this) && FA >= w.FatigueCost())
+            {
+                UseFramesLeft = 6;
+                TimeLeftOnUseFrame = ((BasicMeleeWeapon)Inventory[InvIndex]).FrameTime;
                 FA -= w.FatigueCost();
+            }
             else
                 return;
+        } else
+        {
+            //fisticuffs
+            TimeLeftOnUseFrame = PunchFrames;
+            UseFramesLeft = 6;
         }
-        UseFramesLeft = 6;
-        TimeLeftOnUseFrame = ((BasicMeleeWeapon)Inventory[InvIndex]).FrameTime;
         Anim.Speed = TimeLeftOnUseFrame;
         State = PlayerState.USING;
         Anim.AutoAnimateOnce("swing", (int)Direction);
@@ -427,7 +470,7 @@ public class PC : Creature
         if (TimeLeftOnUseFrame == 0)
         {
             UseFramesLeft--;
-            TimeLeftOnUseFrame = ((BasicMeleeWeapon)Inventory[InvIndex]).FrameTime;
+            TimeLeftOnUseFrame = ((BasicMeleeWeapon)Inventory[InvIndex]) != null? ((BasicMeleeWeapon)Inventory[InvIndex]).FrameTime : PunchFrames;
         }
         if (UseFramesLeft == 0)
         {
@@ -447,8 +490,8 @@ public class PC : Creature
 
         for (int dir = 0; dir != 4; dir++)
         {
-            IdleHandPositions[dir,0] = retrieveHandCoords(hands, "walk", dir, 0, true) % 24;
-            IdleHandPositions[dir,1] = retrieveHandCoords(hands, "walk", dir, 0, false) % 32;
+            IdleHandPositions[dir,0] = retrieveHandCoords(hands, "idle", dir, 0, true) % 24;
+            IdleHandPositions[dir,1] = retrieveHandCoords(hands, "idle", dir, 0, false) % 32;
 
             for (int frame = 0; frame != 4; frame++)
             {
