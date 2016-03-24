@@ -1,10 +1,10 @@
 <Hands>
   <!-- If the hand is a fist, each entry should refer to the pinky. -->
   <!-- X = frame, Y = direction" !-->
-  <walk00>13,85</walk00>
-  <walk10>13,84</walk10>
-  <walk20>13,85</walk20>
-  <walk30>13,84</walk30>
+  <walk00>14,22</walk00>
+  <walk10>14,21</walk10>
+  <walk20>14,22</walk20>
+  <walk30>14,21</walk30>
   
   <walk01>16,56</walk01>
   <walk11>40,55</walk11>
@@ -12,7 +12,7 @@
   <walk31>88,55</walk31>
   
   <walk02>8,89</walk02>
-  <walk12>32,89</walk12>
+  <walk12>32,88</walk12>
   <walk22>56,89</walk22>
   <walk32>80,88</walk32>
   
@@ -22,41 +22,41 @@
   <walk23>55,120</walk23>
   <walk33>79,119</walk33>
   
-  <idle00>13,21</idle00>
-  <idle01>18,55</idle01>
-  <idle02>7,87</idle02>
-  <idle03>5,55</idle03>
+  <idle00>14,21</idle00>
+  <idle01>16,55</idle01>
+  <idle02>8,88</idle02>
+  <idle03>7,119</idle03>
   
   <!-- up facing swing: difficult so I'm not going to try this one yet-->
-  <swing00>13,88</swing00>
-  <swing10>13,88</swing10>
-  <swing20>13,88</swing20>
-  <swing30>13,88</swing30>
-  <swing40>13,88</swing40>
-  <swing50>13,88</swing50>
+  <swing00>19,16</swing00>
+  <swing10>39,19</swing10>
+  <swing20>60,22</swing20>
+  <swing30>81,24</swing30>
+  <swing40>81,24</swing40>
+  <swing50>60,22</swing50>
   
   <!-- Right swing -->
-  <swing01>14,44</swing01>
-  <swing11>44,48</swing11>
-  <swing21>70,52</swing21>
-  <swing31>94,56</swing31>
-  <swing41>118,56</swing41>
-  <swing51>140,54</swing51>
+  <swing01>13,48</swing01>
+  <swing11>40,53</swing11>
+  <swing21>65,55</swing21>
+  <swing31>87,58</swing31>
+  <swing41>87,58</swing41>
+  <swing51>137,55</swing51>
   
     <!-- Down swing -->
-  <swing02>5,79</swing02>
-  <swing12>31,82</swing12>
-  <swing22>58,86</swing22>
-  <swing32>87,88</swing32>
+  <swing02>5,81</swing02>
+  <swing12>31,83</swing12>
+  <swing22>58,87</swing22>
+  <swing32>86,90</swing32>
   <swing42>87,88</swing42>
-  <swing52>131,87</swing52>
+  <swing52>131,89</swing52>
   
       <!-- Left swing -->
-  <swing03>10,107</swing03>
-  <swing13>27,113</swing13>
-  <swing23>49,116</swing23>
-  <swing33>73,120</swing33>
-  <swing43>73,120</swing43>
-  <swing53>124,118</swing53>
+  <swing03>12,111</swing03>
+  <swing13>29,115</swing13>
+  <swing23>53,119</swing23>
+  <swing33>78,123</swing33>
+  <swing43>78,123</swing43>
+  <swing53>127,121</swing53>
   
 </Hands>

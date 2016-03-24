@@ -57,6 +57,7 @@ public class PC : Creature
             case RaceUtils.Race.Ninja:
                 Anim = new AnimationSet(@"creatures\pc\ninja\anim.xml");
                 Stats = new StatSet(@"creatures\pc\ninja\stat.xml");
+                FillHandPositions(@"creatures\pc\ninja\hands.xml");
                 Size = 12;
                 Name = "BIP";
                 break;
