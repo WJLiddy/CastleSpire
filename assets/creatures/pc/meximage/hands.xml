@@ -1,0 +1,62 @@
+<Hands>
+  <!-- Should refer to the middle-lower-end part of the hand. -->
+  <!-- X = frame, Y = direction" !-->
+  <walk00>14,23</walk00>
+  <walk10>14,22</walk10>
+  <walk20>14,23</walk20>
+  <walk30>14,22</walk30>
+  
+  <walk01>13,57</walk01>
+  <walk11>37,56</walk11>
+  <walk21>61,57</walk21>
+  <walk31>85,56</walk31>
+  
+  <walk02>7,89</walk02>
+  <walk12>31,88</walk12>
+  <walk22>55,89</walk22>
+  <walk32>79,88</walk32>
+  
+  <!-- Using right-hand-exposed as a reference -->
+  <walk03>10,121</walk03>
+  <walk13>10,120</walk13>
+  <walk23>10,121</walk23>
+  <walk33>10,120</walk33>
+  
+  <idle00>17,22</idle00>
+  <idle01>13,56</idle01>
+  <idle02>7,88</idle02>
+  <idle03>10,120</idle03>
+  
+  <!-- up facing swing: difficult so I'm not going to try this one -->
+  <swing00>19,16</swing00>
+  <swing10>42,20</swing10>
+  <swing20>65,21</swing20>
+  <swing30>88,22</swing30>
+  <swing40>112,22</swing40>
+  <swing50>137,21</swing50>
+  
+  <!-- Right swing -->
+  <swing01>14,50</swing01>
+  <swing11>43,52</swing11>
+  <swing21>67,55</swing21>
+  <swing31>89,58</swing31>
+  <swing41>113,58</swing41>
+  <swing51>136,57</swing51>
+  
+    <!-- Down swing -->
+  <swing02>4,82</swing02>
+  <swing12>30,84</swing12>
+  <swing22>57,88</swing22>
+  <swing32>110,91</swing32>
+  <swing42>110,91</swing42>
+  <swing52>127,90</swing52>
+  
+      <!-- Left swing -->
+  <swing03>10,113</swing03>
+  <swing13>28,115</swing13>
+  <swing23>52,119</swing23>
+  <swing33>78,122</swing33>
+  <swing43>102,122</swing43>
+  <swing53>127,123</swing53>
+  
+</Hands>

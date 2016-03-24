@@ -51,6 +51,7 @@ public class PC : Creature
             case RaceUtils.Race.Meximage:
                 Anim = new AnimationSet(@"creatures\pc\meximage\anim.xml");
                 Stats = new StatSet(@"creatures\pc\meximage\stat.xml");
+                FillHandPositions(@"creatures\pc\meximage\hands.xml");
                 Size = 14;
                 Name = "JESUS";
                 break;
