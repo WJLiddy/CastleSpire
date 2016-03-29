@@ -1,6 +1,5 @@
 ﻿public abstract class Creature : Entity
 {
-    public static readonly double Rad2Over2 = .7071067812;
     public static readonly int MaxFatigue = 100;
     public static readonly int FatigueRegenFrames = 12;
     public static readonly int InvSize = 7;

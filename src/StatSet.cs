@@ -16,10 +16,6 @@ public class StatSet
     public static readonly double BaseSpeed = 45;
     public static readonly double SkillSpeed = 1;
 
-    // In Zombies
-    // There are 50 waves.
-    // I want to give 2 levels ~ 100 XP per wave.
-    // So I will distribute 65 levels starting out.
 
     public StatSet(string pathToURL)
     {

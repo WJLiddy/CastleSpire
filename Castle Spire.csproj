@@ -56,6 +56,8 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="src\CastleUtils.cs" />
+    <Compile Include="src\AI\PathFinding.cs" />
     <Compile Include="src\Castle Spire.cs" />
     <Compile Include="src\Entity.cs" />
     <Compile Include="src\GameState\CharSelect.cs" />

@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using CastleUtils;
 
 public class PC : Creature
 {
-    public static readonly bool HandDebug = true;
+    public static readonly bool HandDebug = false;
     public static readonly double AttackMovementPercent = 0.5;
     public static readonly int PunchFrames = 60;
     public enum PlayerState { IDLE, WALKING, USING };
-    enum Dir { Up, Right, Down, Left };
 
     public RaceUtils.Race Race { get; private set; }
     private AnimationSet Anim;
     public PlayerState State { get; private set; } = PlayerState.IDLE;
-    Dir Direction = Dir.Down;
+    CardinalDir Direction = CardinalDir.South;
     public string Name { get; private set; }
 
     private int UseFramesLeft = 0;
@@ -126,7 +126,7 @@ public class PC : Creature
         if(Y + (Size - 1) != floor)
             return;
         //If facing down or right, the weapon draws over player.
-        if(Direction == Dir.Down || Direction == Dir.Right)
+        if(Direction == CardinalDir.South || Direction == CardinalDir.East)
             Anim.Draw(sb, X + - cameraX, Y + - cameraY);
         if (Inventory[InvIndex] != null)
         {
@@ -162,7 +162,7 @@ public class PC : Creature
         }
 
         // If facing left or up, the weapon draws under player.
-        if (Direction == Dir.Left || Direction == Dir.Up)
+        if (Direction == CardinalDir.West || Direction == CardinalDir.North)
             Anim.Draw(sb, X + -cameraX, Y + -cameraY);
 
         if (HandDebug)
@@ -262,6 +262,7 @@ public class PC : Creature
     private void Move(Input i, int ms)
     {
         double pixelsPerSecond = StatSet.BaseSpeed + (StatSet.SkillSpeed * Stats.Spd());
+
         double pixelsToMove = pixelsPerSecond * ((double)ms / 1000);
         int milliPixelsToMove = (int)(DeltaScale * pixelsToMove);
 
@@ -308,48 +309,48 @@ public class PC : Creature
 
         if (xy[0] == 3 && xy[1] == 0)
         {
-            DX = DX - (int)(milliPixelsToMove * Rad2Over2);
-            DY = DY - (int)(milliPixelsToMove * Rad2Over2);
-            Direction = Dir.Left;
+            DX = DX - (int)(milliPixelsToMove * Util.Rad2Over2);
+            DY = DY - (int)(milliPixelsToMove * Util.Rad2Over2);
+            Direction = CardinalDir.West;
         }
         else if (xy[0] == 3 && xy[1] == 2)
         {
-            DX = DX - (int)(milliPixelsToMove * Rad2Over2);
-            DY = DY + (int)(milliPixelsToMove * Rad2Over2);
-            Direction = Dir.Left;
+            DX = DX - (int)(milliPixelsToMove * Util.Rad2Over2);
+            DY = DY + (int)(milliPixelsToMove * Util.Rad2Over2);
+            Direction = CardinalDir.West;
         }
         else if (xy[0] == 1 && xy[1] == 0)
         {
-            DX = DX + (int)(milliPixelsToMove * Rad2Over2);
-            DY = DY - (int)(milliPixelsToMove * Rad2Over2);
-            Direction = Dir.Right;
+            DX = DX + (int)(milliPixelsToMove * Util.Rad2Over2);
+            DY = DY - (int)(milliPixelsToMove * Util.Rad2Over2);
+            Direction = CardinalDir.East;
         }
         else if (xy[0] == 1 && xy[1] == 2)
         {
-            DX = DX + (int)(milliPixelsToMove * Rad2Over2);
-            DY = DY + (int)(milliPixelsToMove * Rad2Over2);
-            Direction = Dir.Right;
+            DX = DX + (int)(milliPixelsToMove * Util.Rad2Over2);
+            DY = DY + (int)(milliPixelsToMove * Util.Rad2Over2);
+            Direction = CardinalDir.East;
         }
 
         else if (xy[0] == 1)
         {
             DX = DX + milliPixelsToMove;
-            Direction = Dir.Right;
+            Direction = CardinalDir.East;
         }
         else if (xy[0] == 3)
         {
             DX = DX - milliPixelsToMove;
-            Direction = Dir.Left;
+            Direction = CardinalDir.West;
         }
         else if (xy[1] == 0)
         {
             DY = DY - milliPixelsToMove;
-            Direction = Dir.Up;
+            Direction = CardinalDir.North;
         }
         else if (xy[1] == 2)
         {
             DY = DY + milliPixelsToMove;
-            Direction = Dir.Down;
+            Direction = CardinalDir.South;
         }
 
     }
@@ -454,16 +455,16 @@ public class PC : Creature
         {
             switch(Direction)
             {
-                case Dir.Down:
+                case CardinalDir.South:
                     DY += milliPixelsToMove;
                     break;
-                case Dir.Up:
+                case CardinalDir.North:
                     DY -= milliPixelsToMove;
                     break;
-                case Dir.Left:
+                case CardinalDir.West:
                     DX -= milliPixelsToMove;
                     break;
-                case Dir.Right:
+                case CardinalDir.East:
                     DX += milliPixelsToMove;
                     break;
             }

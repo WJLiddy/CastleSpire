@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using CastleUtils;
+using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 
 //Singletonize.
 class InGame
@@ -64,9 +66,19 @@ class InGame
         SoundManager.Play("night.ogg", true);
     }
 
+    //TEMP!
+    Stack<AllDir> DijTest;
+    int DijX;
+    int DijY;
+
     //Load each of the characters.
     public GS.State Update(int ms)
     {
+        //Fake dijikstra stress
+        DijX = 172 + -10 + (int)(20 * Utils.RandomNumber());
+        DijY = 123 + -10 + (int)(20 * Utils.RandomNumber());
+        DijTest = PathFinding.DijikstraPath(Map, DijX, DijY, 172, 123);
+        
         UpdatePlayersAndHud(ms);
         return GS.State.InGame;
     }
@@ -86,7 +98,17 @@ class InGame
         cameraY /= allPlayers().Count;
 
         DrawWorld(sb, cameraX, cameraY);
-        
+
+
+        Utils.DrawRect(sb, -cameraX + DijX, -cameraY + DijY, 1, 1, Color.Green);
+        /** Dijtest Temp */
+        while (DijTest != null && DijTest.Count > 0)
+        {
+            AllDir d = DijTest.Pop();
+            DijX += DirectionUtils.getDeltaX(d);
+            DijY += DirectionUtils.getDeltaY(d);
+            Utils.DrawRect(sb, -cameraX + DijX, -cameraY + DijY, 1, 1, Color.Red);
+        }
 
         for (int i = 0; i != 4; i++)
         {
@@ -98,7 +120,10 @@ class InGame
 
     private void DrawWorld(AD2SpriteBatch sb, int cameraX, int cameraY)
     {
+       
         Map.DrawBase(sb, cameraX, cameraY);
+        
+
         Item.DrawGlowingItems(sb, allPlayers(), FloorItems, cameraX, cameraY);
         foreach (Item i in FloorItems)
         {
