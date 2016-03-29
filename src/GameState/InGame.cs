@@ -78,7 +78,7 @@ class InGame
         DijX = 172 + -10 + (int)(20 * Utils.RandomNumber());
         DijY = 123 + -10 + (int)(20 * Utils.RandomNumber());
         DijTest = PathFinding.DijikstraPath(Map, DijX, DijY, 172, 123);
-        
+
         UpdatePlayersAndHud(ms);
         return GS.State.InGame;
     }
@@ -100,7 +100,7 @@ class InGame
         DrawWorld(sb, cameraX, cameraY);
 
 
-        Utils.DrawRect(sb, -cameraX + DijX, -cameraY + DijY, 1, 1, Color.Green);
+        Utils.DrawRect(sb, -cameraX + DijX, -cameraY + DijY, 1, 1, Color.Purple);
         /** Dijtest Temp */
         while (DijTest != null && DijTest.Count > 0)
         {
@@ -108,7 +108,9 @@ class InGame
             DijX += DirectionUtils.getDeltaX(d);
             DijY += DirectionUtils.getDeltaY(d);
             Utils.DrawRect(sb, -cameraX + DijX, -cameraY + DijY, 1, 1, Color.Red);
+
         }
+        
 
         for (int i = 0; i != 4; i++)
         {

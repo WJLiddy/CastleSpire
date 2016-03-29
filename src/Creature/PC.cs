@@ -309,26 +309,26 @@ public class PC : Creature
 
         if (xy[0] == 3 && xy[1] == 0)
         {
-            DX = DX - (int)(milliPixelsToMove * Util.Rad2Over2);
-            DY = DY - (int)(milliPixelsToMove * Util.Rad2Over2);
+            DX = DX - (int)(milliPixelsToMove * Util.Rad2/2.0);
+            DY = DY - (int)(milliPixelsToMove * Util.Rad2 / 2.0);
             Direction = CardinalDir.West;
         }
         else if (xy[0] == 3 && xy[1] == 2)
         {
-            DX = DX - (int)(milliPixelsToMove * Util.Rad2Over2);
-            DY = DY + (int)(milliPixelsToMove * Util.Rad2Over2);
+            DX = DX - (int)(milliPixelsToMove * Util.Rad2 / 2.0);
+            DY = DY + (int)(milliPixelsToMove * Util.Rad2 / 2.0);
             Direction = CardinalDir.West;
         }
         else if (xy[0] == 1 && xy[1] == 0)
         {
-            DX = DX + (int)(milliPixelsToMove * Util.Rad2Over2);
-            DY = DY - (int)(milliPixelsToMove * Util.Rad2Over2);
+            DX = DX + (int)(milliPixelsToMove * Util.Rad2 / 2.0);
+            DY = DY - (int)(milliPixelsToMove * Util.Rad2 / 2.0);
             Direction = CardinalDir.East;
         }
         else if (xy[0] == 1 && xy[1] == 2)
         {
-            DX = DX + (int)(milliPixelsToMove * Util.Rad2Over2);
-            DY = DY + (int)(milliPixelsToMove * Util.Rad2Over2);
+            DX = DX + (int)(milliPixelsToMove * Util.Rad2 / 2.0);
+            DY = DY + (int)(milliPixelsToMove * Util.Rad2 / 2.0);
             Direction = CardinalDir.East;
         }
 

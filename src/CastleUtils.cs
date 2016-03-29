@@ -2,7 +2,7 @@
 { 
     public class Util
     {
-        public static readonly double Rad2Over2 = .7071067812;
+        public static readonly double Rad2 = 1.414213;
     }
 
     public enum CardinalDir { North, East, South, West };
