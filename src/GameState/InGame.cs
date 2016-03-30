@@ -75,8 +75,8 @@ class InGame
     public GS.State Update(int ms)
     {
         //Fake dijikstra stress
-        DijX = 172 + -10 + (int)(20 * Utils.RandomNumber());
-        DijY = 123 + -10 + (int)(20 * Utils.RandomNumber());
+        DijX = 172 + -40 + (int)(Utils.RandomNumber() * 80);
+        DijY = 123 + -40 + (int)(Utils.RandomNumber() * 80);
         DijTest = PathFinding.DijikstraPath(Map, DijX, DijY, 172, 123);
 
         UpdatePlayersAndHud(ms);
@@ -108,8 +108,8 @@ class InGame
             DijX += DirectionUtils.getDeltaX(d);
             DijY += DirectionUtils.getDeltaY(d);
             Utils.DrawRect(sb, -cameraX + DijX, -cameraY + DijY, 1, 1, Color.Red);
-
         }
+        
         
 
         for (int i = 0; i != 4; i++)
