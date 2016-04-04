@@ -13,6 +13,10 @@ class InGame
     public static LinkedList<Item> FloorItems { get; private set; }
     public static ObjectMap Map { get; private set; }
 
+
+    //testaroni
+    PathFindingMesh pfm;
+
     public InGame(int[] race, bool[] ready)
     {
         SoundManager.Stop();
@@ -35,6 +39,9 @@ class InGame
 
         // Just using a collisionmap for now.
         Map = new ObjectMap(@"maps\zombieBase.xml", CastleSpire.BaseWidth, CastleSpire.BaseHeight);
+
+        //TEST!
+         pfm = new PathFindingMesh(@"maps\mesh.xml",Map.BaseMap.Width,Map.BaseMap.Height);
 
         // knives
         FloorItems = new LinkedList<Item>();
@@ -66,19 +73,12 @@ class InGame
         SoundManager.Play("night.ogg", true);
     }
 
-    //TEMP!
-    Stack<AllDir> DijTest;
-    int DijX;
-    int DijY;
 
     //Load each of the characters.
     public GS.State Update(int ms)
     {
-        //Fake dijikstra stress
-        DijX = 172 + -40 + (int)(Utils.RandomNumber() * 80);
-        DijY = 123 + -40 + (int)(Utils.RandomNumber() * 80);
-        DijTest = PathFinding.DijikstraPath(Map, DijX, DijY, 172, 123);
 
+    
         UpdatePlayersAndHud(ms);
         return GS.State.InGame;
     }
@@ -99,18 +99,7 @@ class InGame
 
         DrawWorld(sb, cameraX, cameraY);
 
-
-        Utils.DrawRect(sb, -cameraX + DijX, -cameraY + DijY, 1, 1, Color.Purple);
-        /** Dijtest Temp */
-        while (DijTest != null && DijTest.Count > 0)
-        {
-            AllDir d = DijTest.Pop();
-            DijX += DirectionUtils.getDeltaX(d);
-            DijY += DirectionUtils.getDeltaY(d);
-            Utils.DrawRect(sb, -cameraX + DijX, -cameraY + DijY, 1, 1, Color.Red);
-        }
-        
-        
+  
 
         for (int i = 0; i != 4; i++)
         {
@@ -124,7 +113,18 @@ class InGame
     {
        
         Map.DrawBase(sb, cameraX, cameraY);
-        
+
+        //PFM test
+        for (int x = 0; x != Map.BaseMap.Width; x++)
+        {
+            for (int y = 0; y != Map.BaseMap.Height; y++)
+            {
+                if (pfm.pixelToRegion[x, y] != null)
+                {
+                    Utils.DrawRect(sb, x + -cameraX, y + -cameraY, 1, 1, new Color((pfm.pixelToRegion[x, y].ID * 197) % 255, (pfm.pixelToRegion[x, y].ID * 257) % 255, (pfm.pixelToRegion[x, y].ID * 379) % 255));
+                }
+            }
+        }
 
         Item.DrawGlowingItems(sb, allPlayers(), FloorItems, cameraX, cameraY);
         foreach (Item i in FloorItems)

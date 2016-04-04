@@ -57,6 +57,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="src\AI\InsertionQueue.cs" />
+    <Compile Include="src\AI\PathFindingMesh.cs" />
     <Compile Include="src\CastleUtils.cs" />
     <Compile Include="src\AI\PathFinding.cs" />
     <Compile Include="src\Castle Spire.cs" />
