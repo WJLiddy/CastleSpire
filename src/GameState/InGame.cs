@@ -73,12 +73,27 @@ class InGame
         SoundManager.Play("night.ogg", true);
     }
 
+    int ptrX = 12;
+    int ptrY = 200;
 
     //Load each of the characters.
     public GS.State Update(int ms)
     {
 
-    
+        PixelSet s = new PixelSet();
+        s.Add(allPlayers().First.Value.X, allPlayers().First.Value.Y);
+        Stack<AllDir> path;
+        //hardcoded 16!
+        path = PathFinding.PixelPath(Map, ptrX, ptrY, allPlayers().First.Value.X, allPlayers().First.Value.Y, s, 16, 50);
+        if(path == null)
+            path = PathFinding.LongPathEstimation(Map, ptrX, ptrY, allPlayers().First.Value.X, allPlayers().First.Value.Y, pfm, 16);
+
+        if (Utils.RandomNumber() < .2 && path != null && path.Count > 0)
+        {
+            ptrX += DirectionUtils.getDeltaX(path.Peek());
+            ptrY += DirectionUtils.getDeltaY(path.Peek());
+            Utils.Log(ptrX + "," + ptrY);
+        }
         UpdatePlayersAndHud(ms);
         return GS.State.InGame;
     }
@@ -115,16 +130,27 @@ class InGame
         Map.DrawBase(sb, cameraX, cameraY);
 
         //PFM test
+        /**
         for (int x = 0; x != Map.BaseMap.Width; x++)
         {
             for (int y = 0; y != Map.BaseMap.Height; y++)
             {
-                if (pfm.pixelToRegion[x, y] != null)
-                {
-                    Utils.DrawRect(sb, x + -cameraX, y + -cameraY, 1, 1, new Color((pfm.pixelToRegion[x, y].ID * 197) % 255, (pfm.pixelToRegion[x, y].ID * 257) % 255, (pfm.pixelToRegion[x, y].ID * 379) % 255));
-                }
+                  if (pfm.pixelToRegion[x, y] != null)
+                  {
+                        Utils.DrawRect(sb, x + -cameraX, y + -cameraY, 1, 1, new Color((pfm.pixelToRegion[x, y].ID * 197) % 255, (pfm.pixelToRegion[x, y].ID * 257) % 255, (pfm.pixelToRegion[x, y].ID * 379) % 255));
+                  }
             }
         }
+        */
+        /*
+        foreach(PathFindingMesh.MeshRegion p in pfm.allRegions)
+        {
+            Utils.DefaultFont.Draw(sb, "" + p.ID, p.centerX + -(Utils.DefaultFont.GetWidth(""+p.ID,false)/2) + -cameraX, p.centerY +- 3 + -cameraY, Color.Black, 1);
+        }
+    */
+
+        Utils.DefaultFont.Draw(sb, "X", ptrX + -cameraX, ptrY  + -cameraY, Color.Black, 1);
+
 
         Item.DrawGlowingItems(sb, allPlayers(), FloorItems, cameraX, cameraY);
         foreach (Item i in FloorItems)

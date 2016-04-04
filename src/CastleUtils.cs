@@ -1,8 +1,29 @@
-﻿namespace CastleUtils
+﻿using System.Collections.Generic;
+
+namespace CastleUtils
 { 
     public class Util
     {
         public static readonly double Rad2 = 1.414214;
+    }
+
+    public class PixelSet
+    {
+        private Dictionary<int, HashSet<int>> regionPixels = new Dictionary<int, HashSet<int>>();
+
+        public void Add(int x, int y)
+        {
+            if (!regionPixels.ContainsKey(x))
+                regionPixels.Add(x,new HashSet<int>());
+            regionPixels[x].Add(y);
+        }
+
+        public bool Contains(int x, int y)
+        {
+            if (!regionPixels.ContainsKey(x))
+                return false;
+            return regionPixels[x].Contains(y);
+        }
     }
 
     public enum CardinalDir { North, East, South, West };

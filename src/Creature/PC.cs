@@ -30,7 +30,7 @@ public class PC : Creature
     {
         //TODO Clean
         X = 225;
-        Y = 200;
+        Y = 230;
         Race = (RaceUtils.Race)racei;
         switch (Race)
         {
