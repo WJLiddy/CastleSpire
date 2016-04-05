@@ -1,4 +1,4 @@
-﻿public class Input
+﻿public abstract class Input
 {
     //Main commands
     public bool Fire {get; protected set;}

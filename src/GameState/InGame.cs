@@ -87,7 +87,7 @@ class InGame
         path = PathFinding.PixelPath(Map, ptrX, ptrY, allPlayers().First.Value.X, allPlayers().First.Value.Y, s, 16, 50);
 
         if(path == null)
-            path = PathFinding.LongPathEstimation(Map, ptrX, ptrY, allPlayers().First.Value.X, allPlayers().First.Value.Y, pfm, 16);
+            path = LongPath.LongPathEstimation(Map, ptrX, ptrY, allPlayers().First.Value.X, allPlayers().First.Value.Y, pfm, 16);
 
         if (updateCounter % 60 == 0)
         {
@@ -133,33 +133,25 @@ class InGame
        
         Map.DrawBase(sb, cameraX, cameraY);
 
-        //PFM test
         /**
-        for (int x = 0; x != Map.BaseMap.Width; x++)
-        {
-            for (int y = 0; y != Map.BaseMap.Height; y++)
-            {
-                  if (pfm.pixelToRegion[x, y] != null)
-                  {
-                        Utils.DrawRect(sb, x + -cameraX, y + -cameraY, 1, 1, new Color((pfm.pixelToRegion[x, y].ID * 197) % 255, (pfm.pixelToRegion[x, y].ID * 257) % 255, (pfm.pixelToRegion[x, y].ID * 379) % 255));
-                  }
-            }
-        }
-        */
         foreach(PathFindingMesh.MeshRegion p in pfm.allRegions)
         {
             Utils.DefaultFont.Draw(sb, "" + p.ID, p.centerX + -(Utils.DefaultFont.GetWidth(""+p.ID,false)/2) + -cameraX, p.centerY +- 3 + -cameraY, Color.Black, 1);
         }
+        */
 
         Utils.DefaultFont.Draw(sb, "X", ptrX + -cameraX, ptrY  + -cameraY, Color.Black, 1);
 
 
         Item.DrawGlowingItems(sb, allPlayers(), FloorItems, cameraX, cameraY);
+
+        //draw floor items
         foreach (Item i in FloorItems)
         {
             i.DrawOnFloor(sb, cameraX, cameraY);
         }
 
+        //draw y ordered items
         for (int floor = 0; floor != Map.BaseMap.Height; floor++)
         {
             Map.DrawObjects(sb, cameraX, cameraY, floor);
@@ -168,6 +160,7 @@ class InGame
                 p.Draw(sb, cameraX, cameraY,floor);
             }
         }   
+        // draw the always map.
         Map.DrawAlways(sb, cameraX, cameraY);
     }
     

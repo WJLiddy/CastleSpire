@@ -4,7 +4,7 @@
     public static readonly int FatigueRegenFrames = 12;
     public static readonly int InvSize = 7;
 
-    //TODO Document
+    //TODO Document. This is a tricky structure that keeps track of mouse inputs so that newpresses are detected in the right direction.
     protected int[] PrioritySet = new int[4]{ 0, 1, 2, 3 };
 
     public int HP { get; protected set; }
@@ -12,7 +12,6 @@
     public int FA { get; protected set; }
     protected int TimeToNextFatiguePoint = 0;
     public StatSet Stats { get; protected set; }
-
     public int InvIndex { get; protected set; } = 0;
     public Item[] Inventory { get; protected set; }
 

@@ -58,11 +58,11 @@
   <ItemGroup>
     <Compile Include="src\AI\FastPriorityQueue.cs" />
     <Compile Include="src\AI\FastPriorityQueueNode.cs" />
-    <Compile Include="src\AI\InsertionQueue.cs" />
     <Compile Include="src\AI\IPriorityQueue.cs" />
     <Compile Include="src\AI\PathFindingMesh.cs" />
+    <Compile Include="src\AI\LongPath.cs" />
     <Compile Include="src\CastleUtils.cs" />
-    <Compile Include="src\AI\PathFinding.cs" />
+    <Compile Include="src\AI\PixelPath.cs" />
     <Compile Include="src\Castle Spire.cs" />
     <Compile Include="src\Entity.cs" />
     <Compile Include="src\GameState\CharSelect.cs" />
@@ -70,7 +70,6 @@
     <Compile Include="src\GameState\InGame.cs" />
     <Compile Include="src\GameState\Title.cs" />
     <Compile Include="src\HUD.cs" />
-    <Compile Include="src\Input\AIInput.cs" />
     <Compile Include="src\Creature\Creature.cs" />
     <Compile Include="src\Input\KeyboardInput.cs" />
     <Compile Include="src\Input\ControllerInput.cs" />
