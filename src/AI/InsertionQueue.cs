@@ -4,13 +4,13 @@
 // Memory usage is O(1) per insertion that does not get freed until clear() is called.
 
 //!!!! I should test against a fast heap implementaion online !!!!
-public class InsertionQueue<T> where T : IComparable
+public class InsertionQueueOLD<T> where T : IComparable
 {
     private T[] List;
     private int FirstElementInList = 0;
     private int LastElementInList = 0;
     
-    public InsertionQueue(int maxElements)
+    public InsertionQueueOLD(int maxElements)
     {
         // Pointer to first element
         FirstElementInList = 0;

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 
 class InGame
 {
-
     private static PC[] Players = new PC[4];
     private static LinkedList<PC> PlayerList = new LinkedList<PC>();
 
@@ -147,12 +146,10 @@ class InGame
             }
         }
         */
-        /*
         foreach(PathFindingMesh.MeshRegion p in pfm.allRegions)
         {
             Utils.DefaultFont.Draw(sb, "" + p.ID, p.centerX + -(Utils.DefaultFont.GetWidth(""+p.ID,false)/2) + -cameraX, p.centerY +- 3 + -cameraY, Color.Black, 1);
         }
-    */
 
         Utils.DefaultFont.Draw(sb, "X", ptrX + -cameraX, ptrY  + -cameraY, Color.Black, 1);
 

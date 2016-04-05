@@ -1,4 +1,5 @@
 ﻿using CastleUtils;
+using Priority_Queue;
 using System;
 using System.Collections.Generic;
 
@@ -7,21 +8,20 @@ using System.Collections.Generic;
 //Currently good for a search space of ~15 by 15
 class PathFinding
 {
-    private static InsertionQueue<PixelNode> IQ = new InsertionQueue<PixelNode>(CastleSpire.BaseWidth * CastleSpire.BaseHeight);
-    private static InsertionQueue<PathMeshNode> IQPRE = new InsertionQueue<PathMeshNode>(CastleSpire.BaseWidth * CastleSpire.BaseHeight);
+    private static FastPriorityQueue<PixelNode> IQ = new FastPriorityQueue<PixelNode>(CastleSpire.BaseWidth * CastleSpire.BaseHeight);
+    private static FastPriorityQueue<PathMeshNode> IQPRE = new FastPriorityQueue<PathMeshNode>(CastleSpire.BaseWidth * CastleSpire.BaseHeight);
     //1.0 is admissible.
     private static double PixelHeuristicEmphasis = 1.2;
     private static double MeshHeuristicEmphasis = 0.5;
     public static bool[,] notWalkable; 
 
-    private class PixelNode : IComparable
+    private class PixelNode : FastPriorityQueueNode
     {
         public AllDir DirectionFromParent;
         public PixelNode parent = null;
         public int X, Y;
         public double Cost; // "g" score
         public double EstimateToGoal; //"heuristic"
-        public double TotalEstimate; // "f" score
         public bool Closed;
      
         public PixelNode(int x, int y, int goalX, int goalY, double cost)
@@ -31,7 +31,6 @@ class PathFinding
             Closed = false;
             Cost = cost;
             EstimateToGoal = PixelHeuristic(x, goalX, y, goalY);
-            TotalEstimate = Cost + EstimateToGoal;
         }
 
         public PixelNode(int x, int y, AllDir directionFromParent, int goalX, int goalY, double cost) : this(x, y, goalX, goalY, cost)
@@ -39,14 +38,11 @@ class PathFinding
             DirectionFromParent = directionFromParent;
         }
 
-        public int CompareTo(object obj)
+        public double getEstimate()
         {
-            if (TotalEstimate - ((PixelNode)obj).TotalEstimate < 0)
-                return -1;
-            if (TotalEstimate - ((PixelNode)obj).TotalEstimate > 0)
-                return 1;
-            return 0;
+            return Cost + EstimateToGoal; 
         }
+
     }
 
     public static Stack<AllDir> PixelPath(CollisionMap map, int xStart, int yStart, int goalCenterX, int goalCenterY, PixelSet goal, int charSize, int giveUpSteps)
@@ -64,11 +60,11 @@ class PathFinding
 
         // Add the initial node to the set
         PixelNode startNode = new PixelNode(xStart,yStart,goalCenterX,goalCenterY,0);
-        IQ.Enqueue(startNode);
+        IQ.Enqueue(startNode,startNode.getEstimate());
         allNodes[startNode.X,startNode.Y] = startNode;
         
 
-        while (IQ.Count() > 0)
+        while (IQ.Count > 0)
         {
             giveUpSteps--;
             if (giveUpSteps == 0)
@@ -101,7 +97,7 @@ class PathFinding
                 if (allNodes[childX,childY] == null)
                 {
                     PixelNode child = new PixelNode(childX,childY,d,goalCenterX,goalCenterY,cost);
-                    IQ.Enqueue(child);
+                    IQ.Enqueue(child,child.getEstimate());
                     allNodes[childX,childY] = child;
                     child.parent = toExplore;
                 }
@@ -110,7 +106,7 @@ class PathFinding
                 else if (allNodes[childX,childY].Cost > cost && !allNodes[childX, childY].Closed)
                 {
                     allNodes[childX, childY].Cost = cost;
-                    allNodes[childX, childY].TotalEstimate = (cost + allNodes[childX, childY].EstimateToGoal);
+                    IQ.UpdatePriority(allNodes[childX, childY], allNodes[childX, childY].getEstimate());
                     allNodes[childX,childY].DirectionFromParent = d;
                     allNodes[childX,childY].parent = toExplore;
                 }
@@ -147,7 +143,7 @@ class PathFinding
         return MeshHeuristicEmphasis*Utils.Dist(m1.centerX, m2.centerX, m2.centerY, m2.centerY);
     }
 
-    private class PathMeshNode : IComparable
+    private class PathMeshNode : FastPriorityQueueNode
     {
         public PathMeshNode Parent = null;
         public PathFindingMesh.MeshRegion Mesh;
@@ -162,7 +158,6 @@ class PathFinding
             Closed = false;
             Cost = cost;
             EstimateToGoal = MeshHeuristic(source,goal);
-            TotalEstimate = Cost + EstimateToGoal;
         }
 
         public PathMeshNode(PathFindingMesh.MeshRegion source, PathMeshNode parent, PathFindingMesh.MeshRegion goal, double cost) : this(source,goal, cost)
@@ -170,13 +165,9 @@ class PathFinding
             this.Parent = parent;
         }
 
-        public int CompareTo(object obj)
+        public double estimate()
         {
-            if (TotalEstimate - ((PathMeshNode)obj).TotalEstimate < 0)
-                return -1;
-            if (TotalEstimate - ((PathMeshNode)obj).TotalEstimate > 0)
-                return 1;
-            return 0;
+            return Cost + EstimateToGoal;
         }
     }
 
@@ -200,11 +191,11 @@ class PathFinding
         Dictionary<int,PathMeshNode> allNodes = new Dictionary<int, PathMeshNode>();
 
         PathMeshNode startNode = new PathMeshNode(startRegion, endRegion, 0);
-        IQPRE.Enqueue(startNode);
+        IQPRE.Enqueue(startNode,startNode.estimate());
         allNodes[startRegion.ID] = startNode;
 
         int searchedsteps = 0;
-        while (IQPRE.Count() > 0)
+        while (IQPRE.Count > 0)
         {
             searchedsteps++;
             PathMeshNode toExplore = IQPRE.Dequeue();
@@ -231,20 +222,18 @@ class PathFinding
 
                 double cost = toExplore.Cost + Utils.Dist(toExplore.Mesh.centerX, pm.centerX, toExplore.Mesh.centerY, pm.centerY);
 
-
                 // Hasn't been explored yet so add.
                 if (!allNodes.ContainsKey(pm.ID))
                 {
                     PathMeshNode child = new PathMeshNode(pm, toExplore, endRegion, cost);
-                    IQPRE.Enqueue(child);
+                    IQPRE.Enqueue(child,child.estimate());
                     allNodes[pm.ID] = child;
                 }
-
 
                 else if (allNodes[pm.ID].Cost > cost && !allNodes[pm.ID].Closed)
                 {
                     allNodes[pm.ID].Cost = cost;
-                    allNodes[pm.ID].TotalEstimate = (cost + allNodes[pm.ID].EstimateToGoal);
+                    IQPRE.UpdatePriority(allNodes[pm.ID], allNodes[pm.ID].estimate());
                     allNodes[pm.ID].Parent = toExplore;
                 }
             }

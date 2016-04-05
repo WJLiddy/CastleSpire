@@ -56,7 +56,10 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="src\AI\FastPriorityQueue.cs" />
+    <Compile Include="src\AI\FastPriorityQueueNode.cs" />
     <Compile Include="src\AI\InsertionQueue.cs" />
+    <Compile Include="src\AI\IPriorityQueue.cs" />
     <Compile Include="src\AI\PathFindingMesh.cs" />
     <Compile Include="src\CastleUtils.cs" />
     <Compile Include="src\AI\PathFinding.cs" />
