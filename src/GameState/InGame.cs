@@ -1,8 +1,8 @@
 ﻿using CastleUtils;
 using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 
-//Singletonize.
 class InGame
 {
 
@@ -13,8 +13,8 @@ class InGame
     public static LinkedList<Item> FloorItems { get; private set; }
     public static ObjectMap Map { get; private set; }
 
+    private static int updateCounter = 0;
 
-    //testaroni
     PathFindingMesh pfm;
 
     public InGame(int[] race, bool[] ready)
@@ -75,25 +75,32 @@ class InGame
 
     int ptrX = 12;
     int ptrY = 200;
-
+    
     //Load each of the characters.
     public GS.State Update(int ms)
     {
+        updateCounter++;
 
         PixelSet s = new PixelSet();
         s.Add(allPlayers().First.Value.X, allPlayers().First.Value.Y);
         Stack<AllDir> path;
         //hardcoded 16!
         path = PathFinding.PixelPath(Map, ptrX, ptrY, allPlayers().First.Value.X, allPlayers().First.Value.Y, s, 16, 50);
+
         if(path == null)
             path = PathFinding.LongPathEstimation(Map, ptrX, ptrY, allPlayers().First.Value.X, allPlayers().First.Value.Y, pfm, 16);
 
-        if (Utils.RandomNumber() < .2 && path != null && path.Count > 0)
+        if (updateCounter % 60 == 0)
+        {
+            GC.Collect();
+        }
+
+        if (((updateCounter + 1) % 6 == 0) && path != null && path.Count > 0)
         {
             ptrX += DirectionUtils.getDeltaX(path.Peek());
             ptrY += DirectionUtils.getDeltaY(path.Peek());
-            Utils.Log(ptrX + "," + ptrY);
         }
+
         UpdatePlayersAndHud(ms);
         return GS.State.InGame;
     }
@@ -113,8 +120,6 @@ class InGame
         cameraY /= allPlayers().Count;
 
         DrawWorld(sb, cameraX, cameraY);
-
-  
 
         for (int i = 0; i != 4; i++)
         {

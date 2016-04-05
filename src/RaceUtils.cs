@@ -16,7 +16,8 @@ public class RaceUtils
 
     public static Texture2D GetPotrait(Race r)
     {
-        Load();
+        if(Portraits == null)
+            Load();
         return Portraits[(int)r];
     }
 

@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
+using System.Runtime;
+using System.Runtime.CompilerServices;
 
 public class CastleSpire : AD2Game
 {
@@ -9,7 +11,9 @@ public class CastleSpire : AD2Game
     public CastleSpire() : base (BaseWidth, BaseHeight, 100/6)
     {
         Renderer.Resolution = Renderer.ResolutionType.WindowedLarge;
-    }
+        RuntimeHelpers.PrepareConstrainedRegions();
+        GCSettings.LatencyMode = GCLatencyMode.LowLatency;
+   }
       
     protected override void AD2LoadContent()
     {
