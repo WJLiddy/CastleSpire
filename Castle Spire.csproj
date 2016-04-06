@@ -64,6 +64,7 @@
     <Compile Include="src\CastleUtils.cs" />
     <Compile Include="src\AI\PixelPath.cs" />
     <Compile Include="src\Castle Spire.cs" />
+    <Compile Include="src\Creature\BeachZombie.cs" />
     <Compile Include="src\Entity.cs" />
     <Compile Include="src\GameState\CharSelect.cs" />
     <Compile Include="src\GameState\GS.cs" />

@@ -217,54 +217,10 @@ public class PC : Creature
         //Put this priority first.
         PrioritySet[0] = dir;
     }
-
-    //push this to entity
-    private bool CanMove(int dir)
-    {
-        switch (dir)
-        {
-            case 0:
-                for (int top = X; top != X + Size; top++)
-                {
-                    if (InGame.Map.Collide(top,Y - 1))
-                        return false;
-                }
-                return true;
-            case 2:
-                for (int bottom = X; bottom != X + Size; bottom++)
-                {
-                    if (InGame.Map.Collide(bottom, Y + Size))
-                        return false;
-                }
-                return true;
-
-            case 1:
-                for (int right = Y; right!= Y + Size; right++)
-                {
-                    if (InGame.Map.Collide(X+Size, right))
-                        return false;
-                }
-                return true;
-
-            case 3:
-                for (int left = Y; left != Y + Size; left++)
-                {
-                    if (InGame.Map.Collide(X - 1,left))
-                        return false;
-                }
-                return true;
-
-            default:
-                return false;
-        }
-    }
     
     private void Move(Input i, int ms)
     {
-        double pixelsPerSecond = StatSet.BaseSpeed + (StatSet.SkillSpeed * Stats.Spd());
-
-        double pixelsToMove = pixelsPerSecond * ((double)ms / 1000);
-        int milliPixelsToMove = (int)(DeltaScale * pixelsToMove);
+        int milliPixelsToMove = getMilliPixelsToMove(ms);
 
         //look for fresh new inputs.
         if (i.PressedUp)
@@ -359,7 +315,7 @@ public class PC : Creature
     {
         foreach(Item i in floorItems)
         {
-            if (this.collide(i))
+            if (this.Collide(i))
                 return i;
         }
         return null;
@@ -380,27 +336,13 @@ public class PC : Creature
 
     }
 
-    private void ConvertDXDYToMovement()
-    {
-        //check to see if my dx would cause a collision.
-        if (DX < 0 && !CanMove(3)) DX = 0;
-        if (DX >= DeltaScale && !CanMove(1)) DX = DeltaScale - 1;
-        if (DY < 0 && !CanMove(0)) DY = 0;
-        if (DY >= DeltaScale && !CanMove(2)) DY = DeltaScale - 1;
-
-        while (DX >= DeltaScale) { DX = DX - DeltaScale; X++; } //3 , 1100 -> 4, 100
-        while (DY >= DeltaScale) { DY = DY - DeltaScale; Y++; }
-        while (DX < 0) { DX = DX + DeltaScale; X--; } //3, -100 -> 2, 900
-        while (DY < 0) { DY = DY + DeltaScale; Y--; }
-    }
-
     private void Use()
     {
         //get ground pick-uppable items and grab them all
         LinkedList<Item> removeList = new LinkedList<Item>();
         foreach (Item item in InGame.FloorItems)
         {
-            if (item.collide(this))
+            if (item.Collide(this))
             {
                 for (int i = 0; i != Inventory.Length; i++)
                 {

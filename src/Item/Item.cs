@@ -65,7 +65,7 @@ public abstract class Item : Entity
         {
             foreach (Item item in items)
             {
-                if (item.collide(c))
+                if (item.Collide(c))
                 {
                     item.DrawOutline(sb, camX, camY);
                 }

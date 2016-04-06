@@ -6,16 +6,18 @@ using System.Collections.Generic;
 class InGame
 {
     private static PC[] Players = new PC[4];
-    private static LinkedList<PC> PlayerList = new LinkedList<PC>();
+    public static LinkedList<PC> PlayerList { get; private set; } = new LinkedList<PC>(); 
+    private static LinkedList<NPC> NPCList = new LinkedList<NPC>();
+    private static int NPCPlanIndex = 0;
 
     private static HUD[] HUDs = new HUD[4];
     public static LinkedList<Item> FloorItems { get; private set; }
+
     public static ObjectMap Map { get; private set; }
+    public static PathFindingMesh MapMesh { get; private set; }
 
-    private static int updateCounter = 0;
-
-    PathFindingMesh pfm;
-
+    private static int UpdateCounter = 0;
+    
     public InGame(int[] race, bool[] ready)
     {
         SoundManager.Stop();
@@ -40,9 +42,8 @@ class InGame
         Map = new ObjectMap(@"maps\zombieBase.xml", CastleSpire.BaseWidth, CastleSpire.BaseHeight);
 
         //TEST!
-         pfm = new PathFindingMesh(@"maps\mesh.xml",Map.BaseMap.Width,Map.BaseMap.Height);
-
-        // knives
+        MapMesh = new PathFindingMesh(@"maps\mesh.xml",Map.BaseMap.Width,Map.BaseMap.Height);
+        
         FloorItems = new LinkedList<Item>();
         for (int i = 0; i != 100; i++)
         {
@@ -71,37 +72,33 @@ class InGame
 
         SoundManager.Play("night.ogg", true);
     }
-
-    int ptrX = 12;
-    int ptrY = 200;
     
     //Load each of the characters.
     public GS.State Update(int ms)
     {
-        updateCounter++;
+        UpdateCounter++;
 
-        PixelSet s = new PixelSet();
-        s.Add(allPlayers().First.Value.X, allPlayers().First.Value.Y);
-        Stack<AllDir> path;
-        //hardcoded 16!
-        path = PathFinding.PixelPath(Map, ptrX, ptrY, allPlayers().First.Value.X, allPlayers().First.Value.Y, s, 16, 50);
-
-        if(path == null)
-            path = LongPath.LongPathEstimation(Map, ptrX, ptrY, allPlayers().First.Value.X, allPlayers().First.Value.Y, pfm, 16);
-
-        if (updateCounter % 60 == 0)
+        //Do garbage collection every second, but avoid AI.
+        if (UpdateCounter % 60 == 0)
         {
             GC.Collect();
         }
-
-        if (((updateCounter + 1) % 6 == 0) && path != null && path.Count > 0)
-        {
-            ptrX += DirectionUtils.getDeltaX(path.Peek());
-            ptrY += DirectionUtils.getDeltaY(path.Peek());
-        }
-
         UpdatePlayersAndHud(ms);
+        UpdateNPCs(ms,UpdateCounter);
         return GS.State.InGame;
+    }
+
+    private void UpdateNPCs(int ms, int updateCounter)
+    {
+        PixelSet s = new PixelSet();
+        s.Add(allPlayers().First.Value.X, allPlayers().First.Value.Y);
+        int index = 0;
+        foreach (NPC npc in NPCList)
+        {
+            if(index == NPCPlanIndex % npc.Size)
+                npc.UpdatePlan();
+            npc.Update( ms);
+        }
     }
 
     public void Draw(AD2SpriteBatch sb)
@@ -139,9 +136,6 @@ class InGame
             Utils.DefaultFont.Draw(sb, "" + p.ID, p.centerX + -(Utils.DefaultFont.GetWidth(""+p.ID,false)/2) + -cameraX, p.centerY +- 3 + -cameraY, Color.Black, 1);
         }
         */
-
-        Utils.DefaultFont.Draw(sb, "X", ptrX + -cameraX, ptrY  + -cameraY, Color.Black, 1);
-
 
         Item.DrawGlowingItems(sb, allPlayers(), FloorItems, cameraX, cameraY);
 

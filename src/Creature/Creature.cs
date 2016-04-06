@@ -26,4 +26,25 @@
     {
         Inventory = new Item[InvSize];
     }
+
+    protected void ConvertDXDYToMovement()
+    {
+        //check to see if my dx would cause a collision.
+        if (DX < 0 && !CanMove(3)) DX = 0;
+        if (DX >= DeltaScale && !CanMove(1)) DX = DeltaScale - 1;
+        if (DY < 0 && !CanMove(0)) DY = 0;
+        if (DY >= DeltaScale && !CanMove(2)) DY = DeltaScale - 1;
+
+        while (DX >= DeltaScale) { DX = DX - DeltaScale; X++; } //3 , 1100 -> 4, 100
+        while (DY >= DeltaScale) { DY = DY - DeltaScale; Y++; }
+        while (DX < 0) { DX = DX + DeltaScale; X--; } //3, -100 -> 2, 900
+        while (DY < 0) { DY = DY + DeltaScale; Y--; }
+    }
+
+    protected int getMilliPixelsToMove(int ms)
+    {
+        double pixelsPerSecond = StatSet.BaseSpeed + (StatSet.SkillSpeed * Stats.Spd());
+        double pixelsToMove = pixelsPerSecond * ((double)ms / 1000);
+        return (int)(DeltaScale * pixelsToMove);
+    }
 }
