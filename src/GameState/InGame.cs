@@ -72,7 +72,7 @@ class InGame
         for (int i = 0; i != 50; i++)
         {
             BeachZombie bz = new BeachZombie(250, 230);
-            bz.Stats.AwardSpdXP(bz.Stats.XPPerSkill * -i);
+            bz.Stats.AwardSpdXP((bz.Stats.XPPerSkill/2) * -i);
             NPCList.AddFirst(bz);
 
         }
@@ -98,17 +98,22 @@ class InGame
         PixelSet s = new PixelSet();
         s.Add(allPlayers().First.Value.X, allPlayers().First.Value.Y);
         int index = 0;
+        bool updateNext = false;
         foreach (NPC npc in NPCList)
         {
-            if (execAI && index == (NPCPlanIndex % NPCList.Count))
+            if (execAI && (updateNext ||  index == (NPCPlanIndex % NPCList.Count)))
+            {
+                Utils.Log( " AI " + index );
                 npc.UpdatePlan();
-
+                updateNext = !updateNext;
+            }
             npc.Update(ms);
             index++;
         }
 
-        if(execAI)
-            NPCPlanIndex++;
+        if (execAI)
+            NPCPlanIndex = NPCPlanIndex + 2 ;
+        Utils.Log("---");
     }
 
     public void Draw(AD2SpriteBatch sb)

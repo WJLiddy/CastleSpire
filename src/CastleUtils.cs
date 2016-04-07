@@ -48,5 +48,16 @@ namespace CastleUtils
                 return 1;
             return 0;
         }
+
+        public static CardinalDir ConvertAllDir(AllDir d)
+        {
+            if (d.Equals(AllDir.North))
+                return CardinalDir.North;
+            if (d.Equals(AllDir.South)) 
+                return CardinalDir.South;
+            if (d.Equals(AllDir.East) || d.Equals(AllDir.SouthEast) || d.Equals(AllDir.NorthEast))
+                return CardinalDir.East;
+            return CardinalDir.West;
+        }
     }
 }

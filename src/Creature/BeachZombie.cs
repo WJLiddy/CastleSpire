@@ -6,6 +6,7 @@ class BeachZombie : NPC
 {
     private AnimationSet Anim;
     private Stack<AllDir> Plan;
+    CardinalDir Direction = CardinalDir.South;
     int LeftoverMilliPixels = 0;
 
     public BeachZombie(int x, int y)
@@ -16,6 +17,7 @@ class BeachZombie : NPC
         Anim = new AnimationSet(@"creatures\npc\zombie\anim.xml");
         Anim.Hold("idle", 0, 0);
         Stats = new StatSet(@"creatures\npc\zombie\stat.xml");
+        Anim.Speed = 9;
     }
 
     public override void Draw(AD2SpriteBatch sb, int cameraX, int cameraY, int floor)
@@ -41,7 +43,7 @@ class BeachZombie : NPC
                         LeftoverMilliPixels -= (int)(1000*Util.Rad2);
                         X += DirectionUtils.getDeltaX(Plan.Peek());
                         Y += DirectionUtils.getDeltaY(Plan.Peek());
-                        Plan.Pop();
+                        Direction = DirectionUtils.ConvertAllDir(Plan.Pop());
                     }
                     else
                     {
@@ -55,7 +57,7 @@ class BeachZombie : NPC
                         LeftoverMilliPixels -= 1000;
                         X += DirectionUtils.getDeltaX(Plan.Peek());
                         Y += DirectionUtils.getDeltaY(Plan.Peek());
-                        Plan.Pop();
+                        Direction = DirectionUtils.ConvertAllDir(Plan.Pop());
                     }
                     else
                     {
@@ -63,10 +65,21 @@ class BeachZombie : NPC
                     }
                 }
             }
-            // we ran out of bulk moves, save delta millipixels
+            // we ran out of bulk moves, no leftover pixels.
             if (Plan.Count == 0)
+            {
+                if(!Anim.CurrentAnimationName.Equals("idle"))
+                {
+                    Anim.Hold("idle", 0, (int)Direction);
+                }
                 LeftoverMilliPixels = 0;
+            } else
+            {
+                if(!Anim.CurrentAnimationName.Equals("walk") || Anim.YFrame != (int)Direction)
+                    Anim.AutoAnimate("walk", (int)Direction);
+            }
         }
+        Anim.Update();
     }
 
     public override void UpdatePlan()
