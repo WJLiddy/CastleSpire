@@ -26,6 +26,10 @@ public class PC : Creature
     //                             2   3   4  5   6 
     // Weapon speeds can then be: 12, 18, 24, 30, 36 frames.
 
+    protected int DX { get; set; }
+    protected int DY { get; set; }
+
+
     public PC(int racei)
     {
         //TODO Clean
@@ -466,4 +470,20 @@ public class PC : Creature
             return 0;
         }
     }
+
+    protected void ConvertDXDYToMovement()
+    {
+        //check to see if my dx would cause a collision.
+        if (DX < 0 && !CanMove(3)) DX = 0;
+        if (DX >= DeltaScale && !CanMove(1)) DX = DeltaScale - 1;
+        if (DY < 0 && !CanMove(0)) DY = 0;
+        if (DY >= DeltaScale && !CanMove(2)) DY = DeltaScale - 1;
+
+        while (DX >= DeltaScale) { DX = DX - DeltaScale; X++; } //3 , 1100 -> 4, 100
+        while (DY >= DeltaScale) { DY = DY - DeltaScale; Y++; }
+        while (DX < 0) { DX = DX + DeltaScale; X--; } //3, -100 -> 2, 900
+        while (DY < 0) { DY = DY + DeltaScale; Y--; }
+    }
+
+
 }

@@ -55,7 +55,12 @@ class LongPath
         //BFS yo
         if(endRegion == null)
         {
-            //find closest region
+            endRegion = findClosestRegion(map, mapMesh, xEnd, yEnd);
+        }
+
+        if (startRegion == null)
+        {
+            startRegion = findClosestRegion(map, mapMesh, xStart, yStart);
         }
 
         // We will use a priority queue to store the open set.
@@ -120,6 +125,36 @@ class LongPath
         }
         //NO PATH FOUND! This should never happen.
         System.Diagnostics.Debug.Assert(false);
+        return null;
+    }
+
+    private static PathFindingMesh.MeshRegion findClosestRegion(CollisionMap m, PathFindingMesh pm, int x, int y)
+    {
+        LinkedList<int[]> frontier = new LinkedList<int[]>();
+        PixelSet seen = new PixelSet();
+        frontier.AddFirst(new int[2]{x,y});
+        seen.Add(frontier.First.Value[0], frontier.First.Value[1]);
+
+        while (frontier.Count > 0)
+        {
+            int[] pixel = frontier.First.Value;
+            frontier.RemoveFirst();
+
+            if (pm.pixelToRegion[pixel[0], pixel[1]] != null)
+                return pm.pixelToRegion[pixel[0], pixel[1]];
+
+            foreach (AllDir d in Enum.GetValues(typeof(AllDir)))
+            {
+                int newX = pixel[0] + DirectionUtils.getDeltaX(d);
+                int newY = pixel[1] + DirectionUtils.getDeltaY(d);
+
+                if (!seen.Contains(newX, newY) && !m.Collide(newX, newY)) 
+                {
+                    frontier.AddLast(new int[2] { newX, newY });
+                    seen.Add(newX, newY);
+                }
+            }
+        }
         return null;
     }
 }

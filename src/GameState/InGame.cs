@@ -69,7 +69,13 @@ class InGame
             FloorItems.AddFirst(b);
         }
 
+        for (int i = 0; i != 50; i++)
+        {
+            BeachZombie bz = new BeachZombie(250, 230);
+            bz.Stats.AwardSpdXP(bz.Stats.XPPerSkill * -i);
+            NPCList.AddFirst(bz);
 
+        }
         SoundManager.Play("night.ogg", true);
     }
     
@@ -77,28 +83,32 @@ class InGame
     public GS.State Update(int ms)
     {
         UpdateCounter++;
-
         //Do garbage collection every second, but avoid AI.
         if (UpdateCounter % 60 == 0)
         {
             GC.Collect();
         }
         UpdatePlayersAndHud(ms);
-        UpdateNPCs(ms,UpdateCounter);
+        UpdateNPCs(ms,UpdateCounter, UpdateCounter % 60 != 0);
         return GS.State.InGame;
     }
 
-    private void UpdateNPCs(int ms, int updateCounter)
+    private void UpdateNPCs(int ms, int updateCounter, bool execAI)
     {
         PixelSet s = new PixelSet();
         s.Add(allPlayers().First.Value.X, allPlayers().First.Value.Y);
         int index = 0;
         foreach (NPC npc in NPCList)
         {
-            if(index == NPCPlanIndex % npc.Size)
+            if (execAI && index == (NPCPlanIndex % NPCList.Count))
                 npc.UpdatePlan();
-            npc.Update( ms);
+
+            npc.Update(ms);
+            index++;
         }
+
+        if(execAI)
+            NPCPlanIndex++;
     }
 
     public void Draw(AD2SpriteBatch sb)
@@ -152,6 +162,11 @@ class InGame
             foreach (PC p in allPlayers())
             {
                 p.Draw(sb, cameraX, cameraY,floor);
+            }
+
+            foreach (NPC p in NPCList)
+            {
+                p.Draw(sb, cameraX, cameraY, floor);
             }
         }   
         // draw the always map.
