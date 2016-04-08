@@ -162,7 +162,10 @@ public class PC : Creature
                     Utils.DrawRect(sb, XHandPosition, YHandPosition, 1, 1, new Microsoft.Xna.Framework.Color(255, 0, 255));
                 }
 
-                Inventory[InvIndex].DrawAlone(sb, XHandPosition, YHandPosition, (int)Direction);
+                if(Anim.CurrentAnimationName.Equals("swing"))
+                    ((BasicMeleeWeapon)Inventory[InvIndex]).DrawSwing(sb, XHandPosition, YHandPosition, Direction, UseFramesLeft);
+                else
+                    Inventory[InvIndex].DrawAlone(sb, XHandPosition, YHandPosition, (int)Direction);
         }
 
         // If facing left or up, the weapon draws under player.
@@ -196,7 +199,8 @@ public class PC : Creature
             Utils.DrawRect(sb, X + -Anim.CurrentAnimation.XOffset + handPositionX + + -cameraX, Y + -Anim.CurrentAnimation.YOffset + handPositionY + -cameraY, 1, 1, new Microsoft.Xna.Framework.Color(255, 0, 255));
         }
     }
-    
+
+
     //Put the priority to move "dir" direction first.
     private void Prioritize(int dir)
     {

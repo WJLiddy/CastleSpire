@@ -18,8 +18,8 @@ public abstract class Item : Entity
     public Item(string pathToXML, string name)
     {
         this.Name = name;
-        ReadMapXML(pathToXML);
         Texture = Utils.TextureLoader(Path.ChangeExtension(pathToXML, ".png"));
+        ReadMapXML(pathToXML);
         makeOutline();
     }
     public void ReadMapXML(String url)
@@ -40,11 +40,11 @@ public abstract class Item : Entity
 
         reader.ReadToFollowing("handX");
         string handXParse = reader.ReadElementContentAsString();
-        HandX = Int32.Parse(handXParse);
+        HandX = Int32.Parse(handXParse) % (Texture.Width / 4);
 
         reader.ReadToFollowing("handY");
         string handYParse = reader.ReadElementContentAsString();
-        HandY = Int32.Parse(handYParse);
+        HandY = Int32.Parse(handYParse) % Texture.Height;
 
         reader.Close();
     }

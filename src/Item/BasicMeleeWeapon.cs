@@ -155,9 +155,35 @@ class BasicMeleeWeapon : Item
         Utils.DefaultFont.Draw(sb, FatigueCost() + "", Utils.DefaultFont.GetWidth("SWING: " + Damage + "/", false) + 1 + tx, 7 + ty, Color.Green);
     }
 
+    public void DrawSwing(AD2SpriteBatch sb, int xHandPosition, int yHandPosition, CastleUtils.CardinalDir direction, int useFramesLeft)
+    {
+        // reverse-index [0] is done
+        double[] south = new double[6]{ 0.5, 1.5, 1.5, 0.7, 0.3, 0.0 };
+        double[] rotangle = new double[6] { -0.5, -1.5, -1.5, -0.9, -0.5, 0 };
+        //scale based on direction and useframesleft. 
+        switch (direction)
+        {
+            case CastleUtils.CardinalDir.South:
+                int heightMod = (int)((south[useFramesLeft - 1]) * Texture.Height);
+                sb.Draw(Texture, new Rectangle(xHandPosition, yHandPosition + heightMod, Texture.Width / 4, Texture.Height - heightMod), new Rectangle(((int)direction) * 16, 0, Texture.Width / 4, Texture.Height), Tint);
+                break;
+            case CastleUtils.CardinalDir.West:
+                sb.Draw(
+                    Texture,
+                    new Rectangle(xHandPosition + HandX, yHandPosition +HandY , Texture.Width / 4, Texture.Height),
+                    new Rectangle(((int)direction) * 16, 0, Texture.Width / 4, Texture.Height),
+                    Tint, 
+                    (Single)rotangle[useFramesLeft-1],
+                    new Vector2(HandX, HandY),
+                    SpriteEffects.None,
+                    (Single)0.0);
+               break;
+        }
+    }
+
     public override bool CanUse(Creature c)
     {
-        return true;
+        return c.Stats.Str() >= StrengthRequirement && c.Stats.Dex() >= DexterityRequirement;
     }
 
     public int FatigueCost()
