@@ -6,7 +6,7 @@ class InGame
 {
     private static PC[] Players = new PC[4];
     public static LinkedList<PC> PlayerList { get; private set; } = new LinkedList<PC>(); 
-    private static LinkedList<NPC> NPCList = new LinkedList<NPC>();
+    public static LinkedList<NPC> NPCList { get; private set; } = new LinkedList<NPC>();
     private static int NPCPlanIndex = 0;
 
     private static HUD[] HUDs = new HUD[4];

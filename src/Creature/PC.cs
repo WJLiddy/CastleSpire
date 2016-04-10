@@ -401,7 +401,7 @@ public class PC : Creature
         double pixelsToMove = pixelsPerSecond * ((double)ms / 1000);
         int milliPixelsToMove = (int)(DeltaScale * pixelsToMove * AttackMovementPercent);
 
-        if (CanMove((int)Direction))
+        if (NoWallCollide((int)Direction))
         {
             switch(Direction)
             {
@@ -478,12 +478,22 @@ public class PC : Creature
 
     protected void ConvertDXDYToMovement()
     {
-        //check to see if my dx would cause a collision.
-        if (DX < 0 && !CanMove(3)) DX = 0;
-        if (DX >= DeltaScale && !CanMove(1)) DX = DeltaScale - 1;
-        if (DY < 0 && !CanMove(0)) DY = 0;
-        if (DY >= DeltaScale && !CanMove(2)) DY = DeltaScale - 1;
 
+        // C#. PLS.
+        List<Entity> ol = new List<Entity>();
+
+        foreach (Entity p in InGame.NPCList)
+        {
+            ol.Add((Entity)p);  // The cast is performed implicitly even if omitted
+        }
+        //check to see if my dx would cause a collision.
+        if (DX < 0 && (!NoWallCollide(3) || !NoEntityCollide(-1,0,ol))) DX = 0;
+        if (DX >= DeltaScale && (!NoWallCollide(1) || !NoEntityCollide(1, 0, ol))) DX = DeltaScale - 1;
+        if (DY < 0 && (!NoWallCollide(0) || !NoEntityCollide(0, -1, ol))) DY = 0;
+        if (DY >= DeltaScale && (!NoWallCollide(2) || !NoEntityCollide(0, 1, ol))) DY = DeltaScale - 1;
+
+
+        //THIS works now, but could lead to glitches later. I only check one in any given direciton.
         while (DX >= DeltaScale) { DX = DX - DeltaScale; X++; } //3 , 1100 -> 4, 100
         while (DY >= DeltaScale) { DY = DY - DeltaScale; Y++; }
         while (DX < 0) { DX = DX + DeltaScale; X--; } //3, -100 -> 2, 900

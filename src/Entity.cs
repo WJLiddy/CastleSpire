@@ -1,4 +1,6 @@
-﻿public abstract class Entity
+﻿using System.Collections.Generic;
+
+public abstract class Entity
 {
 
     public int X { get; protected set; }
@@ -14,7 +16,7 @@
         (X + (Size - 1) < e.X)));
     }
 
-    protected bool CanMove(int dir)
+    protected bool NoWallCollide(int dir)
     {
         switch (dir)
         {
@@ -52,5 +54,16 @@
             default:
                 return false;
         }
+    }
+
+    //check that, if our X and Y was moved by this much, the move would still be valid.
+    protected bool NoEntityCollide(int dx, int dy, List<Entity> collidesWith) 
+    {
+        foreach(Entity e in collidesWith)
+        {
+            if (CastleUtils.Util.Collide(X+dx,Y+dy,Size,Size,e.X,e.Y,e.Size,e.Size))
+                return false;
+        }
+        return true;
     }
 }

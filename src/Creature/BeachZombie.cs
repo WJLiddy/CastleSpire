@@ -29,18 +29,35 @@ class BeachZombie : NPC
 
     public override void Update(int ms)
     {
+        
+        //c# PLS I should be able to pass in derived class types.
+        List<Entity> ol = new List<Entity>();
+
+        foreach (PC p in InGame.PlayerList)
+        {
+            ol.Add((Entity)p);  // The cast is performed implicitly even if omitted
+        }
+
         LeftoverMilliPixels += getMilliPixelsToMove(ms);
 
         if(Plan != null)
         {
             while (Plan.Count > 0)
             {
+                //If my plan would leave me to collide, set animation to idle and return.
+                if (!NoEntityCollide(DirectionUtils.getDeltaX(Plan.Peek()), DirectionUtils.getDeltaY(Plan.Peek()), ol))
+                {
+                    Anim.Hold("idle", 0, (int)Direction);
+                    LeftoverMilliPixels = 0;
+                    return;
+                }
+
                 // Diagonal move.
                 if (Math.Abs(DirectionUtils.getDeltaX(Plan.Peek())) + Math.Abs(DirectionUtils.getDeltaY(Plan.Peek())) == 2)
                 {
                     if (LeftoverMilliPixels >= 1000*(Util.Rad2))
                     {
-                        LeftoverMilliPixels -= (int)(1000*Util.Rad2);
+                       LeftoverMilliPixels -= (int)(1000*Util.Rad2);
                         X += DirectionUtils.getDeltaX(Plan.Peek());
                         Y += DirectionUtils.getDeltaY(Plan.Peek());
                         Direction = DirectionUtils.ConvertAllDir(Plan.Pop());
