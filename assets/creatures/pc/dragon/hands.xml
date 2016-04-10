@@ -28,7 +28,7 @@
   <idle03>5,55</idle03>
   
   <!-- up facing swing: difficult so I'm not going to try this one yet-->
-  <swing00>14,8</swing00>
+  <swing00>17,8</swing00>
   <swing10>38,11</swing10>
   <swing20>59,16</swing20>
   <swing30>80,19</swing30>
@@ -36,27 +36,27 @@
   <swing50>59,16</swing50>
   
   <!-- Right swing -->
-  <swing01>14,44</swing01>
-  <swing11>44,48</swing11>
-  <swing21>70,52</swing21>
-  <swing31>94,56</swing31>
-  <swing41>118,56</swing41>
-  <swing51>140,54</swing51>
+  <swing01>16,46</swing01>
+  <swing11>48,50</swing11>
+  <swing21>76,54</swing21>
+  <swing31>102,58</swing31>
+  <swing41>128,58</swing41>
+  <swing51>152,56</swing51>
   
     <!-- Down swing -->
-  <swing02>5,79</swing02>
-  <swing12>31,82</swing12>
-  <swing22>58,86</swing22>
-  <swing32>87,88</swing32>
-  <swing42>87,88</swing42>
-  <swing52>131,87</swing52>
+  <swing02>6,79</swing02>
+  <swing12>34,82</swing12>
+  <swing22>63,86</swing22>
+  <swing32>94,88</swing32>
+  <swing42>94,88</swing42>
+  <swing52>142,87</swing52>
   
       <!-- Left swing -->
-  <swing03>10,107</swing03>
-  <swing13>27,113</swing13>
-  <swing23>49,116</swing23>
-  <swing33>73,120</swing33>
-  <swing43>73,120</swing43>
-  <swing53>124,118</swing53>
+  <swing03>10,109</swing03>
+  <swing13>29,115</swing13>
+  <swing23>53,118</swing23>
+  <swing33>79,122</swing33>
+  <swing43>79,122</swing43>
+  <swing53>134,120</swing53>
   
 </Hands>

@@ -44,7 +44,7 @@ class InGame
         MapMesh = new PathFindingMesh(@"maps\mesh.xml",Map.BaseMap.Width,Map.BaseMap.Height);
         
         FloorItems = new LinkedList<Item>();
-        for (int i = 0; i != 100; i++)
+        for (int i = 0; i != 2; i++)
         {
             //knives
             BasicMeleeWeapon b = BasicMeleeWeapon.generateBasicWeapon(5,0.1);
@@ -72,7 +72,7 @@ class InGame
         {
             BeachZombie bz = new BeachZombie(250, 230);
             bz.Stats.AwardSpdXP((bz.Stats.XPPerSkill/2) * -i);
-       //     NPCList.AddFirst(bz);
+            NPCList.AddFirst(bz);
 
         }
         SoundManager.Play("night.ogg", true);
@@ -157,20 +157,7 @@ class InGame
             i.DrawOnFloor(sb, cameraX, cameraY);
         }
 
-        //draw y ordered items
-        for (int floor = 0; floor != Map.BaseMap.Height; floor++)
-        {
-            Map.DrawObjects(sb, cameraX, cameraY, floor);
-            foreach (PC p in allPlayers())
-            {
-                p.Draw(sb, cameraX, cameraY,floor);
-            }
-
-            foreach (NPC p in NPCList)
-            {
-                p.Draw(sb, cameraX, cameraY, floor);
-            }
-        }   
+        drawYOrderedItems(sb,cameraX,cameraY);
         // draw the always map.
         Map.DrawAlways(sb, cameraX, cameraY);
     }
@@ -200,6 +187,23 @@ class InGame
             coords.AddLast(new int[2] { p.X, p.Y });
         }
         return coords;
+    }
 
+    private void drawYOrderedItems(AD2SpriteBatch sb, int cameraX, int cameraY)
+    {
+        //draw y ordered items
+        for (int floor = 0; floor != Map.BaseMap.Height; floor++)
+        {
+            Map.DrawObjects(sb, cameraX, cameraY, floor);
+            foreach (PC p in allPlayers())
+            {
+                p.Draw(sb, cameraX, cameraY, floor);
+            }
+
+            foreach (NPC p in NPCList)
+            {
+                p.Draw(sb, cameraX, cameraY, floor);
+            }
+        }
     }
 }

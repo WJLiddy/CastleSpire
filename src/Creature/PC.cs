@@ -4,7 +4,7 @@ using CastleUtils;
 
 public class PC : Creature
 {
-    public static readonly bool HandDebug = false;
+    public static readonly bool HandDebug = true;
     public static readonly double AttackMovementPercent = 0.5;
     public static readonly int PunchFrames = 60;
     public enum PlayerState { IDLE, WALKING, USING };
@@ -454,7 +454,8 @@ public class PC : Creature
 
             for (int frame = 0; frame != 6; frame++)
             {
-                SwingingHandPositions[dir, frame, 0] = retrieveHandCoords(hands, "swing", dir, frame, true) % 24;
+                //DIRTY TODO FIX: HAlf Dragon has length -> 26 
+                SwingingHandPositions[dir, frame, 0] = retrieveHandCoords(hands, "swing", dir, frame, true) % (Race.Equals(RaceUtils.Race.Dragon) ? 26 : 24);
                 SwingingHandPositions[dir, frame, 1] = retrieveHandCoords(hands, "swing", dir, frame, false) % 32;
             }
 
