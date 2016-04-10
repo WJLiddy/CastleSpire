@@ -10,6 +10,10 @@ class BasicMeleeWeapon : Item
     public int Damage { get; private set; }
     public Color Tint { get; private set; }
 
+    // Animation Scale
+    private static double[] YScale = new double[6] { 0.5, 1.5, 1.5, 0.7, 0.3, 0.0 };
+    private static double[] RotateXAngle = new double[6] { -0.5, -1.5, -1.5, -0.9, -0.5, 0 };
+
     //generate based on some level requirement
     private BasicMeleeWeapon(string pathToXML, string name, int strReq, int dexReq, int frameTime, int damage, Color c) : base(pathToXML,name)
     {
@@ -157,14 +161,14 @@ class BasicMeleeWeapon : Item
 
     public void DrawSwing(AD2SpriteBatch sb, int xHandPosition, int yHandPosition, CastleUtils.CardinalDir direction, int useFramesLeft)
     {
-        // reverse-index [0] is done
-        double[] south = new double[6]{ 0.5, 1.5, 1.5, 0.7, 0.3, 0.0 };
-        double[] rotangle = new double[6] { -0.5, -1.5, -1.5, -0.9, -0.5, 0 };
+
         //scale based on direction and useframesleft. 
+
+        int heightMod = (int)((YScale[useFramesLeft - 1]) * Texture.Height);
+
         switch (direction)
         {
             case CastleUtils.CardinalDir.South:
-                int heightMod = (int)((south[useFramesLeft - 1]) * Texture.Height);
                 sb.Draw(Texture, new Rectangle(xHandPosition, yHandPosition + heightMod, Texture.Width / 4, Texture.Height - heightMod), new Rectangle(((int)direction) * 16, 0, Texture.Width / 4, Texture.Height), Tint);
                 break;
             case CastleUtils.CardinalDir.West:
@@ -173,11 +177,25 @@ class BasicMeleeWeapon : Item
                     new Rectangle(xHandPosition + HandX, yHandPosition +HandY , Texture.Width / 4, Texture.Height),
                     new Rectangle(((int)direction) * 16, 0, Texture.Width / 4, Texture.Height),
                     Tint, 
-                    (Single)rotangle[useFramesLeft-1],
+                    (Single)RotateXAngle[useFramesLeft-1],
                     new Vector2(HandX, HandY),
                     SpriteEffects.None,
                     (Single)0.0);
                break;
+            case CastleUtils.CardinalDir.East:
+                sb.Draw(
+                    Texture,
+                    new Rectangle(xHandPosition + HandX, yHandPosition + HandY, Texture.Width / 4, Texture.Height),
+                    new Rectangle(((int)direction) * 16, 0, Texture.Width / 4, Texture.Height),
+                    Tint,
+                    -(Single)RotateXAngle[useFramesLeft - 1],
+                    new Vector2(HandX, HandY),
+                    SpriteEffects.None,
+                    (Single)0.0);
+                break;
+            case CastleUtils.CardinalDir.North:
+                sb.Draw(Texture, new Rectangle(xHandPosition, yHandPosition + heightMod, Texture.Width / 4, Texture.Height - heightMod), new Rectangle(((int)direction) * 16, 0, Texture.Width / 4, Texture.Height), Tint);
+                break;
         }
     }
 

@@ -47,23 +47,23 @@ class InGame
         for (int i = 0; i != 100; i++)
         {
             //knives
-            BasicMeleeWeapon b = BasicMeleeWeapon.generateBasicWeapon(15,0.1);
+            BasicMeleeWeapon b = BasicMeleeWeapon.generateBasicWeapon(5,0.1);
             b.SetCoords((int)(70 + Utils.RandomNumber() * 20), (int)(70 + Utils.RandomNumber() * 20));
             FloorItems.AddFirst(b);
             //sabers
-            b = BasicMeleeWeapon.generateBasicWeapon(15,0.3);
+            b = BasicMeleeWeapon.generateBasicWeapon(5,0.3);
             b.SetCoords((int)(85 + Utils.RandomNumber() * 20), (int)(105 + Utils.RandomNumber() * 20));
             FloorItems.AddFirst(b);
             //swords
-            b = BasicMeleeWeapon.generateBasicWeapon(15,0.5);
+            b = BasicMeleeWeapon.generateBasicWeapon(5,0.5);
             b.SetCoords((int)(85 + Utils.RandomNumber() * 20), (int)(175 + Utils.RandomNumber() * 20));
             FloorItems.AddFirst(b);
             //axes
-            b = BasicMeleeWeapon.generateBasicWeapon(15,0.7);
+            b = BasicMeleeWeapon.generateBasicWeapon(5,0.7);
             b.SetCoords((int)(100 + Utils.RandomNumber() * 20), (int)(210 + Utils.RandomNumber() * 20));
             FloorItems.AddFirst(b);
             //hammers
-            b = BasicMeleeWeapon.generateBasicWeapon(15,0.9);
+            b = BasicMeleeWeapon.generateBasicWeapon(5,0.9);
             b.SetCoords((int)(130+ Utils.RandomNumber() * 20), (int)(180 + Utils.RandomNumber() * 20));
             FloorItems.AddFirst(b);
         }
