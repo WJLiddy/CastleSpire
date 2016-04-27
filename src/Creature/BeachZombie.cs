@@ -104,12 +104,17 @@ class BeachZombie : NPC
         Plan = new Stack<AllDir>();
         PC target = InGame.PlayerList.First.Value;
         PixelSet ps = new PixelSet();
-        ps.Add(target.X, target.Y);
+        //make a box representing all the goal states.
+        //for (int x = 0; x != target.Size; x++)
+       // {
+            ps.Add(target.X, target.Y);
+       // }
         
-        Plan = PathFinding.PixelPath(InGame.Map, X, Y, target.X, target.Y, ps, Size, 100);
+        Plan = PathFinding.PixelPath(InGame.Map, X, Y, target.X, target.Y, ps, Size, 100, this);
+        
         if(Plan == null)
         {
-            Plan = LongPath.LongPathEstimation(InGame.Map, X, Y, target.X, target.Y, InGame.MapMesh, Size);
+            Plan = LongPath.LongPathEstimation(InGame.Map, X, Y, target.X, target.Y, InGame.MapMesh, Size, this);
         }
     }
 }

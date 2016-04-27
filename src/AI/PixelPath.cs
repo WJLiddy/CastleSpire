@@ -40,12 +40,30 @@ class PathFinding
         }
     }
 
-    public static Stack<AllDir> PixelPath(CollisionMap map, int xStart, int yStart, int goalCenterX, int goalCenterY, PixelSet goal, int charSize, int giveUpSteps)
+    public static Stack<AllDir> PixelPath(CollisionMap map, int xStart, int yStart, int goalCenterX, int goalCenterY, PixelSet goal, int charSize, int giveUpSteps, Creature c)
     {
         // Generate a nowalkmap if one has not yet been generated.
         if (notWalkable == null)
         {
             notWalkable = generateNonWalkableMap(map, charSize);
+        }
+
+        // We cannot enter coordinates that are shared by allies.
+        bool[,] allyCollide = new bool[map.BaseMap.Width, map.BaseMap.Height];
+
+        foreach(NPC n in InGame.NPCList)
+        {
+            if (n != c)
+            {
+                for (int x = -(n.Size/2); x != (n.Size/2); x++)
+                {
+                    for (int y = -(n.Size / 2); y != (n.Size/2); y++)
+                    {
+                     //   allyCollide[n.X + x, n.Y + y] = true;
+                    }
+                }
+            }
+            
         }
 
         // We will use a priority queue to store the open set.
@@ -82,7 +100,7 @@ class PathFinding
                 if (childY < 0 || childX < 0 || childX >= map.BaseMap.Width || childY >= map.BaseMap.Height)
                     continue;
 
-                if (notWalkable[childX,childY])
+                if (notWalkable[childX,childY] || allyCollide[childX,childY])
                     continue;
 
                 double cost = toExplore.Cost + ((d.Equals(AllDir.North) || d.Equals(AllDir.West) || d.Equals(AllDir.South) || d.Equals(AllDir.East)) ? 1 : Util.Rad2);
@@ -131,7 +149,6 @@ class PathFinding
     }
 
    // Given a map and a charsize, my top left pixels CANNOT be at return[x][y], otherwise they can.
-   // TODO: This might have an off-by-1
     public static bool[,] generateNonWalkableMap(CollisionMap m, int charSize)
     {
         bool[,] notWalkable = new bool[m.BaseMap.Width, m.BaseMap.Height];
@@ -141,9 +158,9 @@ class PathFinding
             {
                 if (m.Collide(x, y))
                 {
-                    for (int height = charSize; height >= 0; height--)
+                    for (int height = charSize - 1; height >= 0; height--)
                     {
-                        for (int width = charSize; width >= 0; width--)
+                        for (int width = charSize - 1; width >= 0; width--)
                         {
                             if (y - height < 0 || x - width < 0)
                                 continue;

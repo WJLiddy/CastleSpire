@@ -1,4 +1,5 @@
 ﻿using CastleUtils;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 
@@ -68,9 +69,9 @@ class InGame
             FloorItems.AddFirst(b);
         }
 
-        for (int i = 0; i != 50; i++)
+        for (int i = 0; i != 2; i++)
         {
-            BeachZombie bz = new BeachZombie(250, 230);
+            BeachZombie bz = new BeachZombie(250, 230 + (20 * i));
             bz.Stats.AwardSpdXP((bz.Stats.XPPerSkill/2) * -i);
             NPCList.AddFirst(bz);
 
@@ -142,12 +143,12 @@ class InGame
        
         Map.DrawBase(sb, cameraX, cameraY);
 
-        /**
-        foreach(PathFindingMesh.MeshRegion p in pfm.allRegions)
-        {
-            Utils.DefaultFont.Draw(sb, "" + p.ID, p.centerX + -(Utils.DefaultFont.GetWidth(""+p.ID,false)/2) + -cameraX, p.centerY +- 3 + -cameraY, Color.Black, 1);
-        }
-        */
+        
+       // foreach(PathFindingMesh.MeshRegion p in MapMesh.allRegions)
+       // {
+       //     Utils.DefaultFont.Draw(sb, "" + p.ID, p.centerX + -(Utils.DefaultFont.GetWidth(""+p.ID,false)/2) + -cameraX, p.centerY +- 3 + -cameraY, Color.Black, 1);
+       // }
+        
 
         Item.DrawGlowingItems(sb, allPlayers(), FloorItems, cameraX, cameraY);
 

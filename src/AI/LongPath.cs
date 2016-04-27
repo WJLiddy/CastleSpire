@@ -45,7 +45,7 @@ class LongPath
     }
 
 
-    public static Stack<AllDir> LongPathEstimation(CollisionMap map, int xStart, int yStart, int xEnd, int yEnd, PathFindingMesh mapMesh, int charSize)
+    public static Stack<AllDir> LongPathEstimation(CollisionMap map, int xStart, int yStart, int xEnd, int yEnd, PathFindingMesh mapMesh, int charSize, Creature c)
     {
         //First thing to do is map the X and Y to regions. If there is no region, we will do a quick BFS to find the closest reachable region.
         //TODO this BFS.
@@ -85,7 +85,7 @@ class LongPath
             if (toExplore.Mesh.ID == endRegion.ID)
             {
                 //We are in the same node as the goal, there must be a problem because the local serch couldn't find a solution when we were so close. 
-                //Throw assertion error.
+                //Throw assertion error, for now.
                 System.Diagnostics.Debug.Assert(toExplore.Parent != null);
 
                 //Same if we are just one node away.
@@ -98,7 +98,7 @@ class LongPath
                 }
 
                 //return the path to TOExplore, from our node to 2 nodes ahead.
-                return PathFinding.PixelPath(map, xStart, yStart, toExplore.Mesh.centerX, toExplore.Mesh.centerY, toExplore.Mesh.pixels, charSize,PixelPathIterations);
+                return PathFinding.PixelPath(map, xStart, yStart, toExplore.Mesh.centerX, toExplore.Mesh.centerY, toExplore.Mesh.pixels, charSize,PixelPathIterations,c);
             }
 
             foreach (PathFindingMesh.MeshRegion pm in toExplore.Mesh.edges)
